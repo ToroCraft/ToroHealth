@@ -40,7 +40,7 @@ public class DamageAmountFX extends EntityFX {
 	@Override
 	public void renderParticle(final VertexBuffer renderer, final Entity entity, final float x, final float y,
 			final float z, final float dX, final float dY, final float dZ) {
-		//this.rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
+		float rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
 		//this.rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * x - interpPosX));
@@ -54,7 +54,7 @@ public class DamageAmountFX extends EntityFX {
 			GL11.glDepthFunc(515);
 		}
 		GL11.glTranslatef(locX, locY, locZ);
-		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(rotationYaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(0.0F, 1.0F, 0.0F, 0.0F);
 
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);

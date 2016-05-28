@@ -2,11 +2,9 @@ package net.torocraft.damageindicatorsmod.events;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.torocraft.damageindicatorsmod.DamageIndicatorsMod;
@@ -18,8 +16,6 @@ public class EventHooks {
 		float amount = event.getAmount();
 		DamageSource source = event.getSource();
 		EntityLivingBase entity = event.getEntityLiving();
-		
-		EntityPlayer player = entity.getEntityWorld().getClosestPlayerToEntity(entity, -1);
 		
 		if (amount <= 0) {
 			return;
@@ -33,9 +29,6 @@ public class EventHooks {
         amount = Math.round(amount);
 		
         DamageIndicatorsMod.proxy.displayDamageDealt(entity, (int)amount);
-        
-		//player.addChatMessage(new TextComponentString(entity.getName() + " was damaged by " + source.getDamageType() + ": " + amount));
-		
 	}
 	
 	private float applyPotionDamageCalculations(EntityLivingBase entity, DamageSource source, float damage) {
