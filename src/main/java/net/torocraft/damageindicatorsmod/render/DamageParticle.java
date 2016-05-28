@@ -4,14 +4,14 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class DamageAmountFX extends EntityFX {
+public class DamageParticle extends Particle {
 	
 	protected static final float GRAVITY = 0.8F;
 	protected static final float SIZE = 3.0F;
@@ -23,7 +23,7 @@ public class DamageAmountFX extends EntityFX {
 	protected boolean grow = true;
 	protected float scale = 1.0F;
 	
-	public DamageAmountFX(int damage, World world, double parX, double parY, double parZ, double parMotionX, double parMotionY, double parMotionZ) {
+	public DamageParticle(int damage, World world, double parX, double parY, double parZ, double parMotionX, double parMotionY, double parMotionZ) {
 		super(world, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
 		particleTextureJitterX = 1.5F;
 		particleTextureJitterY = 1.5F;
@@ -33,7 +33,7 @@ public class DamageAmountFX extends EntityFX {
 		this.text = Integer.toString(damage);
 	}
 
-	protected DamageAmountFX(World worldIn, double posXIn, double posYIn, double posZIn) {
+	protected DamageParticle(World worldIn, double posXIn, double posYIn, double posZIn) {
 		this(0, worldIn, posXIn, posYIn, posZIn, 0, 0, 0);
 	}
 
