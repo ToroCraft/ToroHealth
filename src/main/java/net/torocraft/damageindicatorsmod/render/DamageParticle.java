@@ -16,13 +16,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DamageParticle extends Particle {
 	
-	protected static final float GRAVITY = 0.8F;
+	protected static final float GRAVITY = 0.1F;
 	protected static final float SIZE = 3.0F;
 	protected static final int LIFESPAN = 12;
 	protected static final double BOUNCE_STRENGTH = 1.5F;
 
 	protected String text;
-	protected boolean shouldOnTop = false;
+	protected boolean shouldOnTop = true;
 	protected boolean grow = true;
 	protected float scale = 1.0F;
 	private int damage;
@@ -46,7 +46,7 @@ public class DamageParticle extends Particle {
 	public void renderParticle(final VertexBuffer renderer, final Entity entity, final float x, final float y,
 			final float z, final float dX, final float dY, final float dZ) {
 		float rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
-		//this.rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
+		float rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * x - interpPosX));
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * y - interpPosY));
@@ -60,7 +60,7 @@ public class DamageParticle extends Particle {
 		}
 		GL11.glTranslatef(locX, locY, locZ);
 		GL11.glRotatef(rotationYaw, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(0.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glRotatef(rotationPitch, 1.0F, 0.0F, 0.0F);
 
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
 		GL11.glScaled(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
@@ -79,7 +79,7 @@ public class DamageParticle extends Particle {
 		GL11.glEnable(3008);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		int color = 0x990000;
+		int color = 0xff0000;
 		if (damage < 0) {
 			color = 0x00ff00;
 		}

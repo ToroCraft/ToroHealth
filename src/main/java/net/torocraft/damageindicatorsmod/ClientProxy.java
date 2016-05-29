@@ -55,7 +55,7 @@ public class ClientProxy extends CommonProxy {
 		}
 		World world = entity.worldObj;
 		double motionX = world.rand.nextGaussian() * 0.02;
-		double motionY = world.rand.nextGaussian() * 0.02;
+		double motionY = 0.5f;
 		double motionZ = world.rand.nextGaussian() * 0.02;
 		Particle damageIndicator = new DamageParticle(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
 		Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
