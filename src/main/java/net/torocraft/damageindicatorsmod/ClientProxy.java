@@ -36,9 +36,6 @@ public class ClientProxy extends CommonProxy {
 			return;
 		}
 
-		System.out.println("on update");
-
-
 		int currentHealth = (int) Math.ceil(entity.getHealth());
 
 		if (entity.getEntityData().hasKey("health")) {
