@@ -23,7 +23,7 @@ public class ServerProxy extends CommonProxy {
 	}
 	
 	@Override
-	public void displayEntityStatus() {
-		super.displayEntityStatus();
+	public void setEntityInCrosshairs() {
+		super.setEntityInCrosshairs();
 	}
 }

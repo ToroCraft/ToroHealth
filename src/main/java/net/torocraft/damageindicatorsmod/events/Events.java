@@ -14,7 +14,7 @@ public class Events {
 
 	@SubscribeEvent
 	public void displayEntityStatus(RenderGameOverlayEvent.Pre event) {
-		DamageIndicatorsMod.proxy.displayEntityStatus();
+		DamageIndicatorsMod.proxy.setEntityInCrosshairs();
 	}
 	
 }

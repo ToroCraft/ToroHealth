@@ -2,6 +2,7 @@ package net.torocraft.damageindicatorsmod;
 
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -11,18 +12,22 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.torocraft.damageindicatorsmod.gui.GuiEntityStatus;
 import net.torocraft.damageindicatorsmod.render.DamageParticle;
 
 public class ClientProxy extends CommonProxy {
+	
+	GuiEntityStatus entityStatusGUI;
 
 	@Override
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
+		entityStatusGUI = new GuiEntityStatus();
 	}
 
 	@Override
@@ -33,7 +38,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit(FMLPostInitializationEvent e) {
 		super.postInit(e);
-
+		MinecraftForge.EVENT_BUS.register(entityStatusGUI);
 	}
 
 	@Override
@@ -69,19 +74,26 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	@Override
-	public void displayEntityStatus() {
+	public void setEntityInCrosshairs() {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		World world = player.worldObj;
 		
-		RayTraceResult rtr = player.rayTrace(200.0, 1);
+		RayTraceResult rtr = player.rayTrace(200.0, 1.0f);
 		
-		BlockPos pos = rtr.getBlockPos();
+		BlockPos pos = new BlockPos(rtr.hitVec);
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock().isAir(state, world, pos)) {
+			pos = pos.down();
+		}
 		
 		AxisAlignedBB scan = new AxisAlignedBB(pos);
 		
-		List<EntityLivingBase> entities = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, scan);
+		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, scan);
 		
-		for (EntityLivingBase entity : entities) {
-			player.addChatMessage(new TextComponentString(entity.getName() + " health: " + entity.getHealth() + "/" + entity.getMaxHealth()));
+		for (Entity entity : entities) {
+			if (entity instanceof EntityLivingBase) {
+				entityStatusGUI.setEntity((EntityLivingBase)entity);
+			}
 		}
 	}
 
