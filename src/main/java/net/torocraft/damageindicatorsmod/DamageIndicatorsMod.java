@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.torocraft.damageindicatorsmod.events.Events;
 
-@Mod(modid = DamageIndicatorsMod.MODID, name = DamageIndicatorsMod.MODNAME, version = DamageIndicatorsMod.VERSION)
+@Mod(modid = DamageIndicatorsMod.MODID, name = DamageIndicatorsMod.MODNAME, version = DamageIndicatorsMod.VERSION, clientSideOnly = true)
 public class DamageIndicatorsMod {
 
 	public static final String MODID = "damageindicatorsmod";
