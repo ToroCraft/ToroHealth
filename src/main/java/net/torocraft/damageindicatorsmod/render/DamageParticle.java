@@ -25,6 +25,7 @@ public class DamageParticle extends Particle {
 	protected boolean shouldOnTop = false;
 	protected boolean grow = true;
 	protected float scale = 1.0F;
+	private int damage;
 	
 	public DamageParticle(int damage, World world, double parX, double parY, double parZ, double parMotionX, double parMotionY, double parMotionZ) {
 		super(world, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
@@ -33,7 +34,8 @@ public class DamageParticle extends Particle {
 		particleGravity = GRAVITY;
 		particleScale = SIZE;
 		particleMaxAge = LIFESPAN;
-		this.text = Integer.toString(damage);
+		this.damage = damage;
+		this.text = Integer.toString(Math.abs(damage));
 	}
 
 	protected DamageParticle(World worldIn, double posXIn, double posYIn, double posZIn) {
@@ -43,8 +45,6 @@ public class DamageParticle extends Particle {
 	@Override
 	public void renderParticle(final VertexBuffer renderer, final Entity entity, final float x, final float y,
 			final float z, final float dX, final float dY, final float dZ) {
-
-		System.out.println("render particle");
 		float rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
 		//this.rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
@@ -78,11 +78,16 @@ public class DamageParticle extends Particle {
 		GL11.glEnable(3042);
 		GL11.glEnable(3008);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		int color = 0x990000;
+		if (damage < 0) {
+			color = 0x00ff00;
+		}
 
 		final FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		fontRenderer.drawStringWithShadow(this.text,
 				-MathHelper.floor_float(fontRenderer.getStringWidth(this.text) / 2.0F) + 1,
-				-MathHelper.floor_float(fontRenderer.FONT_HEIGHT / 2.0F) + 1, 0xFFFFFF);
+				-MathHelper.floor_float(fontRenderer.FONT_HEIGHT / 2.0F) + 1, color);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDepthFunc(515);
@@ -96,7 +101,6 @@ public class DamageParticle extends Particle {
 		} else {
 			this.particleScale *= 0.96F;
 		}
-		System.out.println("finish render particle");
 	}
 
 	public int getFXLayer() {

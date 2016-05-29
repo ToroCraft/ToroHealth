@@ -28,8 +28,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void displayDamageDealt(Entity entity, int damage) {
-    	System.out.println("display damage dealt: " + damage);   
-    	if (damage <= 0) {
+    	if (damage == 0) {
     		return;
     	}
     	World world = entity.worldObj;
@@ -46,7 +45,6 @@ public class ClientProxy extends CommonProxy {
     				motionY,
     				motionZ
     			);
-    	System.out.println("add effect to renderer");
     	Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
     }
     
