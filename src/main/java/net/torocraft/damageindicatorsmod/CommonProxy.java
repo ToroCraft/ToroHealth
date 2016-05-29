@@ -1,23 +1,24 @@
 package net.torocraft.damageindicatorsmod;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy {
-    public void preInit(FMLPreInitializationEvent e) {
+	public void preInit(FMLPreInitializationEvent e) {
 
-    }
+	}
 
-    public void init(FMLInitializationEvent e) {
-    }
+	public void init(FMLInitializationEvent e) {
 
-    public void postInit(FMLPostInitializationEvent e) {
+	}
 
-    }
-    
-    public void displayDamageDealt(Entity entity, int damage) {
-    	
-    }
+	public void postInit(FMLPostInitializationEvent e) {
+
+	}
+
+	public void displayDamageDealt(EntityLivingBase entity) {
+
+	}
 }
