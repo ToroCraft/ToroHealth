@@ -1,10 +1,17 @@
 package net.torocraft.damageindicatorsmod;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -59,6 +66,23 @@ public class ClientProxy extends CommonProxy {
 		double motionZ = world.rand.nextGaussian() * 0.02;
 		Particle damageIndicator = new DamageParticle(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
 		Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
+	}
+	
+	@Override
+	public void displayEntityStatus() {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		
+		RayTraceResult rtr = player.rayTrace(200.0, 1);
+		
+		BlockPos pos = rtr.getBlockPos();
+		
+		AxisAlignedBB scan = new AxisAlignedBB(pos);
+		
+		List<EntityLivingBase> entities = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, scan);
+		
+		for (EntityLivingBase entity : entities) {
+			player.addChatMessage(new TextComponentString(entity.getName() + " health: " + entity.getHealth() + "/" + entity.getMaxHealth()));
+		}
 	}
 
 }

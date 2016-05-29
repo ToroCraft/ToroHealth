@@ -21,4 +21,9 @@ public class ServerProxy extends CommonProxy {
 	public void displayDamageDealt(EntityLivingBase entity) {
 		super.displayDamageDealt(entity);
 	}
+	
+	@Override
+	public void displayEntityStatus() {
+		super.displayEntityStatus();
+	}
 }

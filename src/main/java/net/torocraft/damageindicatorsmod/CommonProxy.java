@@ -21,4 +21,8 @@ public class CommonProxy {
 	public void displayDamageDealt(EntityLivingBase entity) {
 
 	}
+	
+	public void displayEntityStatus() {
+		
+	}
 }
