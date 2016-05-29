@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.torocraft.damageindicatorsmod.events.EventHooks;
+import net.torocraft.damageindicatorsmod.events.Events;
 
 
 @Mod (modid = DamageIndicatorsMod.MODID, name = DamageIndicatorsMod.MODNAME, version = DamageIndicatorsMod.VERSION)
@@ -38,7 +38,7 @@ public class DamageIndicatorsMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 	    proxy.postInit(e);
-	    MinecraftForge.EVENT_BUS.register(new EventHooks());
+	    MinecraftForge.EVENT_BUS.register(new Events());
 	}
 	
 	

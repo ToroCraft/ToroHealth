@@ -10,13 +10,20 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.torocraft.damageindicatorsmod.DamageIndicatorsMod;
 
-public class EventHooks {
+public class Events {
 
 	@SubscribeEvent
 	public void displayDamage(LivingHurtEvent event) {
 		float amount = event.getAmount();
 		DamageSource source = event.getSource();
 		EntityLivingBase entity = event.getEntityLiving();
+		
+		System.out.println("display damage");
+		
+		if (entity.worldObj.isRemote) {
+			System.out.println("display damage :: is remote");
+			return;
+		}
 		
 		if (amount <= 0) {
 			return;
@@ -28,7 +35,7 @@ public class EventHooks {
         amount = Math.max(amount - entity.getAbsorptionAmount(), 0.0F);
         
         amount = Math.round(amount);
-		
+		System.out.println("call proxy");
         DamageIndicatorsMod.proxy.displayDamageDealt(entity, (int)amount);
 	}
 	

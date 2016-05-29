@@ -10,7 +10,10 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class DamageParticle extends Particle {
 	
 	protected static final float GRAVITY = 0.8F;
@@ -25,8 +28,8 @@ public class DamageParticle extends Particle {
 	
 	public DamageParticle(int damage, World world, double parX, double parY, double parZ, double parMotionX, double parMotionY, double parMotionZ) {
 		super(world, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
-		particleTextureJitterX = 1.5F;
-		particleTextureJitterY = 1.5F;
+		particleTextureJitterX = 0.0F;
+		particleTextureJitterY = 0.0F;
 		particleGravity = GRAVITY;
 		particleScale = SIZE;
 		particleMaxAge = LIFESPAN;
@@ -40,6 +43,8 @@ public class DamageParticle extends Particle {
 	@Override
 	public void renderParticle(final VertexBuffer renderer, final Entity entity, final float x, final float y,
 			final float z, final float dX, final float dY, final float dZ) {
+
+		System.out.println("render particle");
 		float rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
 		//this.rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
@@ -91,6 +96,7 @@ public class DamageParticle extends Particle {
 		} else {
 			this.particleScale *= 0.96F;
 		}
+		System.out.println("finish render particle");
 	}
 
 	public int getFXLayer() {
