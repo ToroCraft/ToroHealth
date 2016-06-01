@@ -3,6 +3,7 @@ package net.torocraft.damageindicatorsmod.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -51,15 +52,85 @@ public class GuiEntityStatus extends Gui {
 	    }
 		ResourceLocation spriteLoc = new ResourceLocation(DamageIndicatorsMod.MODID, "textures/gui/entityStatus.png");
     	this.mc.renderEngine.bindTexture(spriteLoc);
-		Gui.drawModalRectWithCustomSizedTexture(2, 2, 0.0f, 0.0f, 200, 50, 200.0f, 200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(2, 2, 0.0f, 0.0f, 150, 40, 200.0f, 200.0f);
 		
-		Gui.drawModalRectWithCustomSizedTexture(4, 29, 0.0f, 150.0f, 196, 21, 200.0f, 200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(4, 24, 0.0f, 150.0f, 146, 16, 200.0f, 200.0f);
 		
-		int currentHealthWidth = (int)Math.ceil(196 * (entity.getHealth() / entity.getMaxHealth()));
-		Gui.drawModalRectWithCustomSizedTexture(4, 29, 0.0f, 100.0f, currentHealthWidth, 21, 200.0f, 200.0f);
+		int currentHealthWidth = (int)Math.ceil(146 * (entity.getHealth() / entity.getMaxHealth()));
+		Gui.drawModalRectWithCustomSizedTexture(4, 24, 0.0f, 100.0f, currentHealthWidth, 16, 200.0f, 200.0f);
 
-		drawCenteredString(mc.fontRendererObj, entity.getName(), 102, 7, 0xFFFFFF);
-		drawCenteredString(mc.fontRendererObj, (int)Math.ceil(entity.getHealth()) + "/" + (int)entity.getMaxHealth(), 102, 40, 0xFFFFFF);
+		String name = getDisplayName();
+		
+		drawCenteredString(mc.fontRendererObj, name, 77, 8, 0xFFFFFF);
+		drawCenteredString(mc.fontRendererObj, (int)Math.ceil(entity.getHealth()) + "/" + (int)entity.getMaxHealth(), 77, 28, 0xFFFFFF);
+	}
+
+	private String getDisplayName() {
+		String name = entity.getName();
+		if (entity instanceof EntityVillager) {
+			int profId = ((EntityVillager)entity).getProfession();
+			int careerId = ((EntityVillager)entity).getEntityData().getInteger("Career");
+			
+			switch (profId) {
+				case 0: 
+					switch (careerId) {
+						case 1:
+							name = "Farmer";
+							break;
+						case 2:
+							name = "Fisherman";
+							break;
+						case 3:
+							name = "Shepherd";
+							break;
+						case 4: 
+							name = "Fletcher";
+							break;
+						default:
+							name = "Farmer";
+							break;								
+					}
+					break;
+				case 1:
+					name = "Librarian";
+					break;
+				case 2:
+					name = "Cleric";
+					break;
+				case 3:
+					switch (careerId) {
+						case 1:
+							name = "Armorer";
+							break;
+						case 2:
+							name = "Weapon Smith";
+							break;
+						case 3:
+							name = "Tool Smith";
+							break;
+						default:
+							name = "Blacksmith";
+					}
+					break;
+				case 4:
+					switch (careerId) {
+						case 1: 
+							name = "Butcher";
+							break;
+						case 2:
+							name = "Leatherworker";
+							break;
+						default:
+							name = "Butcher";
+							break;
+					}
+					break;
+				default:
+					name = "Villager";
+					break;
+			}
+		}
+		return name;
 	}
 	
 	private void showHealthBar() {

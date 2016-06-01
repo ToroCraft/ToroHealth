@@ -87,7 +87,7 @@ public class ClientProxy extends CommonProxy {
 		RayTraceResult rtr;
 		BlockPos pos;
 		BlockPos prevPos = null;
-		for (double d = 0.0; d < 100.0; d++) {
+		for (double d = 0.0; d < 50.0; d++) {
 			rtr = player.rayTrace(d, 1.0f);
 			
 			if (rtr == null) {
