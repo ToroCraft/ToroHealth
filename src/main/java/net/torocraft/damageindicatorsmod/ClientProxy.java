@@ -2,7 +2,6 @@ package net.torocraft.damageindicatorsmod;
 
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -41,7 +40,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(entityStatusGUI);
 	}
 
-	@Override
+	@Override	
 	public void displayDamageDealt(EntityLivingBase entity) {
 
 		if (!entity.worldObj.isRemote) {
@@ -78,23 +77,47 @@ public class ClientProxy extends CommonProxy {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		World world = player.worldObj;
 		
-		RayTraceResult rtr = player.rayTrace(200.0, 1.0f);
-		
-		BlockPos pos = new BlockPos(rtr.hitVec);
-		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock().isAir(state, world, pos)) {
-			pos = pos.down();
+		EntityLivingBase entity = findEntityLookedAt(player, world);
+		if (entity != null) {
+			entityStatusGUI.setEntity(entity);
 		}
-		
-		AxisAlignedBB scan = new AxisAlignedBB(pos);
-		
-		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, scan);
-		
-		for (Entity entity : entities) {
-			if (entity instanceof EntityLivingBase) {
-				entityStatusGUI.setEntity((EntityLivingBase)entity);
+	}
+	
+	private EntityLivingBase findEntityLookedAt(EntityPlayer player, World world) {
+		RayTraceResult rtr;
+		BlockPos pos;
+		BlockPos prevPos = null;
+		for (double d = 0.0; d < 100.0; d++) {
+			rtr = player.rayTrace(d, 1.0f);
+			
+			if (rtr == null) {
+				continue;
+			}
+			
+			pos = new BlockPos(rtr.hitVec);
+			
+			if (prevPos != null && isSolidBlock(pos, prevPos)) {
+				return null;
+			}
+			
+			prevPos = pos;
+			
+			AxisAlignedBB scan = new AxisAlignedBB(pos);
+			
+			List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, scan);
+			
+			for (Entity entity : entities) {
+				if (entity instanceof EntityLivingBase) {
+					return (EntityLivingBase)entity;
+				}
 			}
 		}
+		
+		return null;
+	}
+
+	private boolean isSolidBlock(BlockPos pos, BlockPos prevPos) {
+		return prevPos.compareTo(pos) == 0;
 	}
 
 }
