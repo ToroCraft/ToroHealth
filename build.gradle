@@ -20,9 +20,9 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.9.4-3"
-group= "net.torocraft.damageindicators" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "damageindicators"
+version = "1.9.4-1"
+group= "net.torocraft.torohealth" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "torohealth"
 
 minecraft {
     version = "1.9.4-12.17.0.1922-1.9.4"

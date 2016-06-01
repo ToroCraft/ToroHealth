@@ -1,4 +1,4 @@
-package net.torocraft.damageindicatorsmod;
+package net.torocraft.torohealthmod;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.torocraft.damageindicatorsmod.gui.GuiEntityStatus;
-import net.torocraft.damageindicatorsmod.render.DamageParticle;
+import net.torocraft.torohealthmod.gui.GuiEntityStatus;
+import net.torocraft.torohealthmod.render.DamageParticle;
 
 public class ClientProxy extends CommonProxy {
 	

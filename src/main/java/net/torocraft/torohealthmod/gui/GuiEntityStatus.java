@@ -1,4 +1,4 @@
-package net.torocraft.damageindicatorsmod.gui;
+package net.torocraft.torohealthmod.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.torocraft.damageindicatorsmod.DamageIndicatorsMod;
+import net.torocraft.torohealthmod.ToroHealthMod;
 
 public class GuiEntityStatus extends Gui {
 
@@ -50,7 +50,7 @@ public class GuiEntityStatus extends Gui {
 		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
 	    	return;
 	    }
-		ResourceLocation spriteLoc = new ResourceLocation(DamageIndicatorsMod.MODID, "textures/gui/entityStatus.png");
+		ResourceLocation spriteLoc = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
     	this.mc.renderEngine.bindTexture(spriteLoc);
 		Gui.drawModalRectWithCustomSizedTexture(2, 2, 0.0f, 0.0f, 150, 40, 200.0f, 200.0f);
 		

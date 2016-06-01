@@ -1,4 +1,4 @@
-package net.torocraft.damageindicatorsmod.render;
+package net.torocraft.torohealthmod.render;
 
 import org.lwjgl.opengl.GL11;
 

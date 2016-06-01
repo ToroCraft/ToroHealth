@@ -1,4 +1,4 @@
-package net.torocraft.damageindicatorsmod;
+package net.torocraft.torohealthmod;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
