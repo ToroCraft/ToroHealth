@@ -7,6 +7,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.torocraft.torohealthmod.ToroHealthMod;
 
@@ -42,8 +43,9 @@ public class GuiEntityStatus extends Gui {
 		if (!showHealthBar) {
 			return;
 		}
+		String entityStatusDisplay = ToroHealthMod.config.getString("entityStatusDisplay", Configuration.CATEGORY_CLIENT, "STANDARD", "Display Health Bars", new String[]{"STANDARD", "COMPACT", "OFF"});
 		age++;
-		if (age > TTL) {
+		if (age > TTL || entityStatusDisplay.equals("OFF")) {
 			hideHealthBar();
 		}
 		
@@ -52,6 +54,14 @@ public class GuiEntityStatus extends Gui {
 	    }
 		ResourceLocation spriteLoc = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
     	this.mc.renderEngine.bindTexture(spriteLoc);
+    	if (entityStatusDisplay.equals("STANDARD")) {
+    		drawStandardDisplayStyle();
+    	} else if (entityStatusDisplay.equals("COMPACT")) {
+    		drawCompactDisplayStyle();
+    	}
+	}
+
+	private void drawStandardDisplayStyle() {
 		Gui.drawModalRectWithCustomSizedTexture(2, 2, 0.0f, 0.0f, 150, 40, 200.0f, 200.0f);
 		
 		Gui.drawModalRectWithCustomSizedTexture(4, 24, 0.0f, 150.0f, 146, 16, 200.0f, 200.0f);
@@ -63,6 +73,18 @@ public class GuiEntityStatus extends Gui {
 		
 		drawCenteredString(mc.fontRendererObj, name, 77, 8, 0xFFFFFF);
 		drawCenteredString(mc.fontRendererObj, (int)Math.ceil(entity.getHealth()) + "/" + (int)entity.getMaxHealth(), 77, 28, 0xFFFFFF);
+	}
+
+	private void drawCompactDisplayStyle() {
+		Gui.drawModalRectWithCustomSizedTexture(2, 14, 0.0f, 150.0f, 100, 16, 200.0f, 200.0f);
+		
+		int currentHealthWidth = (int)Math.ceil(100 * (entity.getHealth() / entity.getMaxHealth()));
+		Gui.drawModalRectWithCustomSizedTexture(2, 14, 0.0f, 100.0f, currentHealthWidth, 16, 200.0f, 200.0f);
+
+		String name = getDisplayName();
+		
+		drawString(mc.fontRendererObj, name, 2, 2, 0xFFFFFF);
+		drawCenteredString(mc.fontRendererObj, (int)Math.ceil(entity.getHealth()) + "/" + (int)entity.getMaxHealth(), 52, 18, 0xFFFFFF);
 	}
 
 	private String getDisplayName() {

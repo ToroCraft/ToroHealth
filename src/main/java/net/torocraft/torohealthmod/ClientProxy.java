@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -46,7 +47,11 @@ public class ClientProxy extends CommonProxy {
 		if (!entity.worldObj.isRemote) {
 			return;
 		}
-
+		
+		if (!ToroHealthMod.config.getBoolean("showDamageParticles", Configuration.CATEGORY_CLIENT, true, "Show Damage Indicators")) {
+			return;
+		}
+		
 		int currentHealth = (int) Math.ceil(entity.getHealth());
 
 		if (entity.getEntityData().hasKey("health")) {

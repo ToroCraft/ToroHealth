@@ -10,8 +10,10 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.torocraft.torohealthmod.ToroHealthMod;
 
 @SideOnly(Side.CLIENT)
 public class DamageParticle extends Particle {
@@ -79,9 +81,9 @@ public class DamageParticle extends Particle {
 		GL11.glEnable(3008);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		int color = 0xff0000;
+		int color = ToroHealthMod.config.getInt("damageColor", Configuration.CATEGORY_CLIENT, 0xff0000, 0x000000, 0xffffff, "Damage Text Color");;
 		if (damage < 0) {
-			color = 0x00ff00;
+			color = ToroHealthMod.config.getInt("healColor", Configuration.CATEGORY_CLIENT, 0x00ff00, 0x000000, 0xffffff, "Heal Text Color");
 		}
 
 		final FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
