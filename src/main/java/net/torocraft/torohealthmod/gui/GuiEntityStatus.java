@@ -7,9 +7,9 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.torocraft.torohealthmod.ToroHealthMod;
+import net.torocraft.torohealthmod.config.ConfigurationHandler;
 
 public class GuiEntityStatus extends Gui {
 
@@ -43,7 +43,7 @@ public class GuiEntityStatus extends Gui {
 		if (!showHealthBar) {
 			return;
 		}
-		String entityStatusDisplay = ToroHealthMod.config.getString("entityStatusDisplay", Configuration.CATEGORY_CLIENT, "STANDARD", "Display Health Bars", new String[]{"STANDARD", "COMPACT", "OFF"});
+		String entityStatusDisplay = ConfigurationHandler.entityStatusDisplay;
 		age++;
 		if (age > TTL || entityStatusDisplay.equals("OFF")) {
 			hideHealthBar();

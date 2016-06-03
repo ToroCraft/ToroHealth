@@ -13,10 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.torocraft.torohealthmod.config.ConfigurationHandler;
 import net.torocraft.torohealthmod.gui.GuiEntityStatus;
 import net.torocraft.torohealthmod.render.DamageParticle;
 
@@ -48,7 +48,7 @@ public class ClientProxy extends CommonProxy {
 			return;
 		}
 		
-		if (!ToroHealthMod.config.getBoolean("showDamageParticles", Configuration.CATEGORY_CLIENT, true, "Show Damage Indicators")) {
+		if (!ConfigurationHandler.showDamageParticles) {
 			return;
 		}
 		
