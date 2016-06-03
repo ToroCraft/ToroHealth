@@ -16,7 +16,7 @@ import net.torocraft.torohealthmod.events.Events;
 public class ToroHealthMod {
 
 	public static final String MODID = "torohealthmod";
-	public static final String VERSION = "1.9.4-2";
+	public static final String VERSION = "1.9.4-3";
 	public static final String MODNAME = "ToroHealthMod";
 	
 	@SidedProxy(clientSide = "net.torocraft.torohealthmod.ClientProxy", serverSide = "net.torocraft.torohealthmod.ServerProxy")
