@@ -30,6 +30,9 @@ public class GuiEntityStatus extends Gui {
 	private final int TTL = 150;
 
 	private ScaledResolution viewport;
+	private final int PADDING_FROM_EDGE = 2;
+
+	int screenX = PADDING_FROM_EDGE, screenY = PADDING_FROM_EDGE;
 
 	/*
 	 * for hearts drawing
@@ -80,7 +83,7 @@ public class GuiEntityStatus extends Gui {
 			entityStatusDisplay = "HEARTS";
 		}
 
-		drawEntityOnScreen(200, 200, 30);
+		// drawEntityOnScreen(200, 200, 30);
 
 		if (entityStatusDisplay.equals("NUMERIC")) {
 			drawNumericDisplayStyle();
@@ -136,47 +139,52 @@ public class GuiEntityStatus extends Gui {
 		ResourceLocation spriteLoc = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
 		mc.renderEngine.bindTexture(spriteLoc);
 
-		int bgX = 2, bgY = 2, healthBarX = 4, healthBarY = 18, healthBarWidth = 100, healthBarHeight = 34, nameX = 52,
-				nameY = 6, healthX = 52, healthY = 22;
+		/*
+		 * defines positions of each element from the top left position of
+		 * status display
+		 */
+		int bgX = 0, bgY = 0, healthBarX = 2, healthBarY = 16, healthBarWidth = 100, healthBarHeight = 34, nameX = 50,
+				nameY = 4, healthX = 50, healthY = 20;
 
 		String displayPosition = ConfigurationHandler.statusDisplayPosition;
 
 		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
 
-		if (displayPosition.equals("TOP CENTER")) {
-			bgX = (sw - healthBarWidth) / 2;
-			healthBarX = bgX + 2;
-			nameX = healthX = sw / 2;
-		} else if (displayPosition.equals("TOP RIGHT")) {
-			bgX = sw - healthBarWidth - 2;
-			healthBarX = bgX + 2;
-			nameX = healthX = sw - (healthBarWidth / 2);
-		} else if (displayPosition.equals("BOTTOM LEFT") || displayPosition.equals("BOTTOM RIGHT")) {
-			bgY = sh - healthBarHeight - 2;
-			healthBarY = bgY + 16;
-			nameY = bgY + 4;
-			healthY = healthBarY + 4;
+		if (displayPosition.contains("TOP")) {
+			screenY = PADDING_FROM_EDGE;
 		}
 
-		if (displayPosition.equals("BOTTOM RIGHT")) {
-			bgX = sw - healthBarWidth - 2;
-			healthBarX = bgX + 2;
-			nameX = healthX = sw - (healthBarWidth / 2);
+		if (displayPosition.contains("BOTTOM")) {
+			screenY = sh - healthBarHeight - PADDING_FROM_EDGE;
 		}
 
-		Gui.drawModalRectWithCustomSizedTexture(bgX, bgY, 0.0f, 0.0f, healthBarWidth, healthBarHeight, 200.0f, 200.0f);
+		if (displayPosition.contains("LEFT")) {
+			screenX = PADDING_FROM_EDGE;
+		}
 
-		Gui.drawModalRectWithCustomSizedTexture(healthBarX, healthBarY, 0.0f, 150.0f, 96, 16, 200.0f, 200.0f);
+		if (displayPosition.contains("RIGHT")) {
+			screenX = sw - healthBarWidth - PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("CENTER")) {
+			screenX = (sw - healthBarWidth) / 2;
+		}
+
+		Gui.drawModalRectWithCustomSizedTexture(screenX + bgX, screenY + bgY, 0.0f, 0.0f, healthBarWidth,
+				healthBarHeight, 200.0f, 200.0f);
+
+		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 150.0f, 96, 16,
+				200.0f, 200.0f);
 
 		int currentHealthWidth = (int) Math.ceil(96 * (entity.getHealth() / entity.getMaxHealth()));
-		Gui.drawModalRectWithCustomSizedTexture(healthBarX, healthBarY, 0.0f, 100.0f, currentHealthWidth, 16, 200.0f,
-				200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 100.0f,
+				currentHealthWidth, 16, 200.0f, 200.0f);
 
 		String name = getDisplayName();
 
-		drawCenteredString(mc.fontRendererObj, name, nameX, nameY, 0xFFFFFF);
+		drawCenteredString(mc.fontRendererObj, name, screenX + nameX, screenY + nameY, 0xFFFFFF);
 		drawCenteredString(mc.fontRendererObj, (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth(),
-				healthX, healthY, 0xFFFFFF);
+				screenX + healthX, screenY + healthY, 0xFFFFFF);
 	}
 
 	private void drawHeartsDisplay() {
@@ -199,12 +207,40 @@ public class GuiEntityStatus extends Gui {
 			lastSystemTime = Minecraft.getSystemTime();
 		}
 
+		screenX = PADDING_FROM_EDGE;
+		screenY = PADDING_FROM_EDGE;
+		int displayHeight = 74;
+		int displayWidth = 84;
+
+		String displayPosition = ConfigurationHandler.statusDisplayPosition;
+		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
+
+		if (displayPosition.contains("TOP")) {
+			screenY = PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("BOTTOM")) {
+			screenY = sh - displayHeight - PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("LEFT")) {
+			screenX = PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("RIGHT")) {
+			screenX = sw - displayWidth - PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("CENTER")) {
+			screenX = (sw - displayWidth) / 2;
+		}
+
 		entityHealth = currentHealth;
 		int preUpdateHealth = lastEntityHealth; // was j
 		rand.setSeed((long) (updateCounter * 312871));
 
-		int leftEdgeStatusBar = 2;
-		int topEdgeStatusBar = 12;
+		int leftEdgeStatusBar = 0;
+		int topEdgeStatusBar = 10;
 
 		float maxHealth = entity.getMaxHealth();
 		int absorptionAmount = MathHelper.ceiling_float_int(entity.getAbsorptionAmount());
@@ -212,7 +248,7 @@ public class GuiEntityStatus extends Gui {
 		int numRowsOfHearts = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F / 10.0F);
 		int j2 = Math.max(10 - (numRowsOfHearts - 2), 3);
 
-		int topOfArmor = topEdgeStatusBar - (numRowsOfHearts - 1) * j2 - 10;
+		int topOfArmor = screenY + topEdgeStatusBar + (numRowsOfHearts - 1) * j2 + 10;
 		int remainingAbsorption = absorptionAmount;
 		int armor = entity.getTotalArmorValue();
 
@@ -224,7 +260,7 @@ public class GuiEntityStatus extends Gui {
 
 		for (int i = 0; i < 10; ++i) {
 			if (armor > 0) {
-				int armorIconX = leftEdgeStatusBar + i * 8;
+				int armorIconX = screenX + leftEdgeStatusBar + i * 8;
 
 				/*
 				 * determines whether armor is full, half, or empty icon
@@ -260,8 +296,8 @@ public class GuiEntityStatus extends Gui {
 			}
 
 			int rowsOfHearts = MathHelper.ceiling_float_int((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
-			int heartToDrawX = leftEdgeStatusBar + currentHeartBeingDrawn % 10 * 8;
-			int heartToDrawY = topEdgeStatusBar + rowsOfHearts * j2;
+			int heartToDrawX = screenX + leftEdgeStatusBar + currentHeartBeingDrawn % 10 * 8;
+			int heartToDrawY = screenY + topEdgeStatusBar + rowsOfHearts * j2;
 
 			if (currentHealth <= 4) {
 				heartToDrawY += this.rand.nextInt(2);
@@ -317,7 +353,7 @@ public class GuiEntityStatus extends Gui {
 
 		String name = getDisplayName();
 
-		drawString(mc.fontRendererObj, name, 2, 2, 0xFFFFFF);
+		drawString(mc.fontRendererObj, name, screenX, screenY, 0xFFFFFF);
 	}
 
 	private boolean isHealthUpdateOver() {
