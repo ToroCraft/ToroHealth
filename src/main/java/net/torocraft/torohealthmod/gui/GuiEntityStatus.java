@@ -190,22 +190,22 @@ public class GuiEntityStatus extends Gui {
 	private void drawHeartsDisplay() {
 		mc.renderEngine.bindTexture(ICONS);
 		int currentHealth = MathHelper.ceiling_float_int(entity.getHealth());
-		boolean isFlashFrame = this.healthUpdateCounter > (long) this.updateCounter
-				&& (this.healthUpdateCounter - (long) this.updateCounter) / 3L % 2L == 1L;
 
-		if (isBeingDamaged(currentHealth)) {
-			lastSystemTime = Minecraft.getSystemTime();
-			healthUpdateCounter = (long) (updateCounter + 20);
-		} else if (isBeingHealed(currentHealth)) {
-			lastSystemTime = Minecraft.getSystemTime();
-			healthUpdateCounter = (long) (updateCounter + 10);
-		}
-
-		if (isHealthUpdateOver()) {
-			entityHealth = currentHealth;
-			lastEntityHealth = currentHealth;
-			lastSystemTime = Minecraft.getSystemTime();
-		}
+		/*
+		 * boolean isFlashFrame = this.healthUpdateCounter > (long)
+		 * this.updateCounter && (this.healthUpdateCounter - (long)
+		 * this.updateCounter) / 3L % 2L == 1L;
+		 * 
+		 * if (isBeingDamaged(currentHealth)) { lastSystemTime =
+		 * Minecraft.getSystemTime(); healthUpdateCounter = (long)
+		 * (updateCounter + 20); } else if (isBeingHealed(currentHealth)) {
+		 * lastSystemTime = Minecraft.getSystemTime(); healthUpdateCounter =
+		 * (long) (updateCounter + 10); }
+		 * 
+		 * if (isHealthUpdateOver()) { entityHealth = currentHealth;
+		 * lastEntityHealth = currentHealth; lastSystemTime =
+		 * Minecraft.getSystemTime(); }
+		 */
 
 		screenX = PADDING_FROM_EDGE;
 		screenY = PADDING_FROM_EDGE;
@@ -283,69 +283,68 @@ public class GuiEntityStatus extends Gui {
 				- 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
 			int texturePosX = 16;
 
-			if (entity.isPotionActive(MobEffects.POISON)) {
-				texturePosX += 36;
-			} else if (entity.isPotionActive(MobEffects.WITHER)) {
-				texturePosX += 72;
-			}
+			/*
+			 * is buggy; removing for now
+			 * 
+			 * if (entity.isPotionActive(MobEffects.POISON)) { texturePosX +=
+			 * 36; } else if (entity.isPotionActive(MobEffects.WITHER)) {
+			 * texturePosX += 72; }
+			 */
 
 			int flashingHeartOffset = 0;
 
-			if (isFlashFrame) {
-				flashingHeartOffset = 1;
-			}
+			/*
+			 * if (isFlashFrame) { flashingHeartOffset = 1; }
+			 */
 
 			int rowsOfHearts = MathHelper.ceiling_float_int((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
 			int heartToDrawX = screenX + leftEdgeStatusBar + currentHeartBeingDrawn % 10 * 8;
 			int heartToDrawY = screenY + topEdgeStatusBar + rowsOfHearts * j2;
 
-			if (currentHealth <= 4) {
-				heartToDrawY += this.rand.nextInt(2);
-			}
+			/*
+			 * if (currentHealth <= 4) { heartToDrawY += this.rand.nextInt(2); }
+			 * 
+			 * if (remainingAbsorption <= 0 && currentHeartBeingDrawn ==
+			 * regenCounter) { heartToDrawY -= 2; }
+			 */
 
-			if (remainingAbsorption <= 0 && currentHeartBeingDrawn == regenCounter) {
-				heartToDrawY -= 2;
-			}
-
-			int hardcoreModOffset = 0;
+			int hardcoreModeOffset = 0;
 
 			if (entity.worldObj.getWorldInfo().isHardcoreModeEnabled()) {
-				hardcoreModOffset = 5;
+				hardcoreModeOffset = 5;
 			}
 
-			this.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModOffset,
+			this.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModeOffset,
 					9, 9);
 
-			if (isFlashFrame) {
-				if (currentHeartBeingDrawn * 2 + 1 < preUpdateHealth) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 54, 9 * hardcoreModOffset, 9,
-							9);
-				}
-
-				if (currentHeartBeingDrawn * 2 + 1 == preUpdateHealth) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 63, 9 * hardcoreModOffset, 9,
-							9);
-				}
-			}
+			/*
+			 * if (isFlashFrame) { if (currentHeartBeingDrawn * 2 + 1 <
+			 * preUpdateHealth) { this.drawTexturedModalRect(heartToDrawX,
+			 * heartToDrawY, texturePosX + 54, 9 * hardcoreModOffset, 9, 9); }
+			 * 
+			 * if (currentHeartBeingDrawn * 2 + 1 == preUpdateHealth) {
+			 * this.drawTexturedModalRect(heartToDrawX, heartToDrawY,
+			 * texturePosX + 63, 9 * hardcoreModOffset, 9, 9); } }
+			 */
 
 			if (remainingAbsorption > 0) {
 				if (remainingAbsorption == absorptionAmount && absorptionAmount % 2 == 1) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 153, 9 * hardcoreModOffset, 9,
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 153, 9 * hardcoreModeOffset, 9,
 							9);
 					--remainingAbsorption;
 				} else {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 144, 9 * hardcoreModOffset, 9,
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 144, 9 * hardcoreModeOffset, 9,
 							9);
 					remainingAbsorption -= 2;
 				}
 			} else {
 				if (currentHeartBeingDrawn * 2 + 1 < currentHealth) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 36, 9 * hardcoreModOffset, 9,
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 36, 9 * hardcoreModeOffset, 9,
 							9);
 				}
 
 				if (currentHeartBeingDrawn * 2 + 1 == currentHealth) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 45, 9 * hardcoreModOffset, 9,
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 45, 9 * hardcoreModeOffset, 9,
 							9);
 				}
 			}
