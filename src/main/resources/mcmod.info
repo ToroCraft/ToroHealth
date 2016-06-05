@@ -3,7 +3,7 @@
   "modid": "torohealthmod",
   "name": "ToroHealth Damage Indicators",
   "description": "Displays damage indicators and health bars for all entities.",
-  "version": "1.9.4-2",
+  "version": "1.9.4-4",
   "mcversion": "${mcversion}",
   "url": "http://torocraft.net/",
   "updateUrl": "",

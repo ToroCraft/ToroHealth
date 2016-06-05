@@ -14,6 +14,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,7 +33,18 @@ public class GuiEntityStatus extends Gui {
 	private ScaledResolution viewport;
 	private final int PADDING_FROM_EDGE = 2;
 
+	String displayPosition;
 	int screenX = PADDING_FROM_EDGE, screenY = PADDING_FROM_EDGE;
+	int displayHeight;
+	int displayWidth;
+
+	/*
+	 * Entity drawing
+	 */
+	private EntityLivingBase tempEntity;
+	private final int entityRenderWidth = 40;
+	private final int entityRenderHeightUnit = 20;
+	private final int entityRenderX = 20;
 
 	/*
 	 * for hearts drawing
@@ -78,51 +90,78 @@ public class GuiEntityStatus extends Gui {
 		}
 
 		viewport = new ScaledResolution(mc);
+		displayPosition = ConfigurationHandler.statusDisplayPosition;
 
 		if (isUnsupportedDisplayType(entityStatusDisplay)) {
 			entityStatusDisplay = "HEARTS";
 		}
-
-		// drawEntityOnScreen(200, 200, 30);
 
 		if (entityStatusDisplay.equals("NUMERIC")) {
 			drawNumericDisplayStyle();
 		} else if (entityStatusDisplay.equals("HEARTS")) {
 			drawHeartsDisplay();
 		}
+
+		drawEntityOnScreen();
 	}
 
-	public void drawEntityOnScreen(int posX, int posY, int scale) {
+	public void drawEntityOnScreen() {
+
+		try {
+			tempEntity = ((EntityLivingBase) entity.getClass().getConstructor(new Class[] { World.class })
+					.newInstance(new Object[] { mc.theWorld }));
+		} catch (Exception e) {
+			tempEntity = null;
+		}
+
+		float heightMultiplier = (float) Math.ceil(tempEntity.height);
+		heightMultiplier = Math.max(heightMultiplier, 2.0f);
+
+		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
+
+		int entityRenderHeight = MathHelper.ceiling_float_int(entityRenderHeightUnit * heightMultiplier);
+
+		if (displayPosition.contains("TOP")) {
+			screenY = entityRenderHeight + 5;
+		}
+
+		if (displayPosition.contains("BOTTOM")) {
+			screenY = sh - displayHeight + entityRenderHeight;
+		}
+
+		if (displayPosition.contains("LEFT")) {
+			screenX = entityRenderX;
+		}
+
+		if (displayPosition.contains("RIGHT")) {
+			screenX = sw - entityRenderWidth + 10;
+		}
+
+		if (displayPosition.contains("CENTER")) {
+			screenX = ((sw - entityRenderWidth - displayWidth) / 2);
+		}
+
+		int scale = 20;
 		GlStateManager.enableColorMaterial();
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) posX, (float) posY, 50.0F);
+		GlStateManager.translate((float) screenX, (float) screenY, 50.0F);
 		GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
 		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-		float f = entity.renderYawOffset;
-		float f1 = entity.rotationYaw;
-		float f2 = entity.rotationPitch;
-		float f3 = entity.prevRotationYawHead;
-		float f4 = entity.rotationYawHead;
 		GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
-		GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(-((float) Math.atan((double) (50 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-		entity.renderYawOffset = (float) Math.atan((double) (50 / 40.0F)) * 20.0F;
-		entity.rotationYaw = (float) Math.atan((double) (50 / 40.0F)) * 40.0F;
-		entity.rotationPitch = -((float) Math.atan((double) (50 / 40.0F))) * 20.0F;
-		entity.rotationYawHead = entity.rotationYaw;
-		entity.prevRotationYawHead = entity.rotationYaw;
+		GlStateManager.rotate(-100.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(0.0f, 1.0F, 0.0F, 0.0F);
+		tempEntity.renderYawOffset = 0.0f;
+		tempEntity.rotationYaw = 0.0f;
+		tempEntity.rotationPitch = 0.0f;
+		tempEntity.rotationYawHead = 0.0f;
+		tempEntity.prevRotationYawHead = 0.0f;
 		GlStateManager.translate(0.0F, 0.0F, 0.0F);
 		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
 		rendermanager.setPlayerViewY(180.0F);
 		rendermanager.setRenderShadow(false);
-		rendermanager.doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+		rendermanager.doRenderEntity(tempEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
 		rendermanager.setRenderShadow(true);
-		entity.renderYawOffset = f;
-		entity.rotationYaw = f1;
-		entity.rotationPitch = f2;
-		entity.prevRotationYawHead = f3;
-		entity.rotationYawHead = f4;
 		GlStateManager.popMatrix();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableRescaleNormal();
@@ -143,35 +182,15 @@ public class GuiEntityStatus extends Gui {
 		 * defines positions of each element from the top left position of
 		 * status display
 		 */
-		int bgX = 0, bgY = 0, healthBarX = 2, healthBarY = 16, healthBarWidth = 100, healthBarHeight = 34, nameX = 50,
-				nameY = 4, healthX = 50, healthY = 20;
+		int bgX = 0, bgY = 0, healthBarX = 2, healthBarY = 16, nameX = 50, nameY = 4, healthX = 50, healthY = 20;
 
-		String displayPosition = ConfigurationHandler.statusDisplayPosition;
+		displayWidth = 100;
+		displayHeight = 34;
 
-		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
+		adjustForDisplayPositionSetting();
 
-		if (displayPosition.contains("TOP")) {
-			screenY = PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("BOTTOM")) {
-			screenY = sh - healthBarHeight - PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("LEFT")) {
-			screenX = PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("RIGHT")) {
-			screenX = sw - healthBarWidth - PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("CENTER")) {
-			screenX = (sw - healthBarWidth) / 2;
-		}
-
-		Gui.drawModalRectWithCustomSizedTexture(screenX + bgX, screenY + bgY, 0.0f, 0.0f, healthBarWidth,
-				healthBarHeight, 200.0f, 200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(screenX + bgX, screenY + bgY, 0.0f, 0.0f, displayWidth, displayHeight,
+				200.0f, 200.0f);
 
 		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 150.0f, 96, 16,
 				200.0f, 200.0f);
@@ -209,31 +228,10 @@ public class GuiEntityStatus extends Gui {
 
 		screenX = PADDING_FROM_EDGE;
 		screenY = PADDING_FROM_EDGE;
-		int displayHeight = 74;
-		int displayWidth = 84;
+		displayHeight = 74;
+		displayWidth = 84;
 
-		String displayPosition = ConfigurationHandler.statusDisplayPosition;
-		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
-
-		if (displayPosition.contains("TOP")) {
-			screenY = PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("BOTTOM")) {
-			screenY = sh - displayHeight - PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("LEFT")) {
-			screenX = PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("RIGHT")) {
-			screenX = sw - displayWidth - PADDING_FROM_EDGE;
-		}
-
-		if (displayPosition.contains("CENTER")) {
-			screenX = (sw - displayWidth) / 2;
-		}
+		adjustForDisplayPositionSetting();
 
 		entityHealth = currentHealth;
 		int preUpdateHealth = lastEntityHealth; // was j
@@ -353,6 +351,31 @@ public class GuiEntityStatus extends Gui {
 		String name = getDisplayName();
 
 		drawString(mc.fontRendererObj, name, screenX, screenY, 0xFFFFFF);
+	}
+
+	private void adjustForDisplayPositionSetting() {
+		int sh = viewport.getScaledHeight();
+		int sw = viewport.getScaledWidth();
+
+		if (displayPosition.contains("TOP")) {
+			screenY = PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("BOTTOM")) {
+			screenY = sh - displayHeight - PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("LEFT")) {
+			screenX = entityRenderWidth + PADDING_FROM_EDGE;
+		}
+
+		if (displayPosition.contains("RIGHT")) {
+			screenX = sw - displayWidth - PADDING_FROM_EDGE - entityRenderWidth - 10;
+		}
+
+		if (displayPosition.contains("CENTER")) {
+			screenX = (sw - displayWidth) / 2;
+		}
 	}
 
 	private boolean isHealthUpdateOver() {

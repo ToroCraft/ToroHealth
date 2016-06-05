@@ -11,14 +11,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.torocraft.torohealthmod.config.ConfigurationHandler;
 import net.torocraft.torohealthmod.events.Events;
 
-@Mod(modid = ToroHealthMod.MODID, name = ToroHealthMod.MODNAME, version = ToroHealthMod.VERSION, clientSideOnly = true,
-	guiFactory = "net.torocraft." + ToroHealthMod.MODID + ".gui.GuiFactoryToroHealth")
+@Mod(modid = ToroHealthMod.MODID, name = ToroHealthMod.MODNAME, version = ToroHealthMod.VERSION, clientSideOnly = true, guiFactory = "net.torocraft."
+		+ ToroHealthMod.MODID + ".gui.GuiFactoryToroHealth")
 public class ToroHealthMod {
 
 	public static final String MODID = "torohealthmod";
-	public static final String VERSION = "1.9.4-3";
+	public static final String VERSION = "1.9.4-4";
 	public static final String MODNAME = "ToroHealthMod";
-	
+
 	@SidedProxy(clientSide = "net.torocraft.torohealthmod.ClientProxy", serverSide = "net.torocraft.torohealthmod.ServerProxy")
 	public static CommonProxy proxy;
 
@@ -28,7 +28,7 @@ public class ToroHealthMod {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		proxy.preInit(e);
-		
+
 		ConfigurationHandler.init(e.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
 	}
