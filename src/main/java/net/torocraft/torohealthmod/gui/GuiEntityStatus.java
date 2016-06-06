@@ -117,7 +117,8 @@ public class GuiEntityStatus extends Gui {
 			return;
 		}
 		try {
-			tempEntity = ((EntityLivingBase) entity.getClass().getConstructor(new Class[] { World.class }).newInstance(new Object[] { mc.theWorld }));
+			tempEntity = ((EntityLivingBase) entity.getClass().getConstructor(new Class[] { World.class })
+					.newInstance(new Object[] { mc.theWorld }));
 		} catch (Exception e) {
 			tempEntity = null;
 		}
@@ -135,10 +136,6 @@ public class GuiEntityStatus extends Gui {
 	public void drawEntityOnScreen() {
 
 		cloneEntity();
-
-		if (tempEntity == null) {
-			return;
-		}
 
 		if (tempEntity == null) {
 			return;
