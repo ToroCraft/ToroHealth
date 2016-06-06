@@ -114,6 +114,10 @@ public class GuiEntityStatus extends Gui {
 			tempEntity = null;
 		}
 
+		if (tempEntity == null) {
+			return;
+		}
+
 		float heightMultiplier = (float) Math.ceil(tempEntity.height);
 		heightMultiplier = Math.max(heightMultiplier, 2.0f);
 
