@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.MobEffects;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -105,13 +106,38 @@ public class GuiEntityStatus extends Gui {
 		drawEntityOnScreen();
 	}
 
-	public void drawEntityOnScreen() {
+	private void cloneEntity() {
+		createNewEntityObject();
+		copyEntityData();
+	}
 
+	protected void createNewEntityObject() {
+		if (entity == null) {
+			tempEntity = null;
+			return;
+		}
 		try {
-			tempEntity = ((EntityLivingBase) entity.getClass().getConstructor(new Class[] { World.class })
-					.newInstance(new Object[] { mc.theWorld }));
+			tempEntity = ((EntityLivingBase) entity.getClass().getConstructor(new Class[] { World.class }).newInstance(new Object[] { mc.theWorld }));
 		} catch (Exception e) {
 			tempEntity = null;
+		}
+	}
+
+	protected void copyEntityData() {
+		if (tempEntity == null || entity == null) {
+			return;
+		}
+		NBTTagCompound nbttagcompound = entity.writeToNBT(new NBTTagCompound());
+		nbttagcompound.removeTag("Dimension");
+		tempEntity.readFromNBT(nbttagcompound);
+	}
+
+	public void drawEntityOnScreen() {
+
+		cloneEntity();
+
+		if (tempEntity == null) {
+			return;
 		}
 
 		float heightMultiplier = (float) Math.ceil(tempEntity.height);
