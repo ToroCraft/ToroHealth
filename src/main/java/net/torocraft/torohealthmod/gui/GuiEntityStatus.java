@@ -10,12 +10,9 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -42,8 +39,7 @@ public class GuiEntityStatus extends Gui {
 	/*
 	 * Entity drawing
 	 */
-	private EntityLivingBase tempEntity;
-	private final int entityRenderWidth = 40;
+	private int entityRenderWidth;
 	private final int entityRenderHeightUnit = 20;
 	private final int entityRenderX = 20;
 
@@ -90,6 +86,13 @@ public class GuiEntityStatus extends Gui {
 			return;
 		}
 
+		boolean showEntityModel = ConfigurationHandler.showEntityModel;
+		if (showEntityModel) {
+			entityRenderWidth = 40;
+		} else {
+			entityRenderWidth = 0;
+		}
+
 		viewport = new ScaledResolution(mc);
 		displayPosition = ConfigurationHandler.statusDisplayPosition;
 
@@ -103,45 +106,13 @@ public class GuiEntityStatus extends Gui {
 			drawHeartsDisplay();
 		}
 
-		drawEntityOnScreen();
-	}
-
-	private void cloneEntity() {
-		createNewEntityObject();
-		copyEntityData();
-	}
-
-	protected void createNewEntityObject() {
-		if (entity == null) {
-			tempEntity = null;
-			return;
+		if (showEntityModel) {
+			drawEntityOnScreen();
 		}
-		try {
-			tempEntity = ((EntityLivingBase) entity.getClass().getConstructor(new Class[] { World.class })
-					.newInstance(new Object[] { mc.theWorld }));
-		} catch (Exception e) {
-			tempEntity = null;
-		}
-	}
-
-	protected void copyEntityData() {
-		if (tempEntity == null || entity == null) {
-			return;
-		}
-		NBTTagCompound nbttagcompound = entity.writeToNBT(new NBTTagCompound());
-		nbttagcompound.removeTag("Dimension");
-		tempEntity.readFromNBT(nbttagcompound);
 	}
 
 	public void drawEntityOnScreen() {
-
-		cloneEntity();
-
-		if (tempEntity == null) {
-			return;
-		}
-
-		float heightMultiplier = (float) Math.ceil(tempEntity.height);
+		float heightMultiplier = (float) Math.ceil(entity.height);
 		heightMultiplier = Math.max(heightMultiplier, 2.0f);
 
 		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
@@ -169,6 +140,11 @@ public class GuiEntityStatus extends Gui {
 		}
 
 		int scale = 20;
+		float prevYawOffset = entity.renderYawOffset;
+		float prevYaw = entity.rotationYaw;
+		float prevPitch = entity.rotationPitch;
+		float prevYawHead = entity.rotationYawHead;
+		float prevPrevYahHead = entity.prevRotationYawHead;
 		GlStateManager.enableColorMaterial();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) screenX, (float) screenY, 50.0F);
@@ -178,17 +154,22 @@ public class GuiEntityStatus extends Gui {
 		RenderHelper.enableStandardItemLighting();
 		GlStateManager.rotate(-100.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(0.0f, 1.0F, 0.0F, 0.0F);
-		tempEntity.renderYawOffset = 0.0f;
-		tempEntity.rotationYaw = 0.0f;
-		tempEntity.rotationPitch = 0.0f;
-		tempEntity.rotationYawHead = 0.0f;
-		tempEntity.prevRotationYawHead = 0.0f;
+		entity.renderYawOffset = 0.0f;
+		entity.rotationYaw = 0.0f;
+		entity.rotationPitch = 0.0f;
+		entity.rotationYawHead = 0.0f;
+		entity.prevRotationYawHead = 0.0f;
 		GlStateManager.translate(0.0F, 0.0F, 0.0F);
 		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
 		rendermanager.setPlayerViewY(180.0F);
 		rendermanager.setRenderShadow(false);
-		rendermanager.doRenderEntity(tempEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+		rendermanager.doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
 		rendermanager.setRenderShadow(true);
+		entity.renderYawOffset = prevYawOffset;
+		entity.rotationYaw = prevYaw;
+		entity.rotationPitch = prevPitch;
+		entity.rotationYawHead = prevYawHead;
+		entity.prevRotationYawHead = prevPrevYahHead;
 		GlStateManager.popMatrix();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableRescaleNormal();
@@ -376,7 +357,6 @@ public class GuiEntityStatus extends Gui {
 		}
 
 		String name = getDisplayName();
-
 		drawString(mc.fontRendererObj, name, screenX, screenY, 0xFFFFFF);
 	}
 
@@ -418,73 +398,7 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	private String getDisplayName() {
-		String name = entity.getName();
-		if (entity.hasCustomName()) {
-			return entity.getCustomNameTag();
-		}
-		if (entity instanceof EntityVillager) {
-			int profId = ((EntityVillager) entity).getProfession();
-			int careerId = ((EntityVillager) entity).getEntityData().getInteger("Career");
-
-			switch (profId) {
-			case 0:
-				switch (careerId) {
-				case 1:
-					name = "Farmer";
-					break;
-				case 2:
-					name = "Fisherman";
-					break;
-				case 3:
-					name = "Shepherd";
-					break;
-				case 4:
-					name = "Fletcher";
-					break;
-				default:
-					name = "Farmer";
-					break;
-				}
-				break;
-			case 1:
-				name = "Librarian";
-				break;
-			case 2:
-				name = "Cleric";
-				break;
-			case 3:
-				switch (careerId) {
-				case 1:
-					name = "Armorer";
-					break;
-				case 2:
-					name = "Weapon Smith";
-					break;
-				case 3:
-					name = "Tool Smith";
-					break;
-				default:
-					name = "Blacksmith";
-				}
-				break;
-			case 4:
-				switch (careerId) {
-				case 1:
-					name = "Butcher";
-					break;
-				case 2:
-					name = "Leatherworker";
-					break;
-				default:
-					name = "Butcher";
-					break;
-				}
-				break;
-			default:
-				name = "Villager";
-				break;
-			}
-		}
+		String name = entity.getDisplayName().getFormattedText();
 		return name;
 	}
 

@@ -11,6 +11,7 @@ public class ConfigurationHandler {
 
 	public static Configuration config;
 
+	public static boolean showEntityModel;
 	public static boolean showDamageParticles;
 	public static String entityStatusDisplay;
 	public static String statusDisplayPosition;
@@ -27,6 +28,8 @@ public class ConfigurationHandler {
 
 	public static void loadConfiguration() {
 		try {
+			showEntityModel = config.getBoolean("Show 3D Model of Entity", Configuration.CATEGORY_CLIENT, true,
+					"Shows a 3D model of the entity being targeted");
 			showDamageParticles = config.getBoolean("Show Damage Particles", Configuration.CATEGORY_CLIENT, true,
 					"Show Damage Indicators");
 			entityStatusDisplay = config.getString("Health Bar Display", Configuration.CATEGORY_CLIENT, "HEARTS",
