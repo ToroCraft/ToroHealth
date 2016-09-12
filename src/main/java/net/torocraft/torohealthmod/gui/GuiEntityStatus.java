@@ -107,7 +107,10 @@ public class GuiEntityStatus extends Gui {
 		}
 
 		if (showEntityModel) {
-			drawEntityOnScreen();
+			try {
+				drawEntityOnScreen();
+			} catch (Throwable ignore) {
+			}
 		}
 	}
 
