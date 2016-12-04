@@ -115,12 +115,12 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	public void drawEntityOnScreen() {
-		float heightMultiplier = (float) Math.ceil(entity.height);
-		heightMultiplier = Math.max(heightMultiplier, 2.0f);
 
 		int sw = viewport.getScaledWidth(), sh = viewport.getScaledHeight();
 
-		int entityRenderHeight = MathHelper.ceiling_float_int(entityRenderHeightUnit * heightMultiplier);
+		int entityRenderHeight = 20;
+
+		double h = entityRenderHeight / entity.height;
 
 		if (displayPosition.contains("TOP")) {
 			screenY = entityRenderHeight + 5;
@@ -142,7 +142,8 @@ public class GuiEntityStatus extends Gui {
 			screenX = ((sw - entityRenderWidth - displayWidth) / 2);
 		}
 
-		int scale = 20;
+		int scale = MathHelper.ceiling_double_int(h);
+
 		float prevYawOffset = entity.renderYawOffset;
 		float prevYaw = entity.rotationYaw;
 		float prevPitch = entity.rotationPitch;
@@ -200,21 +201,17 @@ public class GuiEntityStatus extends Gui {
 
 		adjustForDisplayPositionSetting();
 
-		Gui.drawModalRectWithCustomSizedTexture(screenX + bgX, screenY + bgY, 0.0f, 0.0f, displayWidth, displayHeight,
-				200.0f, 200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(screenX + bgX, screenY + bgY, 0.0f, 0.0f, displayWidth, displayHeight, 200.0f, 200.0f);
 
-		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 150.0f, 96, 16,
-				200.0f, 200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 150.0f, 96, 16, 200.0f, 200.0f);
 
 		int currentHealthWidth = (int) Math.ceil(96 * (entity.getHealth() / entity.getMaxHealth()));
-		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 100.0f,
-				currentHealthWidth, 16, 200.0f, 200.0f);
+		Gui.drawModalRectWithCustomSizedTexture(screenX + healthBarX, screenY + healthBarY, 0.0f, 100.0f, currentHealthWidth, 16, 200.0f, 200.0f);
 
 		String name = getDisplayName();
 
 		drawCenteredString(mc.fontRendererObj, name, screenX + nameX, screenY + nameY, 0xFFFFFF);
-		drawCenteredString(mc.fontRendererObj, (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth(),
-				screenX + healthX, screenY + healthY, 0xFFFFFF);
+		drawCenteredString(mc.fontRendererObj, (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth(), screenX + healthX, screenY + healthY, 0xFFFFFF);
 	}
 
 	private void drawHeartsDisplay() {
@@ -288,8 +285,7 @@ public class GuiEntityStatus extends Gui {
 			}
 		}
 
-		for (int currentHeartBeingDrawn = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F)
-				- 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
+		for (int currentHeartBeingDrawn = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F) - 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
 			int texturePosX = 16;
 
 			/*
@@ -323,8 +319,7 @@ public class GuiEntityStatus extends Gui {
 				hardcoreModeOffset = 5;
 			}
 
-			this.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModeOffset,
-					9, 9);
+			this.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModeOffset, 9, 9);
 
 			/*
 			 * if (isFlashFrame) { if (currentHeartBeingDrawn * 2 + 1 <
@@ -338,23 +333,19 @@ public class GuiEntityStatus extends Gui {
 
 			if (remainingAbsorption > 0) {
 				if (remainingAbsorption == absorptionAmount && absorptionAmount % 2 == 1) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 153, 9 * hardcoreModeOffset, 9,
-							9);
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 153, 9 * hardcoreModeOffset, 9, 9);
 					--remainingAbsorption;
 				} else {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 144, 9 * hardcoreModeOffset, 9,
-							9);
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 144, 9 * hardcoreModeOffset, 9, 9);
 					remainingAbsorption -= 2;
 				}
 			} else {
 				if (currentHeartBeingDrawn * 2 + 1 < currentHealth) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 36, 9 * hardcoreModeOffset, 9,
-							9);
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 36, 9 * hardcoreModeOffset, 9, 9);
 				}
 
 				if (currentHeartBeingDrawn * 2 + 1 == currentHealth) {
-					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 45, 9 * hardcoreModeOffset, 9,
-							9);
+					this.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 45, 9 * hardcoreModeOffset, 9, 9);
 				}
 			}
 		}
