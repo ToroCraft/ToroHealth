@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -215,25 +214,6 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	private void drawHeartsDisplay() {
-		mc.renderEngine.bindTexture(ICONS);
-		int currentHealth = MathHelper.ceiling_float_int(entity.getHealth());
-
-		/*
-		 * boolean isFlashFrame = this.healthUpdateCounter > (long)
-		 * this.updateCounter && (this.healthUpdateCounter - (long)
-		 * this.updateCounter) / 3L % 2L == 1L;
-		 * 
-		 * if (isBeingDamaged(currentHealth)) { lastSystemTime =
-		 * Minecraft.getSystemTime(); healthUpdateCounter = (long)
-		 * (updateCounter + 20); } else if (isBeingHealed(currentHealth)) {
-		 * lastSystemTime = Minecraft.getSystemTime(); healthUpdateCounter =
-		 * (long) (updateCounter + 10); }
-		 * 
-		 * if (isHealthUpdateOver()) { entityHealth = currentHealth;
-		 * lastEntityHealth = currentHealth; lastSystemTime =
-		 * Minecraft.getSystemTime(); }
-		 */
-
 		screenX = PADDING_FROM_EDGE;
 		screenY = PADDING_FROM_EDGE;
 		displayHeight = 74;
@@ -241,77 +221,37 @@ public class GuiEntityStatus extends Gui {
 
 		adjustForDisplayPositionSetting();
 
-		entityHealth = currentHealth;
-		int preUpdateHealth = lastEntityHealth; // was j
-		rand.setSeed((long) (updateCounter * 312871));
+		drawName();
+		drawHearts();
+		drawArmor();
+	}
 
-		int leftEdgeStatusBar = 0;
-		int topEdgeStatusBar = 10;
+	private void drawName() {
+		String name = getDisplayName();
+		drawString(mc.fontRendererObj, name, screenX, screenY, 0xFFFFFF);
+		screenY += 10;
+	}
+
+
+	private int drawHearts() {
+		mc.renderEngine.bindTexture(ICONS);
+		int currentHealth = MathHelper.ceiling_float_int(entity.getHealth());
+		entityHealth = currentHealth;
+		int absorptionAmount = MathHelper.ceiling_float_int(entity.getAbsorptionAmount());
+		int remainingAbsorption = absorptionAmount;
 
 		float maxHealth = entity.getMaxHealth();
-		int absorptionAmount = MathHelper.ceiling_float_int(entity.getAbsorptionAmount());
 
 		int numRowsOfHearts = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F / 10.0F);
 		int j2 = Math.max(10 - (numRowsOfHearts - 2), 3);
 
-		int topOfArmor = screenY + topEdgeStatusBar + (numRowsOfHearts - 1) * j2 + 10;
-		int remainingAbsorption = absorptionAmount;
-		int armor = entity.getTotalArmorValue();
-
-		int regenCounter = -1;
-
-		if (entity.isPotionActive(MobEffects.REGENERATION)) {
-			regenCounter = this.updateCounter % MathHelper.ceiling_float_int(maxHealth + 5.0F);
-		}
-
-		for (int i = 0; i < 10; ++i) {
-			if (armor > 0) {
-				int armorIconX = screenX + leftEdgeStatusBar + i * 8;
-
-				/*
-				 * determines whether armor is full, half, or empty icon
-				 */
-				if (i * 2 + 1 < armor) {
-					this.drawTexturedModalRect(armorIconX, topOfArmor, 34, 9, 9, 9);
-				}
-
-				if (i * 2 + 1 == armor) {
-					this.drawTexturedModalRect(armorIconX, topOfArmor, 25, 9, 9, 9);
-				}
-
-				if (i * 2 + 1 > armor) {
-					this.drawTexturedModalRect(armorIconX, topOfArmor, 16, 9, 9, 9);
-				}
-			}
-		}
-
 		for (int currentHeartBeingDrawn = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F) - 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
 			int texturePosX = 16;
-
-			/*
-			 * is buggy; removing for now
-			 * 
-			 * if (entity.isPotionActive(MobEffects.POISON)) { texturePosX +=
-			 * 36; } else if (entity.isPotionActive(MobEffects.WITHER)) {
-			 * texturePosX += 72; }
-			 */
-
 			int flashingHeartOffset = 0;
 
-			/*
-			 * if (isFlashFrame) { flashingHeartOffset = 1; }
-			 */
-
 			int rowsOfHearts = MathHelper.ceiling_float_int((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
-			int heartToDrawX = screenX + leftEdgeStatusBar + currentHeartBeingDrawn % 10 * 8;
-			int heartToDrawY = screenY + topEdgeStatusBar + rowsOfHearts * j2;
-
-			/*
-			 * if (currentHealth <= 4) { heartToDrawY += this.rand.nextInt(2); }
-			 * 
-			 * if (remainingAbsorption <= 0 && currentHeartBeingDrawn ==
-			 * regenCounter) { heartToDrawY -= 2; }
-			 */
+			int heartToDrawX = screenX + currentHeartBeingDrawn % 10 * 8;
+			int heartToDrawY = screenY + rowsOfHearts * j2;
 
 			int hardcoreModeOffset = 0;
 
@@ -320,16 +260,6 @@ public class GuiEntityStatus extends Gui {
 			}
 
 			this.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModeOffset, 9, 9);
-
-			/*
-			 * if (isFlashFrame) { if (currentHeartBeingDrawn * 2 + 1 <
-			 * preUpdateHealth) { this.drawTexturedModalRect(heartToDrawX,
-			 * heartToDrawY, texturePosX + 54, 9 * hardcoreModOffset, 9, 9); }
-			 * 
-			 * if (currentHeartBeingDrawn * 2 + 1 == preUpdateHealth) {
-			 * this.drawTexturedModalRect(heartToDrawX, heartToDrawY,
-			 * texturePosX + 63, 9 * hardcoreModOffset, 9, 9); } }
-			 */
 
 			if (remainingAbsorption > 0) {
 				if (remainingAbsorption == absorptionAmount && absorptionAmount % 2 == 1) {
@@ -350,8 +280,38 @@ public class GuiEntityStatus extends Gui {
 			}
 		}
 
-		String name = getDisplayName();
-		drawString(mc.fontRendererObj, name, screenX, screenY, 0xFFFFFF);
+		screenY += (numRowsOfHearts - 1) * j2 + 10;
+
+		return remainingAbsorption;
+	}
+
+	private void drawArmor() {
+		mc.renderEngine.bindTexture(ICONS);
+
+		int armor = entity.getTotalArmorValue();
+
+		for (int i = 0; i < 10; ++i) {
+			if (armor > 0) {
+				int armorIconX = screenX + i * 8;
+
+				/*
+				 * determines whether armor is full, half, or empty icon
+				 */
+				if (i * 2 + 1 < armor) {
+					this.drawTexturedModalRect(armorIconX, screenY, 34, 9, 9, 9);
+				}
+
+				if (i * 2 + 1 == armor) {
+					this.drawTexturedModalRect(armorIconX, screenY, 25, 9, 9, 9);
+				}
+
+				if (i * 2 + 1 > armor) {
+					this.drawTexturedModalRect(armorIconX, screenY, 16, 9, 9, 9);
+				}
+			}
+		}
+
+		screenY += 10;
 	}
 
 	private void adjustForDisplayPositionSetting() {
