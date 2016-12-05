@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.10.2-3"
+version = "1.10.2-6"
 group= "net.torocraft.torohealth"
 archivesBaseName = "torohealth"
 
