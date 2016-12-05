@@ -139,6 +139,11 @@ public class GuiEntityStatus extends Gui {
 			screenX = ((sw - entityRenderWidth - displayWidth) / 2);
 		}
 
+		if (displayPosition.equals("CUSTOM")) {
+			screenX = ConfigurationHandler.statusDisplayX + (entityRenderWidth / 2);
+			screenY = ConfigurationHandler.statusDisplayY + entityRenderHeight + 10;
+		}
+		
 		int scale = MathHelper.ceiling_double_int(h);
 
 		float prevYawOffset = entity.renderYawOffset;
@@ -316,6 +321,12 @@ public class GuiEntityStatus extends Gui {
 		int sh = viewport.getScaledHeight();
 		int sw = viewport.getScaledWidth();
 
+		if (displayPosition.equals("CUSTOM")) {
+			screenX = ConfigurationHandler.statusDisplayX + entityRenderWidth;
+			screenY = ConfigurationHandler.statusDisplayY;
+			return;
+		}
+		
 		if (displayPosition.contains("TOP")) {
 			screenY = PADDING_FROM_EDGE;
 		}
