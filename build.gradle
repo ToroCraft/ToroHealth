@@ -1,7 +1,10 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
@@ -9,14 +12,14 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.10.2-2"
+version = "1.11-2"
 group= "net.torocraft.torohealth"
 archivesBaseName = "torohealth"
 
 minecraft {
-    version = "1.10.2-12.18.2.2099"
+    version = "1.11-13.19.0.2180"
     runDir = "run"
-    mappings = "snapshot_20160518"
+    mappings = "snapshot_20161111"
 }
 
 dependencies {
