@@ -25,8 +25,6 @@ public class GuiEntityStatus extends Gui {
 	private int age = 0;
 	private boolean showHealthBar = false;
 
-	private final int TTL = 150;
-
 	private ScaledResolution viewport;
 	private final int PADDING_FROM_EDGE = 2;
 
@@ -77,7 +75,7 @@ public class GuiEntityStatus extends Gui {
 		}
 		String entityStatusDisplay = ConfigurationHandler.entityStatusDisplay;
 		age++;
-		if (age > TTL || entityStatusDisplay.equals("OFF")) {
+		if (age > ConfigurationHandler.hideDelay || entityStatusDisplay.equals("OFF")) {
 			hideHealthBar();
 		}
 
