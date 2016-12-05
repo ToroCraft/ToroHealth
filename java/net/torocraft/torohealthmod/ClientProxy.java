@@ -2,11 +2,6 @@ package net.torocraft.torohealthmod;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -121,12 +116,7 @@ public class ClientProxy extends CommonProxy {
 		Vec3d hitVector = null;
 		float f = 1.0F;
 		List<Entity> list = this.mc.theWorld.getEntitiesInAABBexcluding(observer,
-				observer.getEntityBoundingBox().addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance).expand(1.0D, 1.0D, 1.0D),
-				Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-					public boolean apply(@Nullable Entity p_apply_1_) {
-						return p_apply_1_ != null && p_apply_1_.canBeCollidedWith();
-					}
-				}));
+				observer.getEntityBoundingBox().addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance).expand(1.0D, 1.0D, 1.0D), EntitySelectors.NOT_SPECTATING);
 		double d2 = distance;
 
 		for (int j = 0; j < list.size(); ++j) {
