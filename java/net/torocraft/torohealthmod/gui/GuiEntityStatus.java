@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -22,7 +23,7 @@ import net.torocraft.torohealthmod.config.ConfigurationHandler;
 public class GuiEntityStatus extends Gui {
 
 	private Minecraft mc;
-	private EntityLiving entity;
+	private EntityLivingBase entity;
 	private int age = 0;
 	private boolean showHealthBar = false;
 
@@ -61,7 +62,7 @@ public class GuiEntityStatus extends Gui {
 		this.mc = mc;
 	}
 
-	public void setEntity(EntityLiving entityToTrack) {
+	public void setEntity(EntityLivingBase entityToTrack) {
 		showHealthBar();
 		age = 0;
 		if (entity != null && entity.getUniqueID().equals(entityToTrack.getUniqueID())) {
@@ -148,9 +149,11 @@ public class GuiEntityStatus extends Gui {
 
 		int scale = MathHelper.ceiling_double_int(h);
 
-		if (entity.getLeashed()) {
-			leashedToEntity = entity.getLeashedToEntity();
-			entity.setLeashedToEntity(null, false);
+		if (entity instanceof EntityLiving) {
+			if (((EntityLiving) entity).getLeashed()) {
+				leashedToEntity = ((EntityLiving) entity).getLeashedToEntity();
+				((EntityLiving) entity).setLeashedToEntity(null, false);
+			}
 		}
 
 		float prevYawOffset = entity.renderYawOffset;
@@ -190,8 +193,8 @@ public class GuiEntityStatus extends Gui {
 		GlStateManager.disableTexture2D();
 		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
-		if (leashedToEntity != null) {
-			entity.setLeashedToEntity(leashedToEntity, false);
+		if (entity instanceof EntityLiving && leashedToEntity != null) {
+			((EntityLiving) entity).setLeashedToEntity(leashedToEntity, false);
 			leashedToEntity = null;
 		}
 	}
