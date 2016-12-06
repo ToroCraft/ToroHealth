@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.nbt.NBTTagInt;
@@ -85,8 +86,8 @@ public class ClientProxy extends CommonProxy {
 	public void setEntityInCrosshairs() {
 		RayTraceResult r = getMouseOver(1.0f);
 		if (r != null && RayTraceResult.Type.ENTITY.equals(r.typeOfHit)) {
-			if (r.entityHit instanceof EntityLivingBase) {
-				entityStatusGUI.setEntity((EntityLivingBase) r.entityHit);
+			if (r.entityHit instanceof EntityLiving) {
+				entityStatusGUI.setEntity((EntityLiving) r.entityHit);
 			}
 		}
 	}
