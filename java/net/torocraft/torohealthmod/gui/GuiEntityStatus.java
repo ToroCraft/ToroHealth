@@ -251,7 +251,7 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	private int drawHearts() {
-		mc.renderEngine.bindTexture(ICONS);
+		mc.renderEngine.bindTexture(icons);
 		int currentHealth = MathHelper.ceiling_float_int(entity.getHealth());
 		entityHealth = currentHealth;
 		int absorptionAmount = MathHelper.ceiling_float_int(entity.getAbsorptionAmount());
@@ -303,7 +303,7 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	private void drawArmor() {
-		mc.renderEngine.bindTexture(ICONS);
+		mc.renderEngine.bindTexture(icons);
 
 		int armor = entity.getTotalArmorValue();
 

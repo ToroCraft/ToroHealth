@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.torohealthmod.config.ConfigurationHandler;
 
 @SideOnly(Side.CLIENT)
-public class DamageParticle extends Particle {
+public class DamageParticle extends EntityFX {
 	
 	protected static final float GRAVITY = 0.1F;
 	protected static final float SIZE = 3.0F;

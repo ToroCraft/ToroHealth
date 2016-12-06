@@ -3,7 +3,7 @@ package net.torocraft.torohealthmod;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -77,7 +77,7 @@ public class ClientProxy extends CommonProxy {
 		double motionX = world.rand.nextGaussian() * 0.02;
 		double motionY = 0.5f;
 		double motionZ = world.rand.nextGaussian() * 0.02;
-		Particle damageIndicator = new DamageParticle(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
+		EntityFX damageIndicator = new DamageParticle(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
 		Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
 	}
 
