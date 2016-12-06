@@ -9,6 +9,8 @@ Customization options are available for changing the color of the damage numbers
 
 ###[Download from here](https://minecraft.curseforge.com/projects/torohealth-damage-indicators)
 
+![Screenshot](https://i.imgur.com/C9oBhZ5.png)
+
 ##Development Environment Setup
 Download the desired version of Forge MDK from https://files.minecraftforge.net/ and unzip the MDK into a new dirctory. After the MDK is unzipped, remove the `main` folder from the `src` folder and clone this repo into the `src` directory as `main`. Then you will need to either copy or link the `build.gradle` from the repository to the root of the MDK, replacing the original one. 
 
@@ -27,5 +29,3 @@ ln -s src/main/build.gradle build.gradle
 ./gradlew setupDecompWorkspace
 ./gradlew eclipse
 ```
-
-![Screenshot](https://i.imgur.com/C9oBhZ5.png)
