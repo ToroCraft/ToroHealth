@@ -9,7 +9,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -21,7 +22,7 @@ import net.torocraft.torohealthmod.config.ConfigurationHandler;
 public class GuiEntityStatus extends Gui {
 
 	private Minecraft mc;
-	private EntityLivingBase entity;
+	private EntityLiving entity;
 	private int age = 0;
 	private boolean showHealthBar = false;
 
@@ -39,6 +40,7 @@ public class GuiEntityStatus extends Gui {
 	private int entityRenderWidth;
 	private final int entityRenderHeightUnit = 20;
 	private final int entityRenderX = 20;
+	private Entity leashedToEntity;
 
 	/*
 	 * for hearts drawing
@@ -59,7 +61,7 @@ public class GuiEntityStatus extends Gui {
 		this.mc = mc;
 	}
 
-	public void setEntity(EntityLivingBase entityToTrack) {
+	public void setEntity(EntityLiving entityToTrack) {
 		showHealthBar();
 		age = 0;
 		if (entity != null && entity.getUniqueID().equals(entityToTrack.getUniqueID())) {
@@ -143,8 +145,13 @@ public class GuiEntityStatus extends Gui {
 			screenX = ConfigurationHandler.statusDisplayX + (entityRenderWidth / 2);
 			screenY = ConfigurationHandler.statusDisplayY + entityRenderHeight + 10;
 		}
-		
+
 		int scale = MathHelper.ceiling_double_int(h);
+
+		if (entity.getLeashed()) {
+			leashedToEntity = entity.getLeashedToEntity();
+			entity.setLeashedToEntity(null, false);
+		}
 
 		float prevYawOffset = entity.renderYawOffset;
 		float prevYaw = entity.rotationYaw;
@@ -182,6 +189,11 @@ public class GuiEntityStatus extends Gui {
 		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GlStateManager.disableTexture2D();
 		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+		if (leashedToEntity != null) {
+			entity.setLeashedToEntity(leashedToEntity, false);
+			leashedToEntity = null;
+		}
 	}
 
 	private boolean isUnsupportedDisplayType(String entityStatusDisplay) {
@@ -234,7 +246,6 @@ public class GuiEntityStatus extends Gui {
 		drawString(mc.fontRendererObj, name, screenX, screenY, 0xFFFFFF);
 		screenY += 10;
 	}
-
 
 	private int drawHearts() {
 		mc.renderEngine.bindTexture(ICONS);
@@ -326,7 +337,7 @@ public class GuiEntityStatus extends Gui {
 			screenY = ConfigurationHandler.statusDisplayY;
 			return;
 		}
-		
+
 		if (displayPosition.contains("TOP")) {
 			screenY = PADDING_FROM_EDGE;
 		}
