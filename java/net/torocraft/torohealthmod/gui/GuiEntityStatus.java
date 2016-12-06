@@ -12,8 +12,8 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -82,7 +82,7 @@ public class GuiEntityStatus extends Gui {
 			hideHealthBar();
 		}
 
-		if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
+		if (event.isCancelable() || event.type != ElementType.EXPERIENCE) {
 			return;
 		}
 
@@ -251,7 +251,7 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	private int drawHearts() {
-		mc.renderEngine.bindTexture(ICONS);
+		mc.renderEngine.bindTexture(icons);
 		int currentHealth = MathHelper.ceiling_float_int(entity.getHealth());
 		entityHealth = currentHealth;
 		int absorptionAmount = MathHelper.ceiling_float_int(entity.getAbsorptionAmount());
@@ -303,7 +303,7 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	private void drawArmor() {
-		mc.renderEngine.bindTexture(ICONS);
+		mc.renderEngine.bindTexture(icons);
 
 		int armor = entity.getTotalArmorValue();
 

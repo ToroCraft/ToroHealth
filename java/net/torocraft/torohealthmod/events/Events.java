@@ -9,7 +9,7 @@ public class Events {
 
 	@SubscribeEvent
 	public void displayDamage(LivingUpdateEvent event) {
-		ToroHealthMod.proxy.displayDamageDealt(event.getEntityLiving());
+		ToroHealthMod.proxy.displayDamageDealt(event.entityLiving);
 	}
 
 	@SubscribeEvent

@@ -50,7 +50,7 @@ public class ConfigurationHandler {
 
 	@SubscribeEvent
 	public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.getModID().equalsIgnoreCase(ToroHealthMod.MODID)) {
+		if (event.modID.equalsIgnoreCase(ToroHealthMod.MODID)) {
 			loadConfiguration();
 		}
 	}
