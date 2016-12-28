@@ -46,8 +46,8 @@ public class DamageParticle extends Particle {
 	@Override
 	public void renderParticle(final VertexBuffer renderer, final Entity entity, final float x, final float y,
 			final float z, final float dX, final float dY, final float dZ) {
-		float rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
-		float rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
+		float rotationYaw = (-Minecraft.getMinecraft().player.rotationYaw);
+		float rotationPitch = Minecraft.getMinecraft().player.rotationPitch;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * x - interpPosX));
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * y - interpPosY));
@@ -87,8 +87,7 @@ public class DamageParticle extends Particle {
 
 		final FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		fontRenderer.drawStringWithShadow(this.text,
-				-MathHelper.floor_float(fontRenderer.getStringWidth(this.text) / 2.0F) + 1,
-				-MathHelper.floor_float(fontRenderer.FONT_HEIGHT / 2.0F) + 1, color);
+ -MathHelper.floor(fontRenderer.getStringWidth(this.text) / 2.0F) + 1, -MathHelper.floor(fontRenderer.FONT_HEIGHT / 2.0F) + 1, color);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDepthFunc(515);

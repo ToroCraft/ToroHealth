@@ -147,7 +147,7 @@ public class GuiEntityStatus extends Gui {
 			screenY = ConfigurationHandler.statusDisplayY + entityRenderHeight + 10;
 		}
 
-		int scale = MathHelper.ceiling_double_int(h);
+		int scale = MathHelper.ceil(h);
 
 		if (entity instanceof EntityLiving) {
 			if (((EntityLiving) entity).getLeashed()) {
@@ -252,27 +252,27 @@ public class GuiEntityStatus extends Gui {
 
 	private int drawHearts() {
 		mc.renderEngine.bindTexture(ICONS);
-		int currentHealth = MathHelper.ceiling_float_int(entity.getHealth());
+		int currentHealth = MathHelper.ceil(entity.getHealth());
 		entityHealth = currentHealth;
-		int absorptionAmount = MathHelper.ceiling_float_int(entity.getAbsorptionAmount());
+		int absorptionAmount = MathHelper.ceil(entity.getAbsorptionAmount());
 		int remainingAbsorption = absorptionAmount;
 
 		float maxHealth = entity.getMaxHealth();
 
-		int numRowsOfHearts = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F / 10.0F);
+		int numRowsOfHearts = MathHelper.ceil((maxHealth + (float) absorptionAmount) / 2.0F / 10.0F);
 		int j2 = Math.max(10 - (numRowsOfHearts - 2), 3);
 
-		for (int currentHeartBeingDrawn = MathHelper.ceiling_float_int((maxHealth + (float) absorptionAmount) / 2.0F) - 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
+		for (int currentHeartBeingDrawn = MathHelper.ceil((maxHealth + (float) absorptionAmount) / 2.0F) - 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
 			int texturePosX = 16;
 			int flashingHeartOffset = 0;
 
-			int rowsOfHearts = MathHelper.ceiling_float_int((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
+			int rowsOfHearts = MathHelper.ceil((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
 			int heartToDrawX = screenX + currentHeartBeingDrawn % 10 * 8;
 			int heartToDrawY = screenY + rowsOfHearts * j2;
 
 			int hardcoreModeOffset = 0;
 
-			if (entity.worldObj.getWorldInfo().isHardcoreModeEnabled()) {
+			if (entity.world.getWorldInfo().isHardcoreModeEnabled()) {
 				hardcoreModeOffset = 5;
 			}
 

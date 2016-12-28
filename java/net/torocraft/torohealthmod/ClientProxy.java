@@ -48,7 +48,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void displayDamageDealt(EntityLivingBase entity) {
 
-		if (!entity.worldObj.isRemote) {
+		if (!entity.world.isRemote) {
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class ClientProxy extends CommonProxy {
 		if (damage == 0) {
 			return;
 		}
-		World world = entity.worldObj;
+		World world = entity.world;
 		double motionX = world.rand.nextGaussian() * 0.02;
 		double motionY = 0.5f;
 		double motionZ = world.rand.nextGaussian() * 0.02;
@@ -95,7 +95,7 @@ public class ClientProxy extends CommonProxy {
 		RayTraceResult objectMouseOver = null;
 		Entity observer = this.mc.getRenderViewEntity();
 
-		if (observer == null || this.mc.theWorld == null) {
+		if (observer == null || this.mc.world == null) {
 			return objectMouseOver;
 		}
 
@@ -115,7 +115,7 @@ public class ClientProxy extends CommonProxy {
 		this.pointedEntity = null;
 		Vec3d hitVector = null;
 		float f = 1.0F;
-		List<Entity> list = this.mc.theWorld.getEntitiesInAABBexcluding(observer,
+		List<Entity> list = this.mc.world.getEntitiesInAABBexcluding(observer,
 				observer.getEntityBoundingBox().addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance).expand(1.0D, 1.0D, 1.0D), EntitySelectors.NOT_SPECTATING);
 		double d2 = distance;
 
