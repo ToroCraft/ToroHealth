@@ -72,18 +72,19 @@ public class GuiEntityStatus extends Gui {
 	}
 
 	@SubscribeEvent
-	public void drawHealthBar(RenderGameOverlayEvent event) {
+	public void drawHealthBar(RenderGameOverlayEvent.Pre event) {
 		if (!showHealthBar) {
 			return;
 		}
-		String entityStatusDisplay = ConfigurationHandler.entityStatusDisplay;
-		age++;
-		if (age > ConfigurationHandler.hideDelay || entityStatusDisplay.equals("OFF")) {
-			hideHealthBar();
+
+		if (event.getType() != ElementType.CHAT) {
+			return;
 		}
 
-		if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
-			return;
+		String entityStatusDisplay = ConfigurationHandler.entityStatusDisplay;
+		age = age + 15;
+		if (age > ConfigurationHandler.hideDelay || entityStatusDisplay.equals("OFF")) {
+			hideHealthBar();
 		}
 
 		boolean showEntityModel = ConfigurationHandler.showEntityModel;
