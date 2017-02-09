@@ -11,7 +11,7 @@ import net.torocraft.torohealthmod.gui.GuiEntityStatus;
 public class HeartsDisplay implements ToroHealthDisplay {
 	
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
-	private static final int WIDTH = 84;
+	private static final int WIDTH = 100;
 	private static final int HEIGHT = 34;
 	
 	private final Minecraft mc;
@@ -40,8 +40,14 @@ public class HeartsDisplay implements ToroHealthDisplay {
 		
 		
 		resetToOrigin();
+		
+		
+		
 		mc.renderEngine.bindTexture(TEXTURE);
 		Gui.drawModalRectWithCustomSizedTexture(x, y , 0.0f, 0.0f, WIDTH, HEIGHT, 200.0f, 200.0f);
+		
+		x += 2;
+		y += 2;
 		
 		drawName();
 		drawHearts();

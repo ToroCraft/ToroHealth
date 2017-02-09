@@ -14,8 +14,8 @@ public class NumericDisplay implements ToroHealthDisplay {
 	
 	private final Minecraft mc;
 	private final Gui gui;
-	private int x = 100;
-	private int y = 140;
+	private int x = 220;
+	private int y = 100;
 	private EntityLivingBase entity;
 
 	public NumericDisplay(Minecraft mc, Gui gui) {

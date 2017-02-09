@@ -38,9 +38,14 @@ public class GuiEntityStatus extends Gui {
 
 	public GuiEntityStatus(Minecraft mc) {
 		this.mc = mc;
-		entityDisplay = new EntityDisplay();
+		entityDisplay = new EntityDisplay(mc, this);
 		heartsDisplay = new HeartsDisplay(mc, this);
 		numericDisplay = new NumericDisplay(mc, this);
+
+		entityDisplay.setPosition(50, 50);
+
+		heartsDisplay.setPosition(100, 150);
+		numericDisplay.setPosition(210, 150);
 	}
 
 	@SubscribeEvent

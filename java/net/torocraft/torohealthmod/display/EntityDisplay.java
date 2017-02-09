@@ -1,6 +1,7 @@
 package net.torocraft.torohealthmod.display;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -8,11 +9,18 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.torocraft.torohealthmod.ToroHealthMod;
 
 public class EntityDisplay implements ToroHealthDisplay {
-
+	private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
 	private static final int RENDER_HEIGHT = 20;
+	private static final int WIDTH = 40;
+	private static final int HEIGHT = 40;
+
+	private final Minecraft mc;
+	private final Gui gui;
 
 	private int x = 50;
 	private int y = 50;
@@ -25,6 +33,11 @@ public class EntityDisplay implements ToroHealthDisplay {
 	private float prevYawHead;
 	private float prevPrevYahHead;
 	private int scale = 1;
+
+	public EntityDisplay(Minecraft mc, Gui gui) {
+		this.mc = mc;
+		this.gui = gui;
+	}
 
 	@Override
 	public void setPosition(int x, int y) {
@@ -46,6 +59,9 @@ public class EntityDisplay implements ToroHealthDisplay {
 			glDraw();
 			popEntityRotations();
 			popEntityLeasedTo();
+			
+			mc.renderEngine.bindTexture(TEXTURE);
+			Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, WIDTH, HEIGHT, 200.0f, 200.0f);
 		} catch (Throwable ignore) {
 
 		}
@@ -56,6 +72,9 @@ public class EntityDisplay implements ToroHealthDisplay {
 	}
 
 	private void glDraw() {
+
+		
+
 		GlStateManager.enableColorMaterial();
 		GlStateManager.pushMatrix();
 
@@ -74,6 +93,8 @@ public class EntityDisplay implements ToroHealthDisplay {
 		rendermanager.setRenderShadow(false);
 		rendermanager.doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
 		rendermanager.setRenderShadow(true);
+		
+		
 
 		GlStateManager.popMatrix();
 		RenderHelper.disableStandardItemLighting();
