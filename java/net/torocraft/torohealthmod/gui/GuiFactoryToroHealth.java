@@ -5,6 +5,7 @@ import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
+import net.torocraft.torohealthmod.config.GuiConfigToroHealth;
 
 public class GuiFactoryToroHealth implements IModGuiFactory {
 
@@ -23,6 +24,7 @@ public class GuiFactoryToroHealth implements IModGuiFactory {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;

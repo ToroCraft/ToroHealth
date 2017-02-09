@@ -10,7 +10,6 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -114,7 +113,6 @@ public class ClientProxy extends CommonProxy {
 		Vec3d lookVectorFromEyePosition = observerPositionEyes.addVector(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance);
 		this.pointedEntity = null;
 		Vec3d hitVector = null;
-		float f = 1.0F;
 		List<Entity> list = this.mc.world.getEntitiesInAABBexcluding(observer,
 				observer.getEntityBoundingBox().addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance).expand(1.0D, 1.0D, 1.0D), EntitySelectors.NOT_SPECTATING);
 		double d2 = distance;
@@ -155,10 +153,6 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		return objectMouseOver;
-	}
-
-	private boolean isSolidBlock(BlockPos pos, BlockPos prevPos) {
-		return prevPos.compareTo(pos) == 0;
 	}
 
 }
