@@ -79,7 +79,7 @@ public class BarDisplay implements ToroHealthDisplay {
 			return Color.GREEN;
 		} else if (entity instanceof EntityAmbientCreature) {
 			return Color.GREEN;
-		}else {
+		} else {
 			return Color.WHITE;
 		}
 	}

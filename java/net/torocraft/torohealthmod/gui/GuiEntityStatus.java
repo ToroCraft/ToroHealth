@@ -3,10 +3,13 @@ package net.torocraft.torohealthmod.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.torocraft.torohealthmod.ToroHealthMod;
 import net.torocraft.torohealthmod.config.ConfigurationHandler;
 import net.torocraft.torohealthmod.display.BarDisplay;
 import net.torocraft.torohealthmod.display.EntityDisplay;
@@ -17,6 +20,7 @@ import net.torocraft.torohealthmod.display.ToroHealthDisplay;
 public class GuiEntityStatus extends Gui {
 
 	private static final int PADDING_FROM_EDGE = 3;
+	private static final ResourceLocation SKIN = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/skin_template_top.png");
 
 	private final Minecraft mc;
 	private final ToroHealthDisplay entityDisplay;
@@ -60,7 +64,15 @@ public class GuiEntityStatus extends Gui {
 		}
 		updateGuiAge();
 		updatePositions();
+		drawSkin();
 		draw();
+	}
+	
+	
+	private void drawSkin() {
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		mc.getTextureManager().bindTexture(SKIN);
+		Gui.drawModalRectWithCustomSizedTexture(screenX - 10, screenY - 10, 0.0f, 0.0f, 160, 60, 160, 60);
 	}
 
 	private void updateGuiAge() {
