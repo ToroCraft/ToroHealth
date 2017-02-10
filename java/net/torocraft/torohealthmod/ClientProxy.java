@@ -2,6 +2,8 @@ package net.torocraft.torohealthmod;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -17,6 +19,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.torohealthmod.config.ConfigurationHandler;
 import net.torocraft.torohealthmod.gui.GuiEntityStatus;
 import net.torocraft.torohealthmod.render.DamageParticle;
@@ -76,7 +80,8 @@ public class ClientProxy extends CommonProxy {
 		double motionX = world.rand.nextGaussian() * 0.02;
 		double motionY = 0.5f;
 		double motionZ = world.rand.nextGaussian() * 0.02;
-		Particle damageIndicator = new DamageParticle(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
+		Particle damageIndicator = new DamageParticle(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY,
+				motionZ);
 		Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
 	}
 
@@ -90,6 +95,15 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	public RayTraceResult rayTrace(Entity e, double blockReachDistance, float partialTicks) {
+		Vec3d vec3d = e.getPositionEyes(partialTicks);
+		Vec3d vec3d1 = e.getLook(partialTicks);
+		Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * blockReachDistance, vec3d1.yCoord * blockReachDistance, vec3d1.zCoord * blockReachDistance);
+		return mc.world.rayTraceBlocks(vec3d, vec3d2, false, true, true);
+	}
+
 	public RayTraceResult getMouseOver(float partialTicks) {
 		RayTraceResult objectMouseOver = null;
 		Entity observer = this.mc.getRenderViewEntity();
@@ -100,7 +114,10 @@ public class ClientProxy extends CommonProxy {
 
 		this.mc.pointedEntity = null;
 		double reachDistance = 50;
-		objectMouseOver = observer.rayTrace(reachDistance, partialTicks);
+		// objectMouseOver = observer.rayTrace(reachDistance, partialTicks);
+
+		objectMouseOver = rayTrace(observer, reachDistance, partialTicks);
+
 		Vec3d observerPositionEyes = observer.getPositionEyes(partialTicks);
 
 		double distance = reachDistance;
@@ -110,11 +127,15 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		Vec3d lookVector = observer.getLook(partialTicks);
-		Vec3d lookVectorFromEyePosition = observerPositionEyes.addVector(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance);
+		Vec3d lookVectorFromEyePosition = observerPositionEyes.addVector(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance,
+				lookVector.zCoord * reachDistance);
 		this.pointedEntity = null;
 		Vec3d hitVector = null;
 		List<Entity> list = this.mc.world.getEntitiesInAABBexcluding(observer,
-				observer.getEntityBoundingBox().addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance).expand(1.0D, 1.0D, 1.0D), EntitySelectors.NOT_SPECTATING);
+				observer.getEntityBoundingBox()
+						.addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance)
+						.expand(1.0D, 1.0D, 1.0D),
+				EntitySelectors.NOT_SPECTATING);
 		double d2 = distance;
 
 		for (int j = 0; j < list.size(); ++j) {

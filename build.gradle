@@ -17,7 +17,7 @@ group= "net.torocraft.torohealth"
 archivesBaseName = "torohealth"
 
 minecraft {
-    version = "1.11.2-13.20.0.2201"
+    version = "1.11.2-13.20.0.2227"
     runDir = "run"
     mappings = "snapshot_20161220"
 }
