@@ -11,7 +11,7 @@ public class NumericDisplay implements ToroHealthDisplay {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
 	private static final int WIDTH = 100;
 	private static final int HEIGHT = 34;
-	
+
 	private final Minecraft mc;
 	private final Gui gui;
 	private int x = 220;

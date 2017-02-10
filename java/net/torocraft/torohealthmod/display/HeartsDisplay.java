@@ -3,23 +3,16 @@ package net.torocraft.torohealthmod.display;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.torocraft.torohealthmod.ToroHealthMod;
 import net.torocraft.torohealthmod.gui.GuiEntityStatus;
 
 public class HeartsDisplay implements ToroHealthDisplay {
-	
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
-	private static final int WIDTH = 100;
-	private static final int HEIGHT = 34;
-	
 	private final Minecraft mc;
 	private final Gui gui;
 	private int x, originX = 100;
 	private int y, originY = 100;
 	private EntityLivingBase entity;
-	
+
 	public HeartsDisplay(Minecraft mc, Gui gui) {
 		this.mc = mc;
 		this.gui = gui;
@@ -37,23 +30,17 @@ public class HeartsDisplay implements ToroHealthDisplay {
 		if (entity == null) {
 			return;
 		}
-		
-		
+
 		resetToOrigin();
-		
-		
-		
-		mc.renderEngine.bindTexture(TEXTURE);
-		Gui.drawModalRectWithCustomSizedTexture(x, y , 0.0f, 0.0f, WIDTH, HEIGHT, 200.0f, 200.0f);
-		
+
 		x += 2;
 		y += 2;
-		
+
 		drawName();
 		drawHearts();
 		drawArmor();
 	}
-	
+
 	@Override
 	public void setEntity(EntityLivingBase entity) {
 		this.entity = entity;

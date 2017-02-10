@@ -1,7 +1,6 @@
 package net.torocraft.torohealthmod.display;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -9,21 +8,21 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.util.math.MathHelper;
-import net.torocraft.torohealthmod.ToroHealthMod;
 
 public class EntityDisplay implements ToroHealthDisplay {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
-	private static final int RENDER_HEIGHT = 20;
+	private static final int RENDER_HEIGHT = 30;
+	private static final int RENDER_WIDTH = 18;
+	private static final int PADDING = 2;
 	private static final int WIDTH = 40;
-	private static final int HEIGHT = 40;
+	private static final int HEIGHT = WIDTH;
 
-	private final Minecraft mc;
-	private final Gui gui;
 
-	private int x = 50;
 	private int y = 50;
+
+	private float glX = 50;
+	private float glY = 50;
 
 	private EntityLivingBase entity;
 	private Entity leashedToEntity;
@@ -34,15 +33,14 @@ public class EntityDisplay implements ToroHealthDisplay {
 	private float prevPrevYahHead;
 	private int scale = 1;
 
-	public EntityDisplay(Minecraft mc, Gui gui) {
-		this.mc = mc;
-		this.gui = gui;
+	public EntityDisplay(Minecraft mc) {
 	}
 
 	@Override
 	public void setPosition(int x, int y) {
-		this.x = x;
 		this.y = y;
+		this.glX = (float) x + WIDTH / 2;
+		this.glY = (float) y + HEIGHT - PADDING;
 	}
 
 	@Override
@@ -54,31 +52,36 @@ public class EntityDisplay implements ToroHealthDisplay {
 	@Override
 	public void draw() {
 		try {
+
 			pushEntityLeasedTo();
 			pushEntityRotations();
 			glDraw();
 			popEntityRotations();
 			popEntityLeasedTo();
-			
-			mc.renderEngine.bindTexture(TEXTURE);
-			Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, WIDTH, HEIGHT, 200.0f, 200.0f);
+
 		} catch (Throwable ignore) {
 
 		}
 	}
 
 	private void updateScale() {
-		scale = MathHelper.ceil(RENDER_HEIGHT / entity.height);
+		int scaleY = MathHelper.ceil(RENDER_HEIGHT / entity.height);
+		int scaleX = MathHelper.ceil(RENDER_WIDTH / entity.width);
+		scale = Math.min(scaleX, scaleY);
+
+		glY = (float) y + (HEIGHT / 2 + RENDER_HEIGHT / 2);
+
+		if (entity instanceof EntityGhast) {
+			glY -= 10;
+		}
+
 	}
 
 	private void glDraw() {
-
-		
-
 		GlStateManager.enableColorMaterial();
 		GlStateManager.pushMatrix();
 
-		GlStateManager.translate((float) x, (float) y, 50.0F);
+		GlStateManager.translate(glX, glY, 50.0F);
 		GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
 		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 		GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
@@ -93,8 +96,6 @@ public class EntityDisplay implements ToroHealthDisplay {
 		rendermanager.setRenderShadow(false);
 		rendermanager.doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
 		rendermanager.setRenderShadow(true);
-		
-		
 
 		GlStateManager.popMatrix();
 		RenderHelper.disableStandardItemLighting();
