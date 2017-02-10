@@ -18,11 +18,10 @@ public class EntityDisplay implements ToroHealthDisplay {
 	private static final int WIDTH = 40;
 	private static final int HEIGHT = WIDTH;
 
+	private int y;
 
-	private int y = 50;
-
-	private float glX = 50;
-	private float glY = 50;
+	private float glX;
+	private float glY;
 
 	private EntityLivingBase entity;
 	private Entity leashedToEntity;
@@ -39,8 +38,8 @@ public class EntityDisplay implements ToroHealthDisplay {
 	@Override
 	public void setPosition(int x, int y) {
 		this.y = y;
-		this.glX = (float) x + WIDTH / 2;
-		this.glY = (float) y + HEIGHT - PADDING;
+		glX = (float) x + WIDTH / 2;
+		updateScale();
 	}
 
 	@Override
@@ -52,29 +51,27 @@ public class EntityDisplay implements ToroHealthDisplay {
 	@Override
 	public void draw() {
 		try {
-
 			pushEntityLeasedTo();
 			pushEntityRotations();
 			glDraw();
 			popEntityRotations();
 			popEntityLeasedTo();
-
 		} catch (Throwable ignore) {
-
 		}
 	}
 
 	private void updateScale() {
+		if (entity == null) {
+			glY = (float) y + HEIGHT - PADDING;
+			return;
+		}
 		int scaleY = MathHelper.ceil(RENDER_HEIGHT / entity.height);
 		int scaleX = MathHelper.ceil(RENDER_WIDTH / entity.width);
 		scale = Math.min(scaleX, scaleY);
-
 		glY = (float) y + (HEIGHT / 2 + RENDER_HEIGHT / 2);
-
 		if (entity instanceof EntityGhast) {
 			glY -= 10;
 		}
-
 	}
 
 	private void glDraw() {

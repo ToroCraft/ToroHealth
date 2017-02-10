@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAmbientCreature;
@@ -74,6 +75,8 @@ public class BarDisplay implements ToroHealthDisplay {
 		if (entity instanceof EntityMob) {
 			return Color.RED;
 		} else if (entity instanceof EntitySlime) {
+			return Color.RED;
+		} else if (entity instanceof EntityGhast) {
 			return Color.RED;
 		} else if (entity instanceof EntityAnimal) {
 			return Color.GREEN;

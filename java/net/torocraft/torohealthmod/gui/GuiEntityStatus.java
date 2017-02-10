@@ -20,7 +20,7 @@ import net.torocraft.torohealthmod.display.ToroHealthDisplay;
 public class GuiEntityStatus extends Gui {
 
 	private static final int PADDING_FROM_EDGE = 3;
-	private static final ResourceLocation SKIN = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/skin_template_top.png");
+	private static final ResourceLocation SKIN = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/default_skin_top.png");
 
 	private final Minecraft mc;
 	private final ToroHealthDisplay entityDisplay;
