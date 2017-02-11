@@ -20,7 +20,8 @@ import net.torocraft.torohealthmod.display.ToroHealthDisplay;
 public class GuiEntityStatus extends Gui {
 
 	private static final int PADDING_FROM_EDGE = 3;
-	private static final ResourceLocation SKIN = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/default_skin_top.png");
+	private static final ResourceLocation SKIN_BASIC = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/default_skin_basic.png");
+	private static final ResourceLocation SKIN_HEAVY = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/default_skin_heavy.png");
 
 	private final Minecraft mc;
 	private final ToroHealthDisplay entityDisplay;
@@ -67,11 +68,19 @@ public class GuiEntityStatus extends Gui {
 		drawSkin();
 		draw();
 	}
-	
-	
+
 	private void drawSkin() {
+		if (ConfigurationHandler.skin.equals("NONE")) {
+			return;
+		}
+		
+		if (ConfigurationHandler.skin.equals("HEAVY")) {
+			mc.getTextureManager().bindTexture(SKIN_HEAVY);
+		}else{
+			mc.getTextureManager().bindTexture(SKIN_BASIC);
+		}
+		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(SKIN);
 		Gui.drawModalRectWithCustomSizedTexture(screenX - 10, screenY - 10, 0.0f, 0.0f, 160, 60, 160, 60);
 	}
 

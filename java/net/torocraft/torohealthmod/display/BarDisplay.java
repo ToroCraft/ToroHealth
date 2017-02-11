@@ -9,6 +9,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.util.ResourceLocation;
 import net.torocraft.torohealthmod.ToroHealthMod;
 
@@ -34,7 +35,7 @@ public class BarDisplay implements ToroHealthDisplay {
 	@Override
 	public void setPosition(int x, int y) {
 		this.y = y;
-		barX = x + 2;
+		barX = x + 4;
 		barY = y + 12;
 	}
 
@@ -79,6 +80,8 @@ public class BarDisplay implements ToroHealthDisplay {
 		} else if (entity instanceof EntityGhast) {
 			return Color.RED;
 		} else if (entity instanceof EntityAnimal) {
+			return Color.GREEN;
+		}else if (entity instanceof EntitySquid){
 			return Color.GREEN;
 		} else if (entity instanceof EntityAmbientCreature) {
 			return Color.GREEN;

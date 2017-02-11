@@ -33,7 +33,7 @@ public class HeartsDisplay implements ToroHealthDisplay {
 
 		resetToOrigin();
 
-		x += 2;
+		x += 4;
 		y += 2;
 
 		drawName();
