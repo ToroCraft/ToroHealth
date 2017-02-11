@@ -3,17 +3,10 @@ package net.torocraft.torohealthmod.display;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.passive.EntityAmbientCreature;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.util.ResourceLocation;
 import net.torocraft.torohealthmod.ToroHealthMod;
 
-public class BarDisplay implements ToroHealthDisplay {
+public class BarDisplay extends AbstractHealthDisplay implements ToroHealthDisplay {
 
 	private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/bars.png");
 
@@ -24,8 +17,6 @@ public class BarDisplay implements ToroHealthDisplay {
 	private int y;
 	private int barX;
 	private int barY;
-
-	private EntityLivingBase entity;
 
 	public BarDisplay(Minecraft mc, Gui gui) {
 		this.mc = mc;
@@ -72,27 +63,19 @@ public class BarDisplay implements ToroHealthDisplay {
 		}
 	}
 
-	private Color determineColor() {
-		if (entity instanceof EntityMob) {
-			return Color.RED;
-		} else if (entity instanceof EntitySlime) {
-			return Color.RED;
-		} else if (entity instanceof EntityGhast) {
-			return Color.RED;
-		} else if (entity instanceof EntityAnimal) {
-			return Color.GREEN;
-		}else if (entity instanceof EntitySquid){
-			return Color.GREEN;
-		} else if (entity instanceof EntityAmbientCreature) {
-			return Color.GREEN;
-		} else {
-			return Color.WHITE;
-		}
+	public static enum Relation {
+		FRIEND, FOE, UNKNOWN
 	}
 
-	@Override
-	public void setEntity(EntityLivingBase entity) {
-		this.entity = entity;
+	private Color determineColor() {
+		switch (determineRelation()) {
+		case FOE:
+			return Color.RED;
+		case FRIEND:
+			return Color.GREEN;
+		default:
+			return Color.WHITE;
+		}
 	}
 
 }

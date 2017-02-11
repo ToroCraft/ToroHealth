@@ -2,16 +2,14 @@ package net.torocraft.torohealthmod.display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.torocraft.torohealthmod.gui.GuiEntityStatus;
 
-public class HeartsDisplay implements ToroHealthDisplay {
+public class HeartsDisplay extends AbstractHealthDisplay implements ToroHealthDisplay {
 	private final Minecraft mc;
 	private final Gui gui;
 	private int x, originX = 100;
 	private int y, originY = 100;
-	private EntityLivingBase entity;
 
 	public HeartsDisplay(Minecraft mc, Gui gui) {
 		this.mc = mc;
@@ -41,11 +39,6 @@ public class HeartsDisplay implements ToroHealthDisplay {
 		drawArmor();
 	}
 
-	@Override
-	public void setEntity(EntityLivingBase entity) {
-		this.entity = entity;
-	}
-
 	private void resetToOrigin() {
 		x = originX;
 		y = originY;
@@ -73,6 +66,14 @@ public class HeartsDisplay implements ToroHealthDisplay {
 			int texturePosX = 16;
 			int flashingHeartOffset = 0;
 
+			int foeOffset = 0;
+
+			if (determineRelation().equals(Relation.FOE)) {
+				foeOffset = 54;
+			} else if (determineRelation().equals(Relation.UNKNOWN)) {
+				foeOffset = 18;
+			}
+
 			int rowsOfHearts = MathHelper.ceil((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
 			int heartToDrawX = x + currentHeartBeingDrawn % 10 * 8;
 			int heartToDrawY = y + rowsOfHearts * j2;
@@ -95,11 +96,11 @@ public class HeartsDisplay implements ToroHealthDisplay {
 				}
 			} else {
 				if (currentHeartBeingDrawn * 2 + 1 < currentHealth) {
-					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 36, 9 * hardcoreModeOffset, 9, 9);
+					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + foeOffset + 36, 9 * hardcoreModeOffset, 9, 9);
 				}
 
 				if (currentHeartBeingDrawn * 2 + 1 == currentHealth) {
-					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 45, 9 * hardcoreModeOffset, 9, 9);
+					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + foeOffset + 45, 9 * hardcoreModeOffset, 9, 9);
 				}
 			}
 		}
