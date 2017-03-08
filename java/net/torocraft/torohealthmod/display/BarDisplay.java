@@ -39,7 +39,7 @@ public class BarDisplay extends AbstractHealthDisplay implements ToroHealthDispl
 	}
 
 	public void renderBossHealth() {
-		String name = entity.getDisplayName().getFormattedText();
+		String name = getEntityName();
 		String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth();
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

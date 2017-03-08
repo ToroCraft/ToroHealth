@@ -51,7 +51,7 @@ public class NumericDisplay implements ToroHealthDisplay {
 		int currentHealthWidth = (int) Math.ceil(96 * (entity.getHealth() / entity.getMaxHealth()));
 		Gui.drawModalRectWithCustomSizedTexture(x + healthBarX, y + healthBarY, 0.0f, 100.0f, currentHealthWidth, 16, 200.0f, 200.0f);
 
-		String name = entity.getDisplayName().getFormattedText();
+		String name = getEntityName();
 
 		gui.drawCenteredString(mc.fontRendererObj, name, x + nameX, y + nameY, 0xFFFFFF);
 		gui.drawCenteredString(mc.fontRendererObj, (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth(), x + healthX, y + healthY,
@@ -61,6 +61,13 @@ public class NumericDisplay implements ToroHealthDisplay {
 	@Override
 	public void setEntity(EntityLivingBase entity) {
 		this.entity = entity;
+	}
+
+	public String getEntityName() {
+		if (entity == null || entity.getDisplayName() == null) {
+			return "";
+		}
+		return entity.getDisplayName().getFormattedText();
 	}
 
 }

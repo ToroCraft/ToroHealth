@@ -9,7 +9,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntitySquid;
 
 public abstract class AbstractHealthDisplay implements ToroHealthDisplay {
-	
+
 	protected EntityLivingBase entity;
 
 	public static enum Relation {
@@ -38,6 +38,11 @@ public abstract class AbstractHealthDisplay implements ToroHealthDisplay {
 	public void setEntity(EntityLivingBase entity) {
 		this.entity = entity;
 	}
-	
 
+	public String getEntityName() {
+		if (entity == null || entity.getDisplayName() == null) {
+			return "";
+		}
+		return entity.getDisplayName().getFormattedText();
+	}
 }

@@ -45,7 +45,7 @@ public class HeartsDisplay extends AbstractHealthDisplay implements ToroHealthDi
 	}
 
 	private void drawName() {
-		gui.drawString(mc.fontRendererObj, entity.getDisplayName().getFormattedText(), x, y, 0xFFFFFF);
+		gui.drawString(mc.fontRendererObj, getEntityName(), x, y, 0xFFFFFF);
 		y += 10;
 	}
 
