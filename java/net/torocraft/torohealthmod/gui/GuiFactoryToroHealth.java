@@ -15,6 +15,16 @@ public class GuiFactoryToroHealth implements IModGuiFactory {
 	}
 
 	@Override
+	public boolean hasConfigGui() {
+		return true;
+	}
+
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen) {
+		return new GuiConfigToroHealth(parentScreen);
+	}
+
+	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
 		return GuiConfigToroHealth.class;
 	}

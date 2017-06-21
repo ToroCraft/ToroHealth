@@ -100,7 +100,7 @@ public class ClientProxy extends CommonProxy {
 	public RayTraceResult rayTrace(Entity e, double blockReachDistance, float partialTicks) {
 		Vec3d vec3d = e.getPositionEyes(partialTicks);
 		Vec3d vec3d1 = e.getLook(partialTicks);
-		Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * blockReachDistance, vec3d1.yCoord * blockReachDistance, vec3d1.zCoord * blockReachDistance);
+		Vec3d vec3d2 = vec3d.addVector(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
 		return mc.world.rayTraceBlocks(vec3d, vec3d2, false, true, true);
 	}
 
@@ -127,23 +127,23 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		Vec3d lookVector = observer.getLook(partialTicks);
-		Vec3d lookVectorFromEyePosition = observerPositionEyes.addVector(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance,
-				lookVector.zCoord * reachDistance);
+		Vec3d lookVectorFromEyePosition = observerPositionEyes.addVector(lookVector.x * reachDistance, lookVector.y * reachDistance,
+				lookVector.z * reachDistance);
 		this.pointedEntity = null;
 		Vec3d hitVector = null;
 		List<Entity> list = this.mc.world.getEntitiesInAABBexcluding(observer,
 				observer.getEntityBoundingBox()
-						.addCoord(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance)
+						.expand(lookVector.x * reachDistance, lookVector.y * reachDistance, lookVector.z * reachDistance)
 						.expand(1.0D, 1.0D, 1.0D),
 				EntitySelectors.NOT_SPECTATING);
 		double d2 = distance;
 
 		for (int j = 0; j < list.size(); ++j) {
 			Entity entity1 = (Entity) list.get(j);
-			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz((double) entity1.getCollisionBorderSize());
+			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
 			RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(observerPositionEyes, lookVectorFromEyePosition);
 
-			if (axisalignedbb.isVecInside(observerPositionEyes)) {
+			if (axisalignedbb.contains(observerPositionEyes)) {
 				if (d2 >= 0.0D) {
 					this.pointedEntity = entity1;
 					hitVector = raytraceresult == null ? observerPositionEyes : raytraceresult.hitVec;

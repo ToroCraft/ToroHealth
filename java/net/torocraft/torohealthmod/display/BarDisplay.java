@@ -45,8 +45,8 @@ public class BarDisplay extends AbstractHealthDisplay implements ToroHealthDispl
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(GUI_BARS_TEXTURES);
 		renderHealthBar();
-		mc.fontRendererObj.drawStringWithShadow(name, barX, y + 2, 16777215);
-		mc.fontRendererObj.drawStringWithShadow(health, barX, y + 20, 16777215);
+		mc.fontRenderer.drawStringWithShadow(name, barX, y + 2, 16777215);
+		mc.fontRenderer.drawStringWithShadow(health, barX, y + 20, 16777215);
 	}
 
 	public static enum Color {

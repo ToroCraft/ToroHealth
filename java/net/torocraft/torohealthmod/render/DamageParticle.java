@@ -1,12 +1,12 @@
 package net.torocraft.torohealthmod.render;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -44,7 +44,7 @@ public class DamageParticle extends Particle {
 	}
 
 	@Override
-	public void renderParticle(final VertexBuffer renderer, final Entity entity, final float x, final float y,
+	public void renderParticle(final BufferBuilder renderer, final Entity entity, final float x, final float y,
 			final float z, final float dX, final float dY, final float dZ) {
 		float rotationYaw = (-Minecraft.getMinecraft().player.rotationYaw);
 		float rotationPitch = Minecraft.getMinecraft().player.rotationPitch;
@@ -85,7 +85,7 @@ public class DamageParticle extends Particle {
 			color = ConfigurationHandler.healColor;
 		}
 
-		final FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+		final FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		fontRenderer.drawStringWithShadow(this.text,
  -MathHelper.floor(fontRenderer.getStringWidth(this.text) / 2.0F) + 1, -MathHelper.floor(fontRenderer.FONT_HEIGHT / 2.0F) + 1, color);
 

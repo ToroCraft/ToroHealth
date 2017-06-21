@@ -53,8 +53,8 @@ public class NumericDisplay implements ToroHealthDisplay {
 
 		String name = getEntityName();
 
-		gui.drawCenteredString(mc.fontRendererObj, name, x + nameX, y + nameY, 0xFFFFFF);
-		gui.drawCenteredString(mc.fontRendererObj, (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth(), x + healthX, y + healthY,
+		gui.drawCenteredString(mc.fontRenderer, name, x + nameX, y + nameY, 0xFFFFFF);
+		gui.drawCenteredString(mc.fontRenderer, (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth(), x + healthX, y + healthY,
 				0xFFFFFF);
 	}
 
