@@ -25,18 +25,7 @@ public class GuiFactoryToroHealth implements IModGuiFactory {
 	}
 
 	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return GuiConfigToroHealth.class;
-	}
-
-	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-		return null;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
 
