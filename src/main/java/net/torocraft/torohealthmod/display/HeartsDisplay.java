@@ -6,137 +6,138 @@ import net.minecraft.util.math.MathHelper;
 import net.torocraft.torohealthmod.gui.GuiEntityStatus;
 
 public class HeartsDisplay extends AbstractHealthDisplay implements ToroHealthDisplay {
-	private final Minecraft mc;
-	private final Gui gui;
-	private int x, originX = 100;
-	private int y, originY = 100;
 
-	public HeartsDisplay(Minecraft mc, Gui gui) {
-		this.mc = mc;
-		this.gui = gui;
-	}
+  private final Minecraft mc;
+  private final Gui gui;
+  private int x, originX = 100;
+  private int y, originY = 100;
 
-	@Override
-	public void setPosition(int x, int y) {
-		originX = x;
-		originY = y;
-		resetToOrigin();
-	}
+  public HeartsDisplay(Minecraft mc, Gui gui) {
+    this.mc = mc;
+    this.gui = gui;
+  }
 
-	@Override
-	public void draw() {
-		if (entity == null) {
-			return;
-		}
+  @Override
+  public void setPosition(int x, int y) {
+    originX = x;
+    originY = y;
+    resetToOrigin();
+  }
 
-		resetToOrigin();
+  @Override
+  public void draw() {
+    if (entity == null) {
+      return;
+    }
 
-		x += 4;
-		y += 2;
+    resetToOrigin();
 
-		drawName();
-		drawHearts();
-		drawArmor();
-	}
+    x += 4;
+    y += 2;
 
-	private void resetToOrigin() {
-		x = originX;
-		y = originY;
-	}
+    drawName();
+    drawHearts();
+    drawArmor();
+  }
 
-	private void drawName() {
-		gui.drawString(mc.fontRenderer, getEntityName(), x, y, 0xFFFFFF);
-		y += 10;
-	}
+  private void resetToOrigin() {
+    x = originX;
+    y = originY;
+  }
 
-	private int drawHearts() {
-		mc.renderEngine.bindTexture(GuiEntityStatus.ICONS);
-		int currentHealth = MathHelper.ceil(entity.getHealth());
+  private void drawName() {
+    gui.drawString(mc.fontRenderer, getEntityName(), x, y, 0xFFFFFF);
+    y += 10;
+  }
 
-		int absorptionAmount = MathHelper.ceil(entity.getAbsorptionAmount());
-		int remainingAbsorption = absorptionAmount;
+  private int drawHearts() {
+    mc.renderEngine.bindTexture(GuiEntityStatus.ICONS);
+    int currentHealth = MathHelper.ceil(entity.getHealth());
 
-		float maxHealth = entity.getMaxHealth();
+    int absorptionAmount = MathHelper.ceil(entity.getAbsorptionAmount());
+    int remainingAbsorption = absorptionAmount;
 
-		int numRowsOfHearts = MathHelper.ceil((maxHealth + (float) absorptionAmount) / 2.0F / 10.0F);
-		int j2 = Math.max(10 - (numRowsOfHearts - 2), 3);
+    float maxHealth = entity.getMaxHealth();
 
-		for (int currentHeartBeingDrawn = MathHelper.ceil((maxHealth + (float) absorptionAmount) / 2.0F)
-				- 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
-			int texturePosX = 16;
-			int flashingHeartOffset = 0;
+    int numRowsOfHearts = MathHelper.ceil((maxHealth + (float) absorptionAmount) / 2.0F / 10.0F);
+    int j2 = Math.max(10 - (numRowsOfHearts - 2), 3);
 
-			int foeOffset = 0;
+    for (int currentHeartBeingDrawn = MathHelper.ceil((maxHealth + (float) absorptionAmount) / 2.0F)
+        - 1; currentHeartBeingDrawn >= 0; --currentHeartBeingDrawn) {
+      int texturePosX = 16;
+      int flashingHeartOffset = 0;
 
-			if (determineRelation().equals(Relation.FOE)) {
-				foeOffset = 54;
-			} else if (determineRelation().equals(Relation.UNKNOWN)) {
-				foeOffset = 18;
-			}
+      int foeOffset = 0;
 
-			int rowsOfHearts = MathHelper.ceil((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
-			int heartToDrawX = x + currentHeartBeingDrawn % 10 * 8;
-			int heartToDrawY = y + rowsOfHearts * j2;
+      if (determineRelation().equals(Relation.FOE)) {
+        foeOffset = 54;
+      } else if (determineRelation().equals(Relation.UNKNOWN)) {
+        foeOffset = 18;
+      }
 
-			int hardcoreModeOffset = 0;
+      int rowsOfHearts = MathHelper.ceil((float) (currentHeartBeingDrawn + 1) / 10.0F) - 1;
+      int heartToDrawX = x + currentHeartBeingDrawn % 10 * 8;
+      int heartToDrawY = y + rowsOfHearts * j2;
 
-			if (entity.world.getWorldInfo().isHardcoreModeEnabled()) {
-				hardcoreModeOffset = 5;
-			}
+      int hardcoreModeOffset = 0;
 
-			gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModeOffset, 9, 9);
+      if (entity.world.getWorldInfo().isHardcoreModeEnabled()) {
+        hardcoreModeOffset = 5;
+      }
 
-			if (remainingAbsorption > 0) {
-				if (remainingAbsorption == absorptionAmount && absorptionAmount % 2 == 1) {
-					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 153, 9 * hardcoreModeOffset, 9, 9);
-					--remainingAbsorption;
-				} else {
-					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 144, 9 * hardcoreModeOffset, 9, 9);
-					remainingAbsorption -= 2;
-				}
-			} else {
-				if (currentHeartBeingDrawn * 2 + 1 < currentHealth) {
-					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + foeOffset + 36, 9 * hardcoreModeOffset, 9, 9);
-				}
+      gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, 16 + flashingHeartOffset * 9, 9 * hardcoreModeOffset, 9, 9);
 
-				if (currentHeartBeingDrawn * 2 + 1 == currentHealth) {
-					gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + foeOffset + 45, 9 * hardcoreModeOffset, 9, 9);
-				}
-			}
-		}
+      if (remainingAbsorption > 0) {
+        if (remainingAbsorption == absorptionAmount && absorptionAmount % 2 == 1) {
+          gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 153, 9 * hardcoreModeOffset, 9, 9);
+          --remainingAbsorption;
+        } else {
+          gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + 144, 9 * hardcoreModeOffset, 9, 9);
+          remainingAbsorption -= 2;
+        }
+      } else {
+        if (currentHeartBeingDrawn * 2 + 1 < currentHealth) {
+          gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + foeOffset + 36, 9 * hardcoreModeOffset, 9, 9);
+        }
 
-		y += (numRowsOfHearts - 1) * j2 + 10;
+        if (currentHeartBeingDrawn * 2 + 1 == currentHealth) {
+          gui.drawTexturedModalRect(heartToDrawX, heartToDrawY, texturePosX + foeOffset + 45, 9 * hardcoreModeOffset, 9, 9);
+        }
+      }
+    }
 
-		return remainingAbsorption;
-	}
+    y += (numRowsOfHearts - 1) * j2 + 10;
 
-	private void drawArmor() {
-		mc.renderEngine.bindTexture(GuiEntityStatus.ICONS);
+    return remainingAbsorption;
+  }
 
-		int armor = entity.getTotalArmorValue();
+  private void drawArmor() {
+    mc.renderEngine.bindTexture(GuiEntityStatus.ICONS);
 
-		for (int i = 0; i < 10; ++i) {
-			if (armor > 0) {
-				int armorIconX = x + i * 8;
+    int armor = entity.getTotalArmorValue();
+
+    for (int i = 0; i < 10; ++i) {
+      if (armor > 0) {
+        int armorIconX = x + i * 8;
 
 				/*
-				 * determines whether armor is full, half, or empty icon
+         * determines whether armor is full, half, or empty icon
 				 */
-				if (i * 2 + 1 < armor) {
-					gui.drawTexturedModalRect(armorIconX, y, 34, 9, 9, 9);
-				}
+        if (i * 2 + 1 < armor) {
+          gui.drawTexturedModalRect(armorIconX, y, 34, 9, 9, 9);
+        }
 
-				if (i * 2 + 1 == armor) {
-					gui.drawTexturedModalRect(armorIconX, y, 25, 9, 9, 9);
-				}
+        if (i * 2 + 1 == armor) {
+          gui.drawTexturedModalRect(armorIconX, y, 25, 9, 9, 9);
+        }
 
-				if (i * 2 + 1 > armor) {
-					gui.drawTexturedModalRect(armorIconX, y, 16, 9, 9, 9);
-				}
-			}
-		}
+        if (i * 2 + 1 > armor) {
+          gui.drawTexturedModalRect(armorIconX, y, 16, 9, 9, 9);
+        }
+      }
+    }
 
-		y += 10;
-	}
+    y += 10;
+  }
 
 }

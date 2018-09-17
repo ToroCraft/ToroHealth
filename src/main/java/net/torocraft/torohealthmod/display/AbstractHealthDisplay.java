@@ -10,39 +10,39 @@ import net.minecraft.entity.passive.EntitySquid;
 
 public abstract class AbstractHealthDisplay implements ToroHealthDisplay {
 
-	protected EntityLivingBase entity;
+  protected EntityLivingBase entity;
 
-	public static enum Relation {
-		FRIEND, FOE, UNKNOWN
-	}
+  protected Relation determineRelation() {
+    if (entity instanceof EntityMob) {
+      return Relation.FOE;
+    } else if (entity instanceof EntitySlime) {
+      return Relation.FOE;
+    } else if (entity instanceof EntityGhast) {
+      return Relation.FOE;
+    } else if (entity instanceof EntityAnimal) {
+      return Relation.FRIEND;
+    } else if (entity instanceof EntitySquid) {
+      return Relation.FRIEND;
+    } else if (entity instanceof EntityAmbientCreature) {
+      return Relation.FRIEND;
+    } else {
+      return Relation.UNKNOWN;
+    }
+  }
 
-	protected Relation determineRelation() {
-		if (entity instanceof EntityMob) {
-			return Relation.FOE;
-		} else if (entity instanceof EntitySlime) {
-			return Relation.FOE;
-		} else if (entity instanceof EntityGhast) {
-			return Relation.FOE;
-		} else if (entity instanceof EntityAnimal) {
-			return Relation.FRIEND;
-		} else if (entity instanceof EntitySquid) {
-			return Relation.FRIEND;
-		} else if (entity instanceof EntityAmbientCreature) {
-			return Relation.FRIEND;
-		} else {
-			return Relation.UNKNOWN;
-		}
-	}
+  @Override
+  public void setEntity(EntityLivingBase entity) {
+    this.entity = entity;
+  }
 
-	@Override
-	public void setEntity(EntityLivingBase entity) {
-		this.entity = entity;
-	}
+  public String getEntityName() {
+    if (entity == null || entity.getDisplayName() == null) {
+      return "";
+    }
+    return entity.getDisplayName().getFormattedText();
+  }
 
-	public String getEntityName() {
-		if (entity == null || entity.getDisplayName() == null) {
-			return "";
-		}
-		return entity.getDisplayName().getFormattedText();
-	}
+  public static enum Relation {
+    FRIEND, FOE, UNKNOWN
+  }
 }

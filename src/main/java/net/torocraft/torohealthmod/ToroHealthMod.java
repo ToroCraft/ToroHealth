@@ -12,36 +12,36 @@ import net.torocraft.torohealthmod.config.ConfigurationHandler;
 import net.torocraft.torohealthmod.events.Events;
 
 @Mod(modid = ToroHealthMod.MODID, name = ToroHealthMod.MODNAME, version = ToroHealthMod.VERSION, clientSideOnly = true, guiFactory = "net.torocraft."
-		+ ToroHealthMod.MODID + ".gui.GuiFactoryToroHealth")
+    + ToroHealthMod.MODID + ".gui.GuiFactoryToroHealth")
 public class ToroHealthMod {
 
-	public static final String MODID = "torohealthmod";
-	public static final String VERSION = "1.12.2-11";
-	public static final String MODNAME = "ToroHealthMod";
+  public static final String MODID = "torohealthmod";
+  public static final String VERSION = "1.12.2-11";
+  public static final String MODNAME = "ToroHealthMod";
 
-	@SidedProxy(clientSide = "net.torocraft.torohealthmod.ClientProxy", serverSide = "net.torocraft.torohealthmod.ServerProxy")
-	public static CommonProxy proxy;
+  @SidedProxy(clientSide = "net.torocraft.torohealthmod.ClientProxy", serverSide = "net.torocraft.torohealthmod.ServerProxy")
+  public static CommonProxy proxy;
 
-	@Instance(value = ToroHealthMod.MODID)
-	public static ToroHealthMod instance;
+  @Instance(value = ToroHealthMod.MODID)
+  public static ToroHealthMod instance;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent e) {
-		proxy.preInit(e);
+  @EventHandler
+  public void preInit(FMLPreInitializationEvent e) {
+    proxy.preInit(e);
 
-		ConfigurationHandler.init(e.getSuggestedConfigurationFile());
-		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
-	}
+    ConfigurationHandler.init(e.getSuggestedConfigurationFile());
+    MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
+  }
 
-	@EventHandler
-	public void init(FMLInitializationEvent e) {
-		proxy.init(e);
-	}
+  @EventHandler
+  public void init(FMLInitializationEvent e) {
+    proxy.init(e);
+  }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent e) {
-		proxy.postInit(e);
-		MinecraftForge.EVENT_BUS.register(new Events());
-	}
+  @EventHandler
+  public void postInit(FMLPostInitializationEvent e) {
+    proxy.postInit(e);
+    MinecraftForge.EVENT_BUS.register(new Events());
+  }
 
 }

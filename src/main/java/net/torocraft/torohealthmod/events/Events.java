@@ -8,17 +8,17 @@ import net.torocraft.torohealthmod.ToroHealthMod;
 
 public class Events {
 
-	@SubscribeEvent
-	public void displayDamage(LivingUpdateEvent event) {
-		ToroHealthMod.proxy.displayDamageDealt(event.getEntityLiving());
-	}
+  @SubscribeEvent
+  public void displayDamage(LivingUpdateEvent event) {
+    ToroHealthMod.proxy.displayDamageDealt(event.getEntityLiving());
+  }
 
-	@SubscribeEvent
-	public void displayEntityStatus(RenderGameOverlayEvent.Pre event) {
-		if (event.getType() != ElementType.CHAT) {
-			return;
-		}
-		ToroHealthMod.proxy.setEntityInCrosshairs();
-	}
-	
+  @SubscribeEvent
+  public void displayEntityStatus(RenderGameOverlayEvent.Pre event) {
+    if (event.getType() != ElementType.CHAT) {
+      return;
+    }
+    ToroHealthMod.proxy.setEntityInCrosshairs();
+  }
+
 }

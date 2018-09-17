@@ -6,24 +6,25 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ServerProxy extends CommonProxy {
-	public void preInit(FMLPreInitializationEvent e) {
-		super.preInit(e);
-	}
 
-	public void init(FMLInitializationEvent e) {
-		super.init(e);
-	}
+  public void preInit(FMLPreInitializationEvent e) {
+    super.preInit(e);
+  }
 
-	public void postInit(FMLPostInitializationEvent e) {
-		super.postInit(e);
-	}
+  public void init(FMLInitializationEvent e) {
+    super.init(e);
+  }
 
-	public void displayDamageDealt(EntityLivingBase entity) {
-		super.displayDamageDealt(entity);
-	}
-	
-	@Override
-	public void setEntityInCrosshairs() {
-		super.setEntityInCrosshairs();
-	}
+  public void postInit(FMLPostInitializationEvent e) {
+    super.postInit(e);
+  }
+
+  public void displayDamageDealt(EntityLivingBase entity) {
+    super.displayDamageDealt(entity);
+  }
+
+  @Override
+  public void setEntityInCrosshairs() {
+    super.setEntityInCrosshairs();
+  }
 }
