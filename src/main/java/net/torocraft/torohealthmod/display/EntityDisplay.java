@@ -92,7 +92,7 @@ public class EntityDisplay implements ToroHealthDisplay {
     RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
     rendermanager.setPlayerViewY(180.0F);
     rendermanager.setRenderShadow(false);
-    rendermanager.doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+    rendermanager.renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
     rendermanager.setRenderShadow(true);
 
     GlStateManager.popMatrix();
@@ -105,7 +105,7 @@ public class EntityDisplay implements ToroHealthDisplay {
 
   private void popEntityLeasedTo() {
     if (entity instanceof EntityLiving && leashedToEntity != null) {
-      ((EntityLiving) entity).setLeashedToEntity(leashedToEntity, false);
+      ((EntityLiving) entity).setLeashHolder(leashedToEntity, false);
       leashedToEntity = null;
     }
   }
@@ -113,8 +113,8 @@ public class EntityDisplay implements ToroHealthDisplay {
   private void pushEntityLeasedTo() {
     if (entity instanceof EntityLiving) {
       if (((EntityLiving) entity).getLeashed()) {
-        leashedToEntity = ((EntityLiving) entity).getLeashedToEntity();
-        ((EntityLiving) entity).setLeashedToEntity(null, false);
+        leashedToEntity = ((EntityLiving) entity).getLeashHolder();
+        ((EntityLiving) entity).setLeashHolder(null, false);
       }
     }
   }
