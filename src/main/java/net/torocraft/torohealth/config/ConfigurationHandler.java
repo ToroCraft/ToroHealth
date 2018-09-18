@@ -12,6 +12,7 @@ public class ConfigurationHandler {
 
   public static boolean showEntityModel;
   public static boolean showDamageParticles;
+  public static boolean enableClientSideDamageParticles;
   public static String entityStatusDisplay;
   public static String statusDisplayPosition;
   public static String skin;
@@ -39,6 +40,8 @@ public class ConfigurationHandler {
       statusDisplayY = config.getInt("Health Bar Y", Configuration.CATEGORY_CLIENT, 0, -20000, 20000, "With CUSTOM position, sets Y position of Health Bar");
       hideDelay = config.getInt("Hide Delay", Configuration.CATEGORY_CLIENT, 400, 50, 5000, "Delays hiding the dialog for the given number of milliseconds");
       showDamageParticles = config.getBoolean("Show Damage Particles", Configuration.CATEGORY_CLIENT, true, "Show Damage Indicators");
+      enableClientSideDamageParticles = config.getBoolean("Enable Client Side Damage Particles", Configuration.CATEGORY_CLIENT, false,
+          "Set to true if you would like to see the damage numbers but do not have this mod installed on the server");
       healColor = mapColor(config.getString("Heal Color", Configuration.CATEGORY_CLIENT, "GREEN", "Heal Text Color", acceptedColors));
       damageColor = mapColor(config.getString("Damage Color", Configuration.CATEGORY_CLIENT, "RED", "Damage Text Color", acceptedColors));
     } catch (Exception e) {
@@ -51,22 +54,23 @@ public class ConfigurationHandler {
   }
 
   private static int mapColor(String color) {
-    if (color.equals("RED")) {
-      return 0xff0000;
-    } else if (color.equals("GREEN")) {
-      return 0x00ff00;
-    } else if (color.equals("BLUE")) {
-      return 0x0000ff;
-    } else if (color.equals("YELLOW")) {
-      return 0xffff00;
-    } else if (color.equals("ORANGE")) {
-      return 0xffa500;
-    } else if (color.equals("BLACK")) {
-      return 0x000000;
-    } else if (color.equals("PURPLE")) {
-      return 0x960096;
-    } else {
-      return 0xffffff;
+    switch (color) {
+      case "RED":
+        return 0xff0000;
+      case "GREEN":
+        return 0x00ff00;
+      case "BLUE":
+        return 0x0000ff;
+      case "YELLOW":
+        return 0xffff00;
+      case "ORANGE":
+        return 0xffa500;
+      case "BLACK":
+        return 0x000000;
+      case "PURPLE":
+        return 0x960096;
+      default:
+        return 0xffffff;
     }
   }
 
