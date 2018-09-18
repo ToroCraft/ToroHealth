@@ -12,11 +12,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.torohealth.ToroHealth;
 
 public class MessageEntityStatsResponse implements IMessage {
 
   private static final String POTIONS_KEY = "p";
+
+  @SideOnly(Side.CLIENT)
+  public static Collection<PotionEffect> POTIONS;
 
   private int id;
   private Collection<PotionEffect> potions;
@@ -75,6 +79,7 @@ public class MessageEntityStatsResponse implements IMessage {
     }
 
     public static void work(MessageEntityStatsResponse message) {
+      POTIONS = message.potions;
       for (PotionEffect p : message.potions) {
         System.out.println("POTION ON CLIENT: " + p.getEffectName() + " " + p.getDuration());
       }
