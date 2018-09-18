@@ -1,10 +1,10 @@
-package net.torocraft.torohealthmod.gui;
+package net.torocraft.torohealth.gui;
 
 import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
-import net.torocraft.torohealthmod.config.GuiConfigToroHealth;
+import net.torocraft.torohealth.config.GuiConfigToroHealth;
 
 public class GuiFactoryToroHealth implements IModGuiFactory {
 

@@ -1,9 +1,9 @@
-package net.torocraft.torohealthmod.display;
+package net.torocraft.torohealth.display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.math.MathHelper;
-import net.torocraft.torohealthmod.gui.GuiEntityStatus;
+import net.torocraft.torohealth.gui.GuiEntityStatus;
 
 public class HeartsDisplay extends AbstractHealthDisplay implements ToroHealthDisplay {
 
@@ -120,9 +120,9 @@ public class HeartsDisplay extends AbstractHealthDisplay implements ToroHealthDi
       if (armor > 0) {
         int armorIconX = x + i * 8;
 
-				/*
+        /*
          * determines whether armor is full, half, or empty icon
-				 */
+         */
         if (i * 2 + 1 < armor) {
           gui.drawTexturedModalRect(armorIconX, y, 34, 9, 9, 9);
         }

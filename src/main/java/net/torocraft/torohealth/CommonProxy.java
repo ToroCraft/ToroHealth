@@ -1,4 +1,4 @@
-package net.torocraft.torohealthmod;
+package net.torocraft.torohealth;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

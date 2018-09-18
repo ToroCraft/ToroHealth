@@ -1,14 +1,14 @@
-package net.torocraft.torohealthmod.display;
+package net.torocraft.torohealth.display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.torocraft.torohealthmod.ToroHealthMod;
+import net.torocraft.torohealth.ToroHealth;
 
 public class BarDisplay extends AbstractHealthDisplay implements ToroHealthDisplay {
 
-  private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/bars.png");
+  private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(ToroHealth.MODID, "textures/gui/bars.png");
 
   private static final int BAR_WIDTH = 92;
 
@@ -70,11 +70,11 @@ public class BarDisplay extends AbstractHealthDisplay implements ToroHealthDispl
     }
   }
 
-  public static enum Color {
+  public enum Color {
     PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE;
   }
 
-  public static enum Relation {
+  public enum Relation {
     FRIEND, FOE, UNKNOWN
   }
 

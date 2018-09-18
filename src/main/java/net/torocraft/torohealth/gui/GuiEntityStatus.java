@@ -1,4 +1,4 @@
-package net.torocraft.torohealthmod.gui;
+package net.torocraft.torohealth.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -9,19 +9,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.torocraft.torohealthmod.ToroHealthMod;
-import net.torocraft.torohealthmod.config.ConfigurationHandler;
-import net.torocraft.torohealthmod.display.BarDisplay;
-import net.torocraft.torohealthmod.display.EntityDisplay;
-import net.torocraft.torohealthmod.display.HeartsDisplay;
-import net.torocraft.torohealthmod.display.NumericDisplay;
-import net.torocraft.torohealthmod.display.ToroHealthDisplay;
+import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.config.ConfigurationHandler;
+import net.torocraft.torohealth.display.BarDisplay;
+import net.torocraft.torohealth.display.EntityDisplay;
+import net.torocraft.torohealth.display.HeartsDisplay;
+import net.torocraft.torohealth.display.NumericDisplay;
+import net.torocraft.torohealth.display.ToroHealthDisplay;
 
 public class GuiEntityStatus extends Gui {
 
   private static final int PADDING_FROM_EDGE = 3;
-  private static final ResourceLocation SKIN_BASIC = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/default_skin_basic.png");
-  private static final ResourceLocation SKIN_HEAVY = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/default_skin_heavy.png");
+  private static final ResourceLocation SKIN_BASIC = new ResourceLocation(ToroHealth.MODID, "textures/gui/default_skin_basic.png");
+  private static final ResourceLocation SKIN_HEAVY = new ResourceLocation(ToroHealth.MODID, "textures/gui/default_skin_heavy.png");
 
   private final Minecraft mc;
   private final ToroHealthDisplay entityDisplay;

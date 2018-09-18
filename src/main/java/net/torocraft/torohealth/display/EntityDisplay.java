@@ -1,4 +1,4 @@
-package net.torocraft.torohealthmod.display;
+package net.torocraft.torohealth.display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

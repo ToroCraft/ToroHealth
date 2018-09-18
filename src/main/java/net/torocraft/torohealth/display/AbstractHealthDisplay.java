@@ -1,4 +1,4 @@
-package net.torocraft.torohealthmod.display;
+package net.torocraft.torohealth.display;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityGhast;
@@ -36,13 +36,13 @@ public abstract class AbstractHealthDisplay implements ToroHealthDisplay {
   }
 
   public String getEntityName() {
-    if (entity == null || entity.getDisplayName() == null) {
+    if (entity == null) {
       return "";
     }
     return entity.getDisplayName().getFormattedText();
   }
 
-  public static enum Relation {
+  public enum Relation {
     FRIEND, FOE, UNKNOWN
   }
 }

@@ -1,4 +1,4 @@
-package net.torocraft.torohealthmod;
+package net.torocraft.torohealth;
 
 import java.util.List;
 import javax.annotation.Nullable;
@@ -14,18 +14,17 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.torocraft.torohealthmod.config.ConfigurationHandler;
-import net.torocraft.torohealthmod.gui.GuiEntityStatus;
-import net.torocraft.torohealthmod.render.DamageParticle;
+import net.torocraft.torohealth.config.ConfigurationHandler;
+import net.torocraft.torohealth.gui.GuiEntityStatus;
+import net.torocraft.torohealth.render.DamageParticle;
 
 public class ClientProxy extends CommonProxy {
 
-  GuiEntityStatus entityStatusGUI;
+  private GuiEntityStatus entityStatusGUI;
   private Minecraft mc = Minecraft.getMinecraft();
   private Entity pointedEntity;
 
@@ -33,11 +32,6 @@ public class ClientProxy extends CommonProxy {
   public void preInit(FMLPreInitializationEvent e) {
     super.preInit(e);
     entityStatusGUI = new GuiEntityStatus();
-  }
-
-  @Override
-  public void init(FMLInitializationEvent e) {
-    super.init(e);
   }
 
   @Override
@@ -63,7 +57,7 @@ public class ClientProxy extends CommonProxy {
       int entityHealth = ((NBTTagInt) entity.getEntityData().getTag("health")).getInt();
 
       if (entityHealth != currentHealth) {
-        displayParticle(entity, (int) entityHealth - currentHealth);
+        displayParticle(entity, entityHealth - currentHealth);
       }
     }
 
@@ -103,16 +97,15 @@ public class ClientProxy extends CommonProxy {
   }
 
   public RayTraceResult getMouseOver(float partialTicks) {
-    RayTraceResult objectMouseOver = null;
+    RayTraceResult objectMouseOver;
     Entity observer = this.mc.getRenderViewEntity();
 
     if (observer == null || this.mc.world == null) {
-      return objectMouseOver;
+      return null;
     }
 
     this.mc.pointedEntity = null;
     double reachDistance = 50;
-    // objectMouseOver = observer.rayTrace(reachDistance, partialTicks);
 
     objectMouseOver = rayTrace(observer, reachDistance, partialTicks);
 
@@ -136,8 +129,7 @@ public class ClientProxy extends CommonProxy {
         EntitySelectors.NOT_SPECTATING);
     double d2 = distance;
 
-    for (int j = 0; j < list.size(); ++j) {
-      Entity entity1 = (Entity) list.get(j);
+    for (Entity entity1 : list) {
       AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
       RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(observerPositionEyes, lookVectorFromEyePosition);
 

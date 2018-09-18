@@ -1,14 +1,14 @@
-package net.torocraft.torohealthmod.display;
+package net.torocraft.torohealth.display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import net.torocraft.torohealthmod.ToroHealthMod;
+import net.torocraft.torohealth.ToroHealth;
 
 public class NumericDisplay implements ToroHealthDisplay {
 
-  private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealthMod.MODID, "textures/gui/entityStatus.png");
+  private static final ResourceLocation TEXTURE = new ResourceLocation(ToroHealth.MODID, "textures/gui/entityStatus.png");
   private static final int WIDTH = 100;
   private static final int HEIGHT = 34;
 
@@ -38,10 +38,10 @@ public class NumericDisplay implements ToroHealthDisplay {
 
     mc.renderEngine.bindTexture(TEXTURE);
 
-		/*
+    /*
      * defines positions of each element from the top left position of
-		 * status display
-		 */
+     * status display
+     */
     int bgX = 0, bgY = 0, healthBarX = 2, healthBarY = 16, nameX = 50, nameY = 4, healthX = 50, healthY = 20;
 
     Gui.drawModalRectWithCustomSizedTexture(x + bgX, y + bgY, 0.0f, 0.0f, WIDTH, HEIGHT, 200.0f, 200.0f);
@@ -64,7 +64,7 @@ public class NumericDisplay implements ToroHealthDisplay {
   }
 
   public String getEntityName() {
-    if (entity == null || entity.getDisplayName() == null) {
+    if (entity == null) {
       return "";
     }
     return entity.getDisplayName().getFormattedText();
