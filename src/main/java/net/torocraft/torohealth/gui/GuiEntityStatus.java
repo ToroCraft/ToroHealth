@@ -15,7 +15,6 @@ import net.torocraft.torohealth.display.BarDisplay;
 import net.torocraft.torohealth.display.EntityDisplay;
 import net.torocraft.torohealth.display.HeartsDisplay;
 import net.torocraft.torohealth.display.NumericDisplay;
-import net.torocraft.torohealth.display.PotionDisplay;
 import net.torocraft.torohealth.display.ToroHealthDisplay;
 
 public class GuiEntityStatus extends Gui {
@@ -26,7 +25,6 @@ public class GuiEntityStatus extends Gui {
 
   private final Minecraft mc;
   private final ToroHealthDisplay entityDisplay;
-  private final ToroHealthDisplay potionDisplay;
   private final ToroHealthDisplay heartsDisplay;
   private final ToroHealthDisplay numericDisplay;
   private final ToroHealthDisplay barDisplay;
@@ -48,12 +46,10 @@ public class GuiEntityStatus extends Gui {
     entityDisplay = new EntityDisplay(mc);
     heartsDisplay = new HeartsDisplay(mc, this);
     numericDisplay = new NumericDisplay(mc, this);
-    potionDisplay = new PotionDisplay(mc, this);
     barDisplay = new BarDisplay(mc, this);
 
     entityDisplay.setPosition(50, 50);
     heartsDisplay.setPosition(25, 150);
-    potionDisplay.setPosition(25, 160);
     numericDisplay.setPosition(130, 150);
     barDisplay.setPosition(25, 200);
   }
@@ -110,7 +106,6 @@ public class GuiEntityStatus extends Gui {
     numericDisplay.setPosition(x, y);
     barDisplay.setPosition(x, y);
     heartsDisplay.setPosition(x, y);
-    potionDisplay.setPosition(x, y);
   }
 
   private void draw() {
@@ -125,8 +120,6 @@ public class GuiEntityStatus extends Gui {
     } else if ("HEARTS".equals(ConfigurationHandler.entityStatusDisplay)) {
       heartsDisplay.draw();
     }
-
-    potionDisplay.draw();
   }
 
   private void adjustForDisplayPositionSetting() {
@@ -188,6 +181,5 @@ public class GuiEntityStatus extends Gui {
     heartsDisplay.setEntity(entity);
     numericDisplay.setEntity(entity);
     barDisplay.setEntity(entity);
-    potionDisplay.setEntity(entity);
   }
 }

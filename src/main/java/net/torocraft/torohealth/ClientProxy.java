@@ -7,7 +7,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,7 +20,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.torohealth.config.ConfigurationHandler;
 import net.torocraft.torohealth.gui.GuiEntityStatus;
-import net.torocraft.torohealth.network.MessageEntityStatsRequest;
 import net.torocraft.torohealth.render.DamageParticle;
 
 public class ClientProxy extends CommonProxy {
@@ -42,10 +40,6 @@ public class ClientProxy extends CommonProxy {
     MinecraftForge.EVENT_BUS.register(entityStatusGUI);
   }
 
-  /**
-   * This method is used when damage number are determined on the client side,
-   * entity health is tracked in NBT and damage is determined changes in health
-   */
   @Override
   public void displayDamageDealt(EntityLivingBase entity) {
 
@@ -70,19 +64,6 @@ public class ClientProxy extends CommonProxy {
     entity.getEntityData().setTag("health", new NBTTagInt(currentHealth));
   }
 
-  @Override
-  public void displayDamageDealt(EntityLivingBase entity, float damage) {
-    if (!entity.world.isRemote) {
-      return;
-    }
-
-    if (!ConfigurationHandler.showDamageParticles) {
-      return;
-    }
-
-    displayParticle(entity, Math.round(damage));
-  }
-
   private void displayParticle(Entity entity, int damage) {
     if (damage == 0) {
       return;
@@ -96,31 +77,14 @@ public class ClientProxy extends CommonProxy {
     Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
   }
 
-  private int entityIdInCrosshairs = 0;
-  private int refreshCooldown = 0;
-
   @Override
   public void setEntityInCrosshairs() {
     RayTraceResult r = getMouseOver(1.0f);
     if (r != null && RayTraceResult.Type.ENTITY.equals(r.typeOfHit)) {
       if (r.entityHit instanceof EntityLivingBase) {
-        requestEntityUpdate(r.entityHit);
         entityStatusGUI.setEntity((EntityLivingBase) r.entityHit);
       }
     }
-  }
-
-  public void requestEntityUpdate(Entity entity) {
-    int id = entity.getEntityId();
-    if (id != entityIdInCrosshairs) {
-      refreshCooldown = 0;
-      entityIdInCrosshairs = id;
-    }
-    if (refreshCooldown < 1) {
-      ToroHealth.NETWORK.sendToServer(new MessageEntityStatsRequest(id));
-      refreshCooldown = 50;
-    }
-    refreshCooldown--;
   }
 
   @Nullable
@@ -201,11 +165,5 @@ public class ClientProxy extends CommonProxy {
 
     return objectMouseOver;
   }
-
-  @Override
-  public EntityPlayer getPlayer() {
-    return Minecraft.getMinecraft().player;
-  }
-
 
 }
