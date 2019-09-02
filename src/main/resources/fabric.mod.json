@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "torohealthmod",
+  "version": "${version}",
+
+  "name": "ToroHealth Damage Indicators",
+  "description": "Displays damage indicators and health bars for all entities.",
+  "authors": [
+    "ToroCraft"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/torohealth-damage-indicators",
+    "sources": "https://github.com/ToroCraft/ToroHealth"
+  },
+
+  "license": "GPL3",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.torocraft.torohealth.ToroHealth"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

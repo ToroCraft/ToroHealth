@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.torocraft.torohealth.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "ScreenPaint",
+    "PlayerTick"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
