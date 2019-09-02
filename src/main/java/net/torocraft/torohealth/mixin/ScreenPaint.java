@@ -31,7 +31,7 @@ public class ScreenPaint {
         prev = ToroHealth.selectedEntity;
       }
 
-      display.setPosition(20, 20);
+      display.setPosition(0, 0);
       display.draw();
 
     } catch (Exception e) {
