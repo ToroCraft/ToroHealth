@@ -11,63 +11,57 @@ import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 
-public class EntityDisplay extends Screen implements IDisplay {
+public class EntityDisplay extends Screen implements Displayable {
 
-  private static final int RENDER_HEIGHT = 30;
-  private static final int RENDER_WIDTH = 18;
-  private static final int PADDING = 2;
-  private static final int WIDTH = 40;
-  private static final int HEIGHT = WIDTH;
+  private static final float RENDER_HEIGHT = 30;
+  private static final float RENDER_WIDTH = 18;
+  private static final float WIDTH = 40;
+  private static final float HEIGHT = WIDTH;
 
   private LivingEntity entity;
-  private int scale = 1;
-  private float x;
-  private float y;
+  private int entityScale = 1;
+
+  private float xOffset;
+  private float yOffset;
 
   public EntityDisplay() {
-    super(new LiteralText("Entity Display"));
+    super(new LiteralText("ToroHealth HUD"));
   }
 
-  @Override
-  public void setPosition(int x, int y) {
-    this.y = y;
-    this.x = x + ((float)WIDTH) / 2;
-    updateScale();
-  }
-
-  @Override
   public void setEntity(LivingEntity entity) {
     this.entity = entity;
     updateScale();
   }
 
   @Override
-  public void draw() {
+  public void draw(float x, float y, float scale) {
     if (entity != null) {
-      drawEntity(x, y, scale, -40, -20, entity);
+      drawEntity(x + xOffset * scale, y + yOffset * scale, entityScale * scale, -40, -20, entity);
     }
   }
 
   private void updateScale() {
     if (entity == null) {
-      y = (float) y + HEIGHT - PADDING;
       return;
     }
 
     int scaleY = MathHelper.ceil(RENDER_HEIGHT / entity.getHeight());
     int scaleX = MathHelper.ceil(RENDER_WIDTH / entity.getWidth());
-    scale = Math.min(scaleX, scaleY);
-    y = (float) y + (int) (((double) HEIGHT / 2) + ((double) RENDER_HEIGHT / 2));
+    entityScale = Math.min(scaleX, scaleY);
+
+    xOffset = WIDTH / 2;
+
+    yOffset = HEIGHT / 2 + RENDER_HEIGHT / 2;
     if (entity instanceof GhastEntity) {
-      y -= 10;
+      yOffset -= 10;
     }
   }
 
-  private static void drawEntity(float x, float y, int scale, float yaw, float pitch, LivingEntity entity) {
+  private static void drawEntity(float x, float y, float scale, float yaw, float pitch, LivingEntity entity) {
     GlStateManager.enableColorMaterial();
     GlStateManager.pushMatrix();
     GlStateManager.translatef(x, y, 50.0F);
-    GlStateManager.scalef((float) (-scale), (float) scale, (float) scale);
+    GlStateManager.scalef(-scale, scale, scale);
     GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
     float float_3 = entity.field_6283;
     float float_4 = entity.yaw;
