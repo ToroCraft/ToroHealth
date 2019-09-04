@@ -1,68 +1,75 @@
 package net.torocraft.torohealth.display;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Identifier;
+import net.torocraft.torohealth.ToroHealth;
 
-public class BarDisplay {
+public class BarDisplay extends Screen implements Displayable {
 
-  private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
+  private static final Identifier ICON_TEXTURES = new Identifier("textures/gui/icons.png");
 
   private static final int BAR_WIDTH = 92;
 
-  private final Minecraft mc;
-  private final Gui gui;
+  private final MinecraftClient mc;
+  private final DrawableHelper gui;
   private int y;
-  private int barX;
-  private int barY;
+  //private int barX;
+  //private int barY;
 
-  public BarDisplay(Minecraft mc, Gui gui) {
+  public BarDisplay(MinecraftClient mc, DrawableHelper gui) {
+    super(new LiteralText("Health Bar"));
     this.mc = mc;
     this.gui = gui;
   }
 
-  @Override
-  public void setPosition(int x, int y) {
-    this.y = y;
-    barX = x + 4;
-    barY = y + 12;
+  public String getEntityName() {
+    return ToroHealth.selectedEntity.getDisplayName().asFormattedString();
   }
 
   @Override
-  public void draw() {
-    if (entity == null) {
-      return;
-    }
-    render();
-  }
+  public void draw(float x, float y, float scale) {
+    LivingEntity entity = ToroHealth.selectedEntity;
 
-  public void render() {
+    int xOffset = (int) x;
+
     String name = getEntityName();
-    String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth();
+    String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getHealthMaximum();
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    HealthBars.drawEntityHealthBarInGui(gui, entity, barX, barY);
 
-    mc.fontRenderer.drawStringWithShadow(name, barX, y + 2, 16777215);
-    barX += mc.fontRenderer.getStringWidth(name) + 5;
+    HealthBars.drawEntityHealthBarInGui(gui, entity, xOffset, (int) y + 14);
 
-    renderHeartIcon(barX, y + 1);
-    barX += 10;
+    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-    mc.fontRenderer.drawStringWithShadow(health, barX, y + 2, 0xe0e0e0);
-    barX += mc.fontRenderer.getStringWidth(health) + 5;
+    gui.drawString(mc.textRenderer, name, xOffset, (int) y + 2, 16777215);
 
-    renderArmorIcon(barX, y + 1);
-    barX += 10;
+    mc.textRenderer.drawWithShadow(name, xOffset, y + 2, 16777215);
+    xOffset += mc.textRenderer.getStringWidth(name) + 5;
 
-    mc.fontRenderer.drawStringWithShadow(entity.getTotalArmorValue() + "", barX, y + 2, 0xe0e0e0);
+    renderHeartIcon(xOffset, (int) y + 1);
+    xOffset += 10;
+
+    mc.textRenderer.drawWithShadow(health, xOffset, y + 2, 0xe0e0e0);
+    xOffset += mc.textRenderer.getStringWidth(health) + 5;
+
+    renderArmorIcon(xOffset, (int) y + 1);
+    xOffset += 10;
+
+    mc.textRenderer.drawWithShadow(entity.getArmor() + "", xOffset, y + 2, 0xe0e0e0);
   }
 
   private void renderArmorIcon(int x, int y) {
     mc.getTextureManager().bindTexture(ICON_TEXTURES);
-    gui.drawTexturedModalRect(x, y, 34, 9, 9, 9);
+    gui.blit(x, y, 34, 9, 9, 9);
   }
 
   private void renderHeartIcon(int x, int y) {
     mc.getTextureManager().bindTexture(ICON_TEXTURES);
-    gui.drawTexturedModalRect(x, y, 16 + 36, 0, 9, 9);
+    gui.blit(x, y, 16 + 36, 0, 9, 9);
   }
 }

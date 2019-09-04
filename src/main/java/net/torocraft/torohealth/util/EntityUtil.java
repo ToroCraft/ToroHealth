@@ -2,11 +2,11 @@ package net.torocraft.torohealth.util;
 
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.mob.GhastEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SquidEntity;
+import net.minecraft.entity.passive.WanderingTraderEntity;
 import org.apache.commons.lang3.ArrayUtils;
 
 
@@ -36,7 +36,7 @@ public class EntityUtil {
   }
 
   public static Relation determineRelation(Entity entity) {
-    if (entity instanceof MobEntity) {
+    if (entity instanceof HostileEntity) {
       return Relation.FOE;
     } else if (entity instanceof SlimeEntity) {
       return Relation.FOE;
@@ -46,7 +46,9 @@ public class EntityUtil {
       return Relation.FRIEND;
     } else if (entity instanceof SquidEntity) {
       return Relation.FRIEND;
-    } else if (entity instanceof AmbientCreatureEntity) {
+    } else if (entity instanceof AmbientEntity) {
+      return Relation.FRIEND;
+    } else if (entity instanceof PassiveEntity) {
       return Relation.FRIEND;
     } else {
       return Relation.UNKNOWN;

@@ -12,9 +12,11 @@ public class Hud extends Screen {
   private static final Identifier BACKGROUND_TEXTURE = new Identifier(ToroHealth.MODID, "textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity previousEntity;
+  private BarDisplay barDisplay;
 
   public Hud() {
     super(new LiteralText("ToroHealth HUD"));
+    barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
   }
 
   public void draw() {
@@ -29,9 +31,17 @@ public class Hud extends Screen {
     if (ToroHealth.selectedEntity == null) {
       return;
     }
+
+    float scale1 = 1f;
+    GlStateManager.pushMatrix();
+    GlStateManager.scalef(scale1, scale1, scale1);
+
     drawSkin(x, y, scale);
+    barDisplay.draw(x + 48, y + 2, scale);
     entityDisplay.draw(x, y, scale);
-    drawTitle(x, y, scale);
+
+    GlStateManager.popMatrix();
+    //drawTitle(x, y, scale);
   }
 
   private void drawTitle(float x, float y, float scale) {

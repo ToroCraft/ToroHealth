@@ -2,6 +2,7 @@ package net.torocraft.torohealth.mixin;
 
 import net.minecraft.client.gui.hud.InGameHud;
 import net.torocraft.torohealth.Handlers;
+import net.torocraft.torohealth.display.HealthBars;
 import net.torocraft.torohealth.display.Hud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +17,7 @@ public class ScreenPaint {
   @Inject(method = "render", at = @At("RETURN"))
   private void render(float partial, CallbackInfo info) {
     try {
+      HealthBars.tick(partial);
       Handlers.updateSelectedEntity(partial);
       hud.draw();
     } catch (Exception e) {

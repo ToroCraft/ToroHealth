@@ -1,10 +1,13 @@
 package net.torocraft.torohealth.display;
 
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.mojang.blaze3d.platform.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 public class HealthBars {
 
@@ -62,17 +66,39 @@ public class HealthBars {
     public static NumberType numberType = NumberType.LAST;
   }
 
+  //onRenderWorldLast
   public static void tick(float partial) {
 
     if (!barsAreCurrentlyDisabled()) {
       MinecraftClient mc = MinecraftClient.getInstance();
       Entity viewer = mc.getCameraEntity();
       double diameter = HealthBarGuiConf.distance * 2;
-      BlockPos pos = new BlockPos(viewer).subtract(new Vec3i(HealthBarGuiConf.distance, HealthBarGuiConf.distance, HealthBarGuiConf.distance));
+      BlockPos pos = new BlockPos(viewer); //.subtract(new Vec3i(HealthBarGuiConf.distance, HealthBarGuiConf.distance, HealthBarGuiConf.distance));
       Box box = new Box(pos);
-      List<LivingEntity> entities = viewer.world.getEntities(LivingEntity.class, box);
+      box = box.expand(diameter);
+      List<LivingEntity> entities = mc.world.getEntities(LivingEntity.class, box);
+      //System.out.println("entities " + entities.size() + "  x" + box.minX  + "-x" + box.maxX+ "  z" + box.minZ  + "-z" + box.maxZ);
       entities.forEach(e -> HealthBars.drawEntityHealthBarInWorld(e, partial));
     }
+  }
+
+  //@SubscribeEvent ClientTickEvent cleanup
+  public static void tick() {
+    ClientWorld world = MinecraftClient.getInstance().world;
+
+    if (world == null) {
+      return;
+    }
+
+    if (tickCount % 500 == 0) {
+      states.entrySet().removeIf(e -> stateExpired(world, e.getKey(), e.getValue()));
+    }
+
+    if (HealthBarGuiConf.showBarsAboveEntities.equals(HealthBarGuiConf.Mode.WHEN_HOLDING_WEAPON) && tickCount % 10 == 0) {
+      updateEquipment();
+    }
+
+    tickCount++;
   }
 
   public static boolean barsAreCurrentlyDisabled() {
@@ -103,24 +129,7 @@ public class HealthBars {
   }
 
 
-  //@SubscribeEvent
-  public static void tick() {
-    ClientWorld world = MinecraftClient.getInstance().world;
 
-    if (world == null) {
-      return;
-    }
-
-    if (tickCount % 500 == 0) {
-      states.entrySet().removeIf(e -> stateExpired(world, e.getKey(), e.getValue()));
-    }
-
-    if (HealthBarGuiConf.showBarsAboveEntities.equals(HealthBarGuiConf.Mode.WHEN_HOLDING_WEAPON) && tickCount % 10 == 0) {
-      updateEquipment();
-    }
-
-    tickCount++;
-  }
 
   public static void updateEquipment() {
     PlayerEntity player = MinecraftClient.getInstance().player;
@@ -180,6 +189,7 @@ public class HealthBars {
     if (HealthBarGuiConf.showBarsAboveEntities.equals(HealthBarGuiConf.Mode.WHEN_HURT) && entity.getHealth() >= entity.getHealthMaximum()) {
       return;
     }
+    //System.out.println("draw!");
     double x = entity.prevX + ((entity.x - entity.prevX) * partialTicks);
     double y = entity.prevY + ((entity.y - entity.prevY) * partialTicks);
     double z = entity.prevZ + ((entity.z - entity.prevZ) * partialTicks);
@@ -270,7 +280,7 @@ public class HealthBars {
     float b = (color >> 8 & 255) / 255.0F;
     float a = (color & 255) / 255.0F;
 
-    MinecraftClient.getInstance().render  renderEngine.bindTexture(GUI_BARS_TEXTURES);
+    MinecraftClient.getInstance().getTextureManager().bindTexture(GUI_BARS_TEXTURES);
     GlStateManager.color4f(r, g, b, a);
 
     if (gui != null) {
@@ -278,33 +288,33 @@ public class HealthBars {
       return;
     }
 
-    TextRenderer renderManager = MinecraftClient.getInstance().textRenderer;
+    EntityRenderDispatcher renderManager = MinecraftClient.getInstance().getEntityRenderManager();
     boolean lighting = setupGlStateForInWorldRender(x, y, z, zOffset, renderManager);
 
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder buffer = tessellator.getBufferBuilder();
-    buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-    buffer.pos(-HALF_SIZE, 0, 0.0D).tex(u * c, v * c).endVertex();
-    buffer.pos(-HALF_SIZE, h, 0.0D).tex(u * c, (v + vh) * c).endVertex();
-    buffer.pos(-HALF_SIZE + size, h, 0.0D).tex((u + uw) * c, (v + vh) * c).endVertex();
-    buffer.pos(-HALF_SIZE + size, 0, 0.0D).tex(((u + uw) * c), v * c).endVertex();
+    buffer.begin(7, VertexFormats.POSITION_UV);
+    buffer.vertex(-HALF_SIZE, 0, 0.0D).texture(u * c, v * c).next();
+    buffer.vertex(-HALF_SIZE, h, 0.0D).texture(u * c, (v + vh) * c).next();
+    buffer.vertex(-HALF_SIZE + size, h, 0.0D).texture((u + uw) * c, (v + vh) * c).next();
+    buffer.vertex(-HALF_SIZE + size, 0, 0.0D).texture(((u + uw) * c), v * c).next();
     tessellator.draw();
 
     restoreGlState(lighting);
   }
 
 
-  private static boolean setupGlStateForInWorldRender(double x, double y, double z, int zOffset, RenderManager renderManager) {
-    double relX = x - renderManager.viewerPosX;
-    double relY = y - renderManager.viewerPosY + VERTICAL_MARGIN;
-    double relZ = z - renderManager.viewerPosZ;
+  private static boolean setupGlStateForInWorldRender(double x, double y, double z, int zOffset, EntityRenderDispatcher renderManager) {
+    double relX = x - renderManager.camera.getPos().x; //.viewerPosX;
+    double relY = y - renderManager.camera.getPos().y; //.viewerPosY + VERTICAL_MARGIN;
+    double relZ = z - renderManager.camera.getPos().z; //.viewerPosZ;
 
     GlStateManager.pushMatrix();
     GlStateManager.translated(relX, relY, relZ);
 
     GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-    GlStateManager.rotate(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-    GlStateManager.rotate(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+    GlStateManager.rotatef(-renderManager.cameraPitch, 0.0F, 1.0F, 0.0F);
+    GlStateManager.rotatef(renderManager.cameraYaw, 1.0F, 0.0F, 0.0F);
     GlStateManager.translatef(0, 0, -zOffset * 0.001f);
 
     GlStateManager.scalef(-SCALE, -SCALE, SCALE);
@@ -327,13 +337,10 @@ public class HealthBars {
   }
 
   private static int determineColor(LivingEntity entity) {
-    switch (AbstractEntityDisplay.determineRelation(entity)) {
-      case FOE:
-        return RED;
-      case FRIEND:
-        return GREEN;
-      default:
-        return RED;
+    if (EntityUtil.determineRelation(entity) == EntityUtil.Relation.FRIEND) {
+      return GREEN;
+    } else {
+      return RED;
     }
   }
 }
