@@ -193,14 +193,14 @@ public class HealthBars {
     double x = entity.prevX + ((entity.x - entity.prevX) * partialTicks);
     double y = entity.prevY + ((entity.y - entity.prevY) * partialTicks);
     double z = entity.prevZ + ((entity.z - entity.prevZ) * partialTicks);
-    drawEntityHealthBar(entity, x, y, z, null);
+    drawEntityHealthBar(entity, x, y, z);
   }
 
-  public static void drawEntityHealthBarInGui(DrawableHelper gui, LivingEntity entity, int x, int y) {
-    drawEntityHealthBar(entity, x, y, 0, gui);
+  public static void drawEntityHealthBarInGui(LivingEntity entity, int x, int y) {
+    drawEntityHealthBar(entity, x, y, 0);
   }
 
-  private static void drawEntityHealthBar(LivingEntity entity, double x, double y, double z, DrawableHelper gui) {
+  public static void drawEntityHealthBar(LivingEntity entity, double x, double y, double z) {
     State state = getState(entity);
 
     if (state.lastHealth < 0.1) {
@@ -227,9 +227,9 @@ public class HealthBars {
       state.previousHealthDelay = HEALTH_INDICATOR_DELAY;
     }
 
-    if (HealthBarGuiConf.showBarsAboveEntities.equals(HealthBarGuiConf.Mode.WHEN_HURT_TEMP) && gui == null && state.lastDmg == 0) {
-      return;
-    }
+//    if (HealthBarGuiConf.showBarsAboveEntities.equals(HealthBarGuiConf.Mode.WHEN_HURT_TEMP) && gui == null && state.lastDmg == 0) {
+//      return;
+//    }
 
     int color = determineColor(entity);
     int color2 = color == RED ? DARK_RED : DARK_GREEN;
@@ -239,13 +239,13 @@ public class HealthBars {
     int zOffset = 0;
     y += entity.getHeight();
 
-    drawBar(gui, x, y, z, 1, DARK_GRAY, zOffset++);
-    drawBar(gui, x, y, z, percent2, color2, zOffset++);
-    drawBar(gui, x, y, z, percent, color, zOffset++);
+    drawBar(x, y, z, 1, DARK_GRAY, zOffset++);
+    drawBar(x, y, z, percent2, color2, zOffset++);
+    drawBar(x, y, z, percent, color, zOffset++);
     if (HealthBarGuiConf.numberType.equals(HealthBarGuiConf.NumberType.CUMULATIVE)) {
-      drawDamageNumber(state.previousHealth - entity.getHealth(), entity, gui, x, y, z, zOffset);
+      //drawDamageNumber(state.previousHealth - entity.getHealth(), entity, gui, x, y, z, zOffset);
     } else if (HealthBarGuiConf.numberType.equals(HealthBarGuiConf.NumberType.LAST)) {
-      drawDamageNumber(state.lastDmg, entity, gui, x, y, z, zOffset);
+      //drawDamageNumber(state.lastDmg, entity, gui, x, y, z, zOffset);
     }
   }
 
@@ -265,7 +265,7 @@ public class HealthBars {
     }
   }
 
-  private static void drawBar(DrawableHelper gui, double x, double y, double z, float percent, int color, int zOffset) {
+  private static void drawBar(double x, double y, double z, float percent, int color, int zOffset) {
     float c = 0.00390625f;
     int u = 0;
     int v = 6 * 5 * 2 + 5;
@@ -283,24 +283,21 @@ public class HealthBars {
     MinecraftClient.getInstance().getTextureManager().bindTexture(GUI_BARS_TEXTURES);
     GlStateManager.color4f(r, g, b, a);
 
-    if (gui != null) {
-      gui.blit((int) x, (int) y, u, v, uw, vh);
-      return;
-    }
+    DrawableHelper.blit((int)x, (int)y, 0, (float)u, (float)v, uw, vh, 256, 256 + zOffset);
 
-    EntityRenderDispatcher renderManager = MinecraftClient.getInstance().getEntityRenderManager();
-    boolean lighting = setupGlStateForInWorldRender(x, y, z, zOffset, renderManager);
+    ///EntityRenderDispatcher renderManager = MinecraftClient.getInstance().getEntityRenderManager();
+    //boolean lighting = setupGlStateForInWorldRender(x, y, z, zOffset, renderManager);
 
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBufferBuilder();
-    buffer.begin(7, VertexFormats.POSITION_UV);
-    buffer.vertex(-HALF_SIZE, 0, 0.0D).texture(u * c, v * c).next();
-    buffer.vertex(-HALF_SIZE, h, 0.0D).texture(u * c, (v + vh) * c).next();
-    buffer.vertex(-HALF_SIZE + size, h, 0.0D).texture((u + uw) * c, (v + vh) * c).next();
-    buffer.vertex(-HALF_SIZE + size, 0, 0.0D).texture(((u + uw) * c), v * c).next();
-    tessellator.draw();
+//    Tessellator tessellator = Tessellator.getInstance();
+//    BufferBuilder buffer = tessellator.getBufferBuilder();
+//    buffer.begin(7, VertexFormats.POSITION_UV);
+//    buffer.vertex(-HALF_SIZE, 0, 0.0D).texture(u * c, v * c).next();
+//    buffer.vertex(-HALF_SIZE, h, 0.0D).texture(u * c, (v + vh) * c).next();
+//    buffer.vertex(-HALF_SIZE + size, h, 0.0D).texture((u + uw) * c, (v + vh) * c).next();
+//    buffer.vertex(-HALF_SIZE + size, 0, 0.0D).texture(((u + uw) * c), v * c).next();
+//    tessellator.draw();
 
-    restoreGlState(lighting);
+    //restoreGlState(lighting);
   }
 
 

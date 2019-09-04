@@ -6,7 +6,8 @@
   ],
   "client": [
     "ScreenPaint",
-    "PlayerTick"
+    "PlayerTick",
+    "RenderEntity"
   ],
   "injectors": {
     "defaultRequire": 1

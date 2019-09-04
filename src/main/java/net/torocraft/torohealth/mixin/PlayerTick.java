@@ -15,7 +15,7 @@ public class PlayerTick {
   @Inject(method = "tick()V", at = @At("HEAD"))
   private void render(CallbackInfo info) {
     try {
-      HealthBars.tick();
+      //HealthBars.tick();
       //Handlers.updateSelectedEntity();
     } catch (Exception e) {
       e.printStackTrace();

@@ -42,7 +42,7 @@ public class BarDisplay extends Screen implements Displayable {
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-    HealthBars.drawEntityHealthBarInGui(gui, entity, xOffset, (int) y + 14);
+    HealthBars.drawEntityHealthBarInGui(entity, xOffset, (int) y + 14);
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 

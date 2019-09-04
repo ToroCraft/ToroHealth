@@ -17,7 +17,7 @@ public class ScreenPaint {
   @Inject(method = "render", at = @At("RETURN"))
   private void render(float partial, CallbackInfo info) {
     try {
-      HealthBars.tick(partial);
+      //HealthBars.tick(partial);
       Handlers.updateSelectedEntity(partial);
       hud.draw();
     } catch (Exception e) {
