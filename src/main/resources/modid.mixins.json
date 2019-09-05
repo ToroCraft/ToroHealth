@@ -7,7 +7,8 @@
   "client": [
     "ScreenPaint",
     "PlayerTick",
-    "RenderEntity"
+    "EntityRendererMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
