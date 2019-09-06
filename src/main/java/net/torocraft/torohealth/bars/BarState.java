@@ -1,7 +1,9 @@
 package net.torocraft.torohealth.bars;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,14 +42,36 @@ public class BarState {
       updateState(t.entity);
     }
 
-    if (tickCount % 200 == 0) {
+    if (tickCount % 100 == 0) {
+      cleanCache();
       System.out.println("Entity State Cache [" + states.size() + "]  Tracked Entities [" + EntityTracker.INSTANCE.size() + "]");
     }
 
     tickCount++;
   }
 
-  
+  private static void cleanCache() {
+    states.entrySet().removeIf(BarState::stateExpired);
+  }
+
+  private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
+    if (entry.getValue() == null) {
+      return true;
+    }
+
+    World world = MinecraftClient.getInstance().world;
+    Entity entity = world.getEntityById(entry.getKey());
+
+    if (!((entity instanceof LivingEntity))) {
+      return true;
+    }
+
+    if (!world.isBlockLoaded(entity.getBlockPos())) {
+      return true;
+    }
+
+    return !entity.isAlive();
+  }
 
   private static void updateState(LivingEntity entity) {
     BarState state = BarState.getState(entity);
