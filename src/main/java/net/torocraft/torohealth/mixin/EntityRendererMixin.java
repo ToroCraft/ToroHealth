@@ -26,6 +26,4 @@ public class EntityRendererMixin {
     }
   }
 
-  //render(T entity_1, double double_1, double double_2, double double_3, float float_1, float float_2)
-
 }

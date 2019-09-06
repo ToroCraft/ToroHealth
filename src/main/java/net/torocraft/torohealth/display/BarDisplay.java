@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.bars.HealthBarRenderer;
 
 public class BarDisplay extends Screen implements Displayable {
 
@@ -18,8 +19,6 @@ public class BarDisplay extends Screen implements Displayable {
   private final MinecraftClient mc;
   private final DrawableHelper gui;
   private int y;
-  //private int barX;
-  //private int barY;
 
   public BarDisplay(MinecraftClient mc, DrawableHelper gui) {
     super(new LiteralText("Health Bar"));
@@ -41,8 +40,9 @@ public class BarDisplay extends Screen implements Displayable {
     String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getHealthMaximum();
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-    //HealthBars.drawEntityHealthBarInGui(entity, xOffset, (int) y + 14);
+    GlStateManager.pushMatrix();
+    HealthBarRenderer.render(entity, x + ((float)80 / 2), y + 14, 80, false);
+    GlStateManager.popMatrix();
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
