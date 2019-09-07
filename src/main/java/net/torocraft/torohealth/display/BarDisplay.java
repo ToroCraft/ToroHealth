@@ -41,7 +41,7 @@ public class BarDisplay extends Screen implements Displayable {
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     GlStateManager.pushMatrix();
-    HealthBarRenderer.render(entity, x + ((float)80 / 2), y + 14, 80, false);
+    HealthBarRenderer.render(entity, x + 60, y + 14, 120, false);
     GlStateManager.popMatrix();
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);

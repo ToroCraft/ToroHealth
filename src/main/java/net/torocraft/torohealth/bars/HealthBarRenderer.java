@@ -114,7 +114,7 @@ public class HealthBarRenderer {
     int vh = 5;
 
     double size = percent * width;
-    double h = 4;
+    double h = inWorld ? 4 : 6;
 
     float r = (color >> 24 & 255) / 255.0F;
     float g = (color >> 16 & 255) / 255.0F;

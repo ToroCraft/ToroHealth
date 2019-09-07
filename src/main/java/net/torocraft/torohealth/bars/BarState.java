@@ -20,9 +20,10 @@ public class BarState {
   public float lastDmg;
   public float lastHealth;
   public float lastDmgDelay;
+  private float animationSpeed = 0;
 
-  private static final float HEALTH_INDICATOR_DELAY = 80;
-  private static final float HEALTH_ANIMATION_SPEED = 0.08f;
+  private static final float HEALTH_INDICATOR_DELAY = 40;
+  //private static final float HEALTH_ANIMATION_SPEED = 0.2f;
 
   public static BarState getState(Entity entity) {
     int id = entity.getEntityId();
@@ -75,6 +76,12 @@ public class BarState {
 
   private static void updateState(LivingEntity entity) {
     BarState state = BarState.getState(entity);
+
+    if (state.animationSpeed == 0) {
+      state.animationSpeed = entity.getHealth() / 125;
+    }
+
+
     if (state.lastHealth < 0.1) {
       state.lastHealth = entity.getHealth();
       state.lastDmg = 0;
@@ -91,8 +98,9 @@ public class BarState {
 
     if (state.previousHealthDelay > 0) {
       state.previousHealthDelay--;
+      state.animationSpeed = (state.previousHealthDisplay - entity.getHealth()) / 40;
     } else if (state.previousHealthDelay < 1 && state.previousHealthDisplay > entity.getHealth()) {
-      state.previousHealthDisplay -= HEALTH_ANIMATION_SPEED;
+      state.previousHealthDisplay -= state.animationSpeed;
     } else {
       state.previousHealthDisplay = entity.getHealth();
       state.previousHealth = entity.getHealth();
