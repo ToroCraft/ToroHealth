@@ -1,9 +1,9 @@
 package net.torocraft.torohealth.mixin;
 
 import net.minecraft.client.gui.hud.InGameHud;
-import net.torocraft.torohealth.Handlers;
-import net.torocraft.torohealth.display.HealthBars;
+import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.display.Hud;
+import net.torocraft.torohealth.util.Raytrace;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +17,7 @@ public class ScreenPaint {
   @Inject(method = "render", at = @At("RETURN"))
   private void render(float partial, CallbackInfo info) {
     try {
-      //HealthBars.tick(partial);
-      Handlers.updateSelectedEntity(partial);
+      ToroHealth.selectedEntity = Raytrace.getEntityInCrosshair(partial, ToroHealth.CONFIG.hud.distance);
       hud.draw();
     } catch (Exception e) {
       e.printStackTrace();

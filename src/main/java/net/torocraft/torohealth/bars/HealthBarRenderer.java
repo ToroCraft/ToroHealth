@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.util.Config;
 import net.torocraft.torohealth.util.EntityUtil;
 import org.lwjgl.opengl.GL11;
 
@@ -36,7 +37,7 @@ public class HealthBarRenderer {
   private static final float FULL_SIZE = 40;
   private static final double HALF_SIZE = FULL_SIZE / 2;
 
-  //    if (HealthBarGuiConf.showBarsAboveEntities.equals(HealthBarGuiConf.Mode.WHEN_HURT_TEMP) && gui == null && state.lastDmg == 0) {
+  //    if (HealthBarGuiToroHealth.CONFIG.showBarsAboveEntities.equals(HealthBarGuiToroHealth.CONFIG.Mode.WHEN_HURT_TEMP) && gui == null && state.lastDmg == 0) {
   //      return;
   //    }
 
@@ -88,9 +89,9 @@ public class HealthBarRenderer {
     drawBar(x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(x, y, width, percent, color, zOffset, inWorld);
 
-    if (Conf.numberType.equals(Conf.NumberType.CUMULATIVE)) {
+    if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
       drawDamageNumber(state.previousHealth - entity.getHealth(), entity, x, y, width);
-    } else if (Conf.numberType.equals(Conf.NumberType.LAST)) {
+    } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
       drawDamageNumber(state.lastDmg, entity, x, y, width);
     }
   }
