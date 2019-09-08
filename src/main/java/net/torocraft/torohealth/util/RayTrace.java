@@ -10,7 +10,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
-public class Raytrace {
+public class RayTrace {
   private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
 
   public static LivingEntity getEntityInCrosshair (float partialTicks, double reachDistance) {

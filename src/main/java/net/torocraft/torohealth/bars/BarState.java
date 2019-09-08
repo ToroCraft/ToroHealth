@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
+import net.torocraft.torohealth.ToroHealth;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +14,6 @@ public class BarState {
 
   private static final Map<Integer, BarState> states = new HashMap<>();
 
-  public float showOnHurtDelay;
   public float previousHealth;
   public float previousHealthDisplay;
   public float previousHealthDelay;
@@ -23,7 +23,6 @@ public class BarState {
   private float animationSpeed = 0;
 
   private static final float HEALTH_INDICATOR_DELAY = 40;
-  //private static final float HEALTH_ANIMATION_SPEED = 0.2f;
 
   public static BarState getState(Entity entity) {
     int id = entity.getEntityId();
@@ -38,16 +37,16 @@ public class BarState {
   private static int tickCount = 0;
 
   public static void updateState() {
+    if (ToroHealth.selectedEntity != null){
+      updateState(ToroHealth.selectedEntity);
+    }
     for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
       EntityTracker.TrackedEntity t = i.next();
       updateState(t.entity);
     }
-
-    if (tickCount % 100 == 0) {
+    if (tickCount % 200 == 0) {
       cleanCache();
-      System.out.println("Entity State Cache [" + states.size() + "]  Tracked Entities [" + EntityTracker.INSTANCE.size() + "]");
     }
-
     tickCount++;
   }
 
@@ -80,7 +79,6 @@ public class BarState {
     if (state.animationSpeed == 0) {
       state.animationSpeed = entity.getHealth() / 125;
     }
-
 
     if (state.lastHealth < 0.1) {
       state.lastHealth = entity.getHealth();

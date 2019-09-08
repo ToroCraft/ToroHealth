@@ -37,10 +37,6 @@ public class HealthBarRenderer {
   private static final float FULL_SIZE = 40;
   private static final double HALF_SIZE = FULL_SIZE / 2;
 
-  //    if (HealthBarGuiToroHealth.CONFIG.showBarsAboveEntities.equals(HealthBarGuiToroHealth.CONFIG.Mode.WHEN_HURT_TEMP) && gui == null && state.lastDmg == 0) {
-  //      return;
-  //    }
-
   public static void renderTrackedEntity(float cameraYaw, float cameraPitch) {
     for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
       EntityTracker.TrackedEntity t = i.next();
@@ -123,7 +119,7 @@ public class HealthBarRenderer {
     float a = (color & 255) / 255.0F;
 
     MinecraftClient.getInstance().getTextureManager().bindTexture(GUI_BARS_TEXTURES);
-    GlStateManager.color4f(r, g, b, 255);
+    GlStateManager.color4f(r, g, b, a);
 
     double half = width / 2;
 

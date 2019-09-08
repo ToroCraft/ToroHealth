@@ -2,13 +2,13 @@ package net.torocraft.torohealth.bars;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.torocraft.torohealth.ToroHealth;
 
 import java.util.Iterator;
 
 public class EntityTracker {
   private final static int MAX_BARS = 200;
   private TrackedEntity[] buffer = new TrackedEntity[MAX_BARS];
-  private TrackedEntity[] emptyBuffer = new TrackedEntity[MAX_BARS];
   private int pointer = 0;
   private TrackedEntity e;
 
