@@ -11,7 +11,7 @@ import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 
-public class EntityDisplay extends Screen implements Displayable {
+public class EntityDisplay extends Screen  {
 
   private static final float RENDER_HEIGHT = 30;
   private static final float RENDER_WIDTH = 18;
@@ -33,10 +33,9 @@ public class EntityDisplay extends Screen implements Displayable {
     updateScale();
   }
 
-  @Override
-  public void draw(float x, float y, float scale) {
+  public void draw() {
     if (entity != null) {
-      drawEntity(x + xOffset * scale, y + yOffset * scale, entityScale * scale, -40, -20, entity);
+      drawEntity(xOffset, yOffset, entityScale, -40, -20, entity);
     }
   }
 
@@ -61,7 +60,11 @@ public class EntityDisplay extends Screen implements Displayable {
     GlStateManager.enableColorMaterial();
     GlStateManager.pushMatrix();
     GlStateManager.translatef(x, y, 50.0F);
-    GlStateManager.scalef(-scale, scale, scale);
+    //GlStateManager.scalef(-scale, scale, scale);
+    //System.out.println(scale);
+
+    //TODO fix entity scale
+    GlStateManager.scalef(-16f, 16f, 16f);
     GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
     float float_3 = entity.field_6283;
     float float_4 = entity.yaw;

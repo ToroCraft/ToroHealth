@@ -20,10 +20,14 @@ public class Hud extends Screen {
   }
 
   public void draw() {
-    draw(10, 10, 1f);
+    draw(ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
   }
 
   private void draw(float x, float y, float scale) {
+    x = 10;
+    y = 10;
+    scale = 1f;
+
     if (ToroHealth.selectedEntity != previousEntity) {
       entityDisplay.setEntity(ToroHealth.selectedEntity);
       previousEntity = ToroHealth.selectedEntity;
@@ -32,34 +36,31 @@ public class Hud extends Screen {
       return;
     }
 
-    float scale1 = 1f;
     GlStateManager.pushMatrix();
-    GlStateManager.scalef(scale1, scale1, scale1);
+    GlStateManager.scalef(scale, scale, scale);
+    GlStateManager.translatef(x, y, 0);
 
-    drawSkin(x, y, scale);
-    barDisplay.draw(x + 48, y + 2, scale);
-    entityDisplay.draw(x, y, scale);
+    drawSkin();
+    entityDisplay.draw();
+
+    GlStateManager.pushMatrix();
+    GlStateManager.translatef(54, 10, 0);
+    barDisplay.draw();
+    GlStateManager.popMatrix();
+
+
 
     GlStateManager.popMatrix();
-    //drawTitle(x, y, scale);
   }
 
-  private void drawTitle(float x, float y, float scale) {
-    int x1 = (int) ((48 * scale) + x);
-    int y1 = (int) y + 2;
-    drawString(MinecraftClient.getInstance().textRenderer, ToroHealth.selectedEntity.getName().asString(), x1, y1, 0xFFFFFF);
-  }
-
-  private void drawSkin(float x, float y, float scale) {
+  private void drawSkin() {
     MinecraftClient.getInstance().getTextureManager().bindTexture(BACKGROUND_TEXTURE);
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-    int x1 = (int) (x - (scale * 10));
-    int y1 = (int) (y - (scale * 10));
-    int w = (int) (scale * 160);
-    int h = (int) (scale * 60);
+    int w = 160;
+    int h = 60;
 
-    blit(x1, y1, 0.0f, 0.0f, w, h, w, h);
+    blit(0, 0, 0.0f, 0.0f, w, h, w, h);
   }
 
 }

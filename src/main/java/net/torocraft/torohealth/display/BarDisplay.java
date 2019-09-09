@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.bars.HealthBarRenderer;
 
-public class BarDisplay extends Screen implements Displayable {
+public class BarDisplay extends Screen {
 
   private static final Identifier ICON_TEXTURES = new Identifier("textures/gui/icons.png");
 
@@ -18,7 +18,6 @@ public class BarDisplay extends Screen implements Displayable {
 
   private final MinecraftClient mc;
   private final DrawableHelper gui;
-  private int y;
 
   public BarDisplay(MinecraftClient mc, DrawableHelper gui) {
     super(new LiteralText("Health Bar"));
@@ -30,37 +29,31 @@ public class BarDisplay extends Screen implements Displayable {
     return ToroHealth.selectedEntity.getDisplayName().asFormattedString();
   }
 
-  @Override
-  public void draw(float x, float y, float scale) {
+  public void draw() {
     LivingEntity entity = ToroHealth.selectedEntity;
+    int xOffset = 0;
 
-    int xOffset = (int) x;
-
+    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    HealthBarRenderer.render(entity, 63, 14, 130, false);
     String name = getEntityName();
     String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getHealthMaximum();
-
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    GlStateManager.pushMatrix();
-    HealthBarRenderer.render(entity, x + 60, y + 14, 120, false);
-    GlStateManager.popMatrix();
-
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-    gui.drawString(mc.textRenderer, name, xOffset, (int) y + 2, 16777215);
+    gui.drawString(mc.textRenderer, name, xOffset, (int) 2, 16777215);
 
-    mc.textRenderer.drawWithShadow(name, xOffset, y + 2, 16777215);
+    mc.textRenderer.drawWithShadow(name, xOffset, 2, 16777215);
     xOffset += mc.textRenderer.getStringWidth(name) + 5;
 
-    renderHeartIcon(xOffset, (int) y + 1);
+    renderHeartIcon(xOffset, (int) 1);
     xOffset += 10;
 
-    mc.textRenderer.drawWithShadow(health, xOffset, y + 2, 0xe0e0e0);
+    mc.textRenderer.drawWithShadow(health, xOffset, 2, 0xe0e0e0);
     xOffset += mc.textRenderer.getStringWidth(health) + 5;
 
-    renderArmorIcon(xOffset, (int) y + 1);
+    renderArmorIcon(xOffset, (int) 1);
     xOffset += 10;
 
-    mc.textRenderer.drawWithShadow(entity.getArmor() + "", xOffset, y + 2, 0xe0e0e0);
+    mc.textRenderer.drawWithShadow(entity.getArmor() + "", xOffset, 2, 0xe0e0e0);
   }
 
   private void renderArmorIcon(int x, int y) {
