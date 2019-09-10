@@ -7,7 +7,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
-import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.bars.HealthBarRenderer;
 
 public class BarDisplay extends Screen {
@@ -25,17 +24,16 @@ public class BarDisplay extends Screen {
     this.gui = gui;
   }
 
-  public String getEntityName() {
-    return ToroHealth.selectedEntity.getDisplayName().asFormattedString();
+  private String getEntityName(LivingEntity entity) {
+    return entity.getDisplayName().asFormattedString();
   }
 
-  public void draw() {
-    LivingEntity entity = ToroHealth.selectedEntity;
+  public void draw(LivingEntity entity) {
     int xOffset = 0;
 
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     HealthBarRenderer.render(entity, 63, 14, 130, false);
-    String name = getEntityName();
+    String name = getEntityName(entity);
     String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getHealthMaximum();
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 

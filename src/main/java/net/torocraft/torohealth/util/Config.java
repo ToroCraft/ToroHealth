@@ -18,16 +18,16 @@ public class Config {
     public Float x = 4f;
     public Float y = 4f;
     public Float scale = 1f;
-    public String skin = "BASIC";
+//    public String skin = "BASIC";
     public int hideDelay = 400;
-    public boolean showEntity = true;
+//    public boolean showEntity = true;
   }
 
   public static class Particle {
-    public boolean show = true;
-    public String statusDisplayPosition = "TOP LEFT";
-    public Integer damageColor = 0xff0000;
-    public Integer healColor = 0x00ff00;
+//    public boolean show = true;
+//    public String statusDisplayPosition = "TOP LEFT";
+//    public Integer damageColor = 0xff0000;
+//    public Integer healColor = 0x00ff00;
   }
 
   public static class Bar {

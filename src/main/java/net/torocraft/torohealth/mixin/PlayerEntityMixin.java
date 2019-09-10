@@ -22,6 +22,7 @@ public class PlayerEntityMixin {
   private void render(CallbackInfo info) {
     BarState.updateState();
     HoldingWeaponUpdater.update();
+    ToroHealth.HUD.tick();
   }
 
 }

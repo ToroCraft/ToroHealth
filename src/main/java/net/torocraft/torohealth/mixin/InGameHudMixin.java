@@ -12,11 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
 
-  private Hud hud = new Hud();
-
   @Inject(method = "render", at = @At("RETURN"))
   private void render(float partial, CallbackInfo info) {
     ToroHealth.selectedEntity = RayTrace.getEntityInCrosshair(partial, ToroHealth.CONFIG.hud.distance);
-    hud.draw();
+    ToroHealth.HUD.draw();
   }
 }

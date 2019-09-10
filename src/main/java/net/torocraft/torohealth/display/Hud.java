@@ -11,8 +11,10 @@ import net.torocraft.torohealth.ToroHealth;
 public class Hud extends Screen {
   private static final Identifier BACKGROUND_TEXTURE = new Identifier(ToroHealth.MODID, "textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
-  private LivingEntity previousEntity;
+  private LivingEntity previousSelectedEntity;
+  private LivingEntity drawEntity;
   private BarDisplay barDisplay;
+  private int age;
 
   public Hud() {
     super(new LiteralText("ToroHealth HUD"));
@@ -23,12 +25,39 @@ public class Hud extends Screen {
     draw(ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
   }
 
-  private void draw(float x, float y, float scale) {
-    if (ToroHealth.selectedEntity != previousEntity) {
-      entityDisplay.setEntity(ToroHealth.selectedEntity);
-      previousEntity = ToroHealth.selectedEntity;
+  public void tick() {
+    age++;
+    handleEntityChange(ToroHealth.selectedEntity);
+  }
+
+  private void handleEntityChange (LivingEntity entity) {
+    if (ToroHealth.selectedEntity != drawEntity) {
+      if (ToroHealth.selectedEntity == null && age < ToroHealth.CONFIG.hud.hideDelay) {
+
+      }
+      age = 0;
+
     }
-    if (ToroHealth.selectedEntity == null) {
+  }
+
+  private void draw(float x, float y, float scale) {
+
+    // detect entity change
+    if (ToroHealth.selectedEntity != null) {
+      drawEntity = ToroHealth.selectedEntity;
+    }
+
+
+
+//      if (ToroHealth.selectedEntity == null && age <= ToroHealth.CONFIG.hud.hideDelay) {
+//        drawEntity = previousSelectedEntity;
+//      } else {
+//        drawEntity = ToroHealth.selectedEntity;
+//        previousSelectedEntity = ToroHealth.selectedEntity;
+//      }
+
+
+    if (drawEntity == null) {
       return;
     }
 
@@ -39,9 +68,7 @@ public class Hud extends Screen {
     drawSkin();
     entityDisplay.draw();
     GlStateManager.translatef(44, 0, 0);
-    barDisplay.draw();
-
-
+    barDisplay.draw(drawEntity);
 
     GlStateManager.popMatrix();
   }
