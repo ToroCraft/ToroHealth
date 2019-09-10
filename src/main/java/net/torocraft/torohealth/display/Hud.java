@@ -24,10 +24,6 @@ public class Hud extends Screen {
   }
 
   private void draw(float x, float y, float scale) {
-    x = 10;
-    y = 10;
-    scale = 1f;
-
     if (ToroHealth.selectedEntity != previousEntity) {
       entityDisplay.setEntity(ToroHealth.selectedEntity);
       previousEntity = ToroHealth.selectedEntity;
@@ -38,15 +34,12 @@ public class Hud extends Screen {
 
     GlStateManager.pushMatrix();
     GlStateManager.scalef(scale, scale, scale);
-    GlStateManager.translatef(x, y, 0);
+    GlStateManager.translatef(x - 10, y - 10, 0);
 
     drawSkin();
     entityDisplay.draw();
-
-    GlStateManager.pushMatrix();
-    GlStateManager.translatef(54, 10, 0);
+    GlStateManager.translatef(44, 0, 0);
     barDisplay.draw();
-    GlStateManager.popMatrix();
 
 
 
@@ -61,6 +54,7 @@ public class Hud extends Screen {
     int h = 60;
 
     blit(0, 0, 0.0f, 0.0f, w, h, w, h);
+    GlStateManager.translatef(10, 10, 0);
   }
 
 }

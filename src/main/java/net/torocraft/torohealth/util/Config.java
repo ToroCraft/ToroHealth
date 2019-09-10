@@ -15,8 +15,8 @@ public class Config {
 
   public static class Hud {
     public int distance = 60;
-    public Integer x = 0;
-    public Integer y = 0;
+    public Float x = 4f;
+    public Float y = 4f;
     public Float scale = 1f;
     public String skin = "BASIC";
     public int hideDelay = 400;

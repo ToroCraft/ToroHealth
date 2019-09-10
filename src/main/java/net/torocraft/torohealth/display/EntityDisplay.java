@@ -60,11 +60,7 @@ public class EntityDisplay extends Screen  {
     GlStateManager.enableColorMaterial();
     GlStateManager.pushMatrix();
     GlStateManager.translatef(x, y, 50.0F);
-    //GlStateManager.scalef(-scale, scale, scale);
-    //System.out.println(scale);
-
-    //TODO fix entity scale
-    GlStateManager.scalef(-16f, 16f, 16f);
+    GlStateManager.scalef(-scale, scale, scale);
     GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
     float float_3 = entity.field_6283;
     float float_4 = entity.yaw;
