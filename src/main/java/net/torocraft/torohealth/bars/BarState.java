@@ -37,8 +37,9 @@ public class BarState {
   private static int tickCount = 0;
 
   public static void updateState() {
-    if (ToroHealth.selectedEntity != null){
-      updateState(ToroHealth.selectedEntity);
+    LivingEntity selectedEntity = ToroHealth.HUD.getEntity();
+    if (selectedEntity != null) {
+      updateState(selectedEntity);
     }
     for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
       EntityTracker.TrackedEntity t = i.next();

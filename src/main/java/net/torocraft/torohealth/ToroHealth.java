@@ -11,7 +11,6 @@ public class ToroHealth implements ModInitializer {
 
   public static final String MODID = "torohealth";
 
-  public static LivingEntity selectedEntity;
   public static Config CONFIG;
   public static Hud HUD = new Hud();
   public static boolean IS_HOLDING_WEAPON = false;

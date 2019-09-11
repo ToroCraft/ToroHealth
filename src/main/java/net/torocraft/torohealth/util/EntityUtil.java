@@ -1,35 +1,19 @@
 package net.torocraft.torohealth.util;
 
-import net.fabricmc.fabric.api.client.render.EntityRendererRegistry;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.mob.*;
-import net.minecraft.entity.passive.*;
-import org.apache.commons.lang3.ArrayUtils;
-
+import net.minecraft.entity.mob.AmbientEntity;
+import net.minecraft.entity.mob.GhastEntity;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.FishEntity;
+import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.SquidEntity;
 
 public class EntityUtil {
 
   public enum Relation {
     FRIEND, FOE, UNKNOWN
-  }
-
-  public static class HealthBarGuiConf {
-    public static String[] entityBlacklist = {};
-  }
-
-  public static boolean whiteListedEntity(Entity entity) {
-    return !ArrayUtils.contains(HealthBarGuiConf.entityBlacklist, getEntityStringId(entity));
-  }
-
-  public static String getEntityStringId(Entity entity) {
-    try {
-      //EntityRendererRegistry
-      //return EntityRegistry.getEntityStringId(entity.getClass()).getRegistryName().toString();
-      // return EntityRendererRegistry.INSTANCE.
-      return entity.getEntityName();
-    } catch (Exception e) {
-      return "unknown:unknown";
-    }
   }
 
   public static Relation determineRelation(Entity entity) {

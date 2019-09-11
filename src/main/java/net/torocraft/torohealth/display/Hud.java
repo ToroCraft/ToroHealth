@@ -11,8 +11,7 @@ import net.torocraft.torohealth.ToroHealth;
 public class Hud extends Screen {
   private static final Identifier BACKGROUND_TEXTURE = new Identifier(ToroHealth.MODID, "textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
-  private LivingEntity previousSelectedEntity;
-  private LivingEntity drawEntity;
+  private LivingEntity entity;
   private BarDisplay barDisplay;
   private int age;
 
@@ -27,37 +26,33 @@ public class Hud extends Screen {
 
   public void tick() {
     age++;
-    handleEntityChange(ToroHealth.selectedEntity);
   }
 
-  private void handleEntityChange (LivingEntity entity) {
-    if (ToroHealth.selectedEntity != drawEntity) {
-      if (ToroHealth.selectedEntity == null && age < ToroHealth.CONFIG.hud.hideDelay) {
-
-      }
+  public void setEntity(LivingEntity entity) {
+    if (entity != null) {
       age = 0;
-
     }
+
+    if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay) {
+      setEntityWork(null);
+    }
+
+    if (entity != null && entity != this.entity) {
+      setEntityWork(entity);
+    }
+  }
+
+  private void setEntityWork(LivingEntity entity) {
+    this.entity = entity;
+    entityDisplay.setEntity(entity);
+  }
+
+  public LivingEntity getEntity() {
+    return entity;
   }
 
   private void draw(float x, float y, float scale) {
-
-    // detect entity change
-    if (ToroHealth.selectedEntity != null) {
-      drawEntity = ToroHealth.selectedEntity;
-    }
-
-
-
-//      if (ToroHealth.selectedEntity == null && age <= ToroHealth.CONFIG.hud.hideDelay) {
-//        drawEntity = previousSelectedEntity;
-//      } else {
-//        drawEntity = ToroHealth.selectedEntity;
-//        previousSelectedEntity = ToroHealth.selectedEntity;
-//      }
-
-
-    if (drawEntity == null) {
+    if (entity == null) {
       return;
     }
 
@@ -68,7 +63,7 @@ public class Hud extends Screen {
     drawSkin();
     entityDisplay.draw();
     GlStateManager.translatef(44, 0, 0);
-    barDisplay.draw(drawEntity);
+    barDisplay.draw(entity);
 
     GlStateManager.popMatrix();
   }

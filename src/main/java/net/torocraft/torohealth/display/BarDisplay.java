@@ -12,9 +12,6 @@ import net.torocraft.torohealth.bars.HealthBarRenderer;
 public class BarDisplay extends Screen {
 
   private static final Identifier ICON_TEXTURES = new Identifier("textures/gui/icons.png");
-
-  private static final int BAR_WIDTH = 92;
-
   private final MinecraftClient mc;
   private final DrawableHelper gui;
 

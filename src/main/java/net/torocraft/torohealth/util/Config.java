@@ -11,15 +11,14 @@ public class Config {
   public Hud hud = new Hud();
   public Bar bar = new Bar();
   public InWorld inWorld = new InWorld();
-  public Particle particle = new Particle();
+  //public Particle particle = new Particle();
 
   public static class Hud {
     public int distance = 60;
     public Float x = 4f;
     public Float y = 4f;
     public Float scale = 1f;
-//    public String skin = "BASIC";
-    public int hideDelay = 400;
+    public int hideDelay = 20;
 //    public boolean showEntity = true;
   }
 

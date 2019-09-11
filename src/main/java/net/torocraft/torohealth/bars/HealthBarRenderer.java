@@ -1,20 +1,16 @@
 package net.torocraft.torohealth.bars;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.sun.jna.platform.win32.WinUser;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.util.Config;
 import net.torocraft.torohealth.util.EntityUtil;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 
@@ -99,9 +95,8 @@ public class HealthBarRenderer {
     }
     String s = Integer.toString(i);
     int sw = MinecraftClient.getInstance().textRenderer.getStringWidth(s);
-    MinecraftClient.getInstance().textRenderer.draw(s, (int) (x + (width/2) - sw), (int) y + 5, 0xd00000);
+    MinecraftClient.getInstance().textRenderer.draw(s, (int) (x + (width / 2) - sw), (int) y + 5, 0xd00000);
   }
-
 
   private static void drawBar(double x, double y, float width, float percent, int color, int zOffset, boolean inWorld) {
     float c = 0.00390625f;
@@ -133,17 +128,6 @@ public class HealthBarRenderer {
     buffer.vertex(-half + size + x, h + y, zOffset * zOffsetAmount).texture((u + uw) * c, (v + vh) * c).next();
     buffer.vertex(-half + size + x, y, zOffset * zOffsetAmount).texture(((u + uw) * c), v * c).next();
     tessellator.draw();
-  }
-
-  private static void restoreGlState(boolean lighting) {
-    GlStateManager.disableBlend();
-    GlStateManager.enableDepthTest();//  enableDepth();
-    GlStateManager.depthMask(true);
-    if (lighting) {
-      GlStateManager.enableLighting();
-    }
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    GlStateManager.popMatrix();
   }
 
   private static int determineColor(LivingEntity entity) {
