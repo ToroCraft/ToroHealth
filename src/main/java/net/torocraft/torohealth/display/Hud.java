@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
 
 public class Hud extends Screen {
-  private static final Identifier BACKGROUND_TEXTURE = new Identifier(ToroHealth.MODID, "textures/gui/default_skin_basic.png");
+  private static final Identifier BACKGROUND_TEXTURE = new Identifier(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;

@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 public class HealthBarRenderer {
 
-  private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID, "textures/gui/bars.png");
+  private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
 
   private static final float SCALE = 0.03f;
 

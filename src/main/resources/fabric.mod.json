@@ -14,7 +14,7 @@
   },
 
   "license": "GPL3",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/torohealth/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -23,10 +23,11 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "torohealth.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.4.0"
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
   }
 }
