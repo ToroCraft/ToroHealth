@@ -34,7 +34,7 @@ public class Config {
   }
 
   public static class InWorld {
-    public Mode mode = Mode.ALWAYS;
+    public Mode mode = Mode.NONE;
     public float distance = 60f;
   }
 
