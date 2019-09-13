@@ -16,7 +16,7 @@ public class PlayerEntityMixin {
   @Inject(method = "tick()V", at = @At("HEAD"))
   private void render(CallbackInfo info) {
     ToroHealth.HUD.setEntity(RayTrace.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
-    BarState.updateState();
+    BarState.tick();
     HoldingWeaponUpdater.update();
     ToroHealth.HUD.tick();
   }

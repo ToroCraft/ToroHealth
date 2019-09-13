@@ -18,21 +18,3 @@ public class InGameHudMixin {
     ToroHealth.HUD.draw();
   }
 }
-
-//@Mixin(InGameHud.class)
-//public class InGameHudMixin {
-//  @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(I)V"))
-//  private void render(float partial, CallbackInfo info) {
-//    ToroHealth.HUD.draw();
-//  }
-//}
-
-//this.chatHud.render(this.ticks);
-
-//@Mixin(GameRenderer.class)
-//public class InGameHudMixin {
-//  @Inject(method = "render", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;draw(F)V")), at = @At(value = "INVOKE", ordinal = 0))
-//  private void renderOverlay(float var1, long nanoTime, boolean var4, CallbackInfo callbackInfo) {
-//    ToroHealth.HUD.draw();
-//  }
-//}

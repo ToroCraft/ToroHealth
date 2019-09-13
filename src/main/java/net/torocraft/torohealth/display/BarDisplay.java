@@ -3,20 +3,17 @@ package net.torocraft.torohealth.display;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.bars.HealthBarRenderer;
 
-public class BarDisplay extends Screen {
+public class BarDisplay {
 
   private static final Identifier ICON_TEXTURES = new Identifier("textures/gui/icons.png");
   private final MinecraftClient mc;
   private final DrawableHelper gui;
 
   public BarDisplay(MinecraftClient mc, DrawableHelper gui) {
-    super(new LiteralText("Health Bar"));
     this.mc = mc;
     this.gui = gui;
   }

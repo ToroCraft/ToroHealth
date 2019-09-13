@@ -3,15 +3,13 @@ package net.torocraft.torohealth.display;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 
-public class EntityDisplay extends Screen  {
+public class EntityDisplay {
 
   private static final float RENDER_HEIGHT = 30;
   private static final float RENDER_WIDTH = 18;
@@ -23,10 +21,6 @@ public class EntityDisplay extends Screen  {
 
   private float xOffset;
   private float yOffset;
-
-  public EntityDisplay() {
-    super(new LiteralText("ToroHealth HUD"));
-  }
 
   public void setEntity(LivingEntity entity) {
     this.entity = entity;

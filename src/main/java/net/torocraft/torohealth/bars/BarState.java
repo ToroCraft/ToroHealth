@@ -36,14 +36,14 @@ public class BarState {
 
   private static int tickCount = 0;
 
-  public static void updateState() {
+  public static void tick() {
     LivingEntity selectedEntity = ToroHealth.HUD.getEntity();
     if (selectedEntity != null) {
-      updateState(selectedEntity);
+      tick(selectedEntity);
     }
     for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
       EntityTracker.TrackedEntity t = i.next();
-      updateState(t.entity);
+      tick(t.entity);
     }
     if (tickCount % 200 == 0) {
       cleanCache();
@@ -74,7 +74,7 @@ public class BarState {
     return !entity.isAlive();
   }
 
-  private static void updateState(LivingEntity entity) {
+  private static void tick(LivingEntity entity) {
     BarState state = BarState.getState(entity);
 
     if (state.animationSpeed == 0) {
