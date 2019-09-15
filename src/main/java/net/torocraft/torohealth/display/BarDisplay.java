@@ -42,10 +42,14 @@ public class BarDisplay {
     mc.textRenderer.drawWithShadow(health, xOffset, 2, 0xe0e0e0);
     xOffset += mc.textRenderer.getStringWidth(health) + 5;
 
-    renderArmorIcon(xOffset, (int) 1);
-    xOffset += 10;
 
-    mc.textRenderer.drawWithShadow(entity.getArmor() + "", xOffset, 2, 0xe0e0e0);
+    int armor = entity.getArmor();
+
+    if (armor > 0) {
+      renderArmorIcon(xOffset, (int) 1);
+      xOffset += 10;
+      mc.textRenderer.drawWithShadow(entity.getArmor() + "", xOffset, 2, 0xe0e0e0);
+    }
   }
 
   private void renderArmorIcon(int x, int y) {

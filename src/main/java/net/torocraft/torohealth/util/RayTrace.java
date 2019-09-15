@@ -1,32 +1,46 @@
 package net.torocraft.torohealth.util;
 
-import java.util.function.Predicate;
-
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ProjectileUtil;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitResult.Type;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.RayTraceContext.FluidHandling;
 import net.minecraft.world.World;
 
-public class RayTrace {
+import java.util.function.Predicate;
+
+public class RayTrace implements BlockView {
   private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
 
-  public static LivingEntity getEntityInCrosshair (float partialTicks, double reachDistance) {
+  @Override
+  public BlockEntity getBlockEntity(BlockPos pos) {
+    return MinecraftClient.getInstance().world.getBlockEntity(pos);
+  }
+
+  @Override
+  public BlockState getBlockState(BlockPos pos) {
+    return MinecraftClient.getInstance().world.getBlockState(pos);
+  }
+
+  @Override
+  public FluidState getFluidState(BlockPos pos) {
+    return MinecraftClient.getInstance().world.getFluidState(pos);
+  }
+
+  public LivingEntity getEntityInCrosshair (float partialTicks, double reachDistance) {
     MinecraftClient client = MinecraftClient.getInstance();
-
-    if (client == null) {
-      return null;
-    }
-
     Entity viewer = client.getCameraEntity();
 
     if (viewer == null) {
@@ -46,7 +60,8 @@ public class RayTrace {
 
     if (result.getEntity() instanceof LivingEntity) {
       LivingEntity target = (LivingEntity) result.getEntity();
-      HitResult blockHit = rayTraceBlock(target.world, client.player, reachDistance, FluidHandling.NONE);
+
+      HitResult blockHit = rayTrace(setupRayTraceContext(client.player, reachDistance, FluidHandling.NONE));
 
       if (!blockHit.getType().equals(Type.MISS)) {
         double blockDistance = blockHit.getPos().distanceTo(position);
@@ -61,7 +76,7 @@ public class RayTrace {
     return null;
   }
 
-  protected static HitResult rayTraceBlock(World world, PlayerEntity player, double distance, RayTraceContext.FluidHandling fluidHandling) {
+  private RayTraceContext setupRayTraceContext(PlayerEntity player, double distance, RayTraceContext.FluidHandling fluidHandling) {
     float pitch = player.pitch;
     float yaw = player.yaw;
     Vec3d fromPos = player.getCameraPosVec(1.0F);
@@ -72,7 +87,21 @@ public class RayTrace {
     float yComponent = MathHelper.sin(-pitch * 0.017453292F);
     float zComponent = float_3 * float_5;
     Vec3d toPos = fromPos.add((double)xComponent * distance, (double)yComponent * distance, (double)zComponent * distance);
-    return world.rayTrace(new RayTraceContext(fromPos, toPos, RayTraceContext.ShapeType.OUTLINE, fluidHandling, player));
+    return new RayTraceContext(fromPos, toPos, RayTraceContext.ShapeType.OUTLINE, fluidHandling, player);
   }
 
+  @Override
+  public BlockHitResult rayTrace(RayTraceContext context) {
+    return BlockView.rayTrace(context, (c, pos) -> {
+      BlockState block = this.getBlockState(pos);
+      if (!block.isOpaque()) {
+        return null;
+      }
+      VoxelShape blockShape = c.getBlockShape(block, this, pos);
+      return this.rayTraceBlock(c.getStart(), c.getEnd(), pos, blockShape, block);
+    }, (c) -> {
+      Vec3d v = c.getStart().subtract(c.getEnd());
+      return BlockHitResult.createMissed(c.getEnd(), Direction.getFacing(v.x, v.y, v.z), new BlockPos(c.getEnd()));
+    });
+  }
 }
