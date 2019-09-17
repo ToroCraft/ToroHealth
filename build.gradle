@@ -13,8 +13,11 @@ group = project.maven_group
 minecraft {
 }
 
-dependencies {
+//repositories {
+//	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+//}
 
+dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
@@ -25,6 +28,10 @@ dependencies {
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
+
+	modImplementation "io.github.prospector.modmenu:ModMenu:+"
+	modImplementation ('me.shedaniel.cloth:config-2:+'){transitive = false}
+	include 'me.shedaniel.cloth:config-2:+'
 }
 
 processResources {

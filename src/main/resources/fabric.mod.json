@@ -10,6 +10,7 @@
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/torohealth-damage-indicators",
+    "issues": "https://github.com/ToroCraft/ToroHealth/issues",
     "sources": "https://github.com/ToroCraft/ToroHealth"
   },
 
@@ -20,6 +21,8 @@
   "entrypoints": {
     "main": [
       "net.torocraft.torohealth.ToroHealth"
+    ], "modmenu": [
+      "net.torocraft.torohealth.util.ModMenuEntry"
     ]
   },
   "mixins": [

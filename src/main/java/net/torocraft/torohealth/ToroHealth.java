@@ -1,7 +1,11 @@
 package net.torocraft.torohealth;
 
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.gui.entries.BooleanListEntry;
+import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.torocraft.torohealth.display.Hud;
 import net.torocraft.torohealth.util.Config;
 import net.torocraft.torohealth.util.ConfigLoader;
