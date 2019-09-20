@@ -4,7 +4,7 @@ public class Config {
 
   private final static String[] acceptedColors = new String[]{"RED", "GREEN", "BLUE", "YELLOW", "ORANGE", "WHITE", "BLACK", "PURPLE"};
 
-  public enum Mode {NONE, WHEN_HOLDING_WEAPON, ALWAYS, WHEN_HURT, WHEN_HURT_TEMP}
+  public enum Mode {NONE, WHEN_HOLDING_WEAPON, ALWAYS}
 
   public enum NumberType {NONE, LAST, CUMULATIVE}
 
@@ -15,9 +15,9 @@ public class Config {
 
   public static class Hud {
     public int distance = 60;
-    public Float x = 4f;
-    public Float y = 4f;
-    public Float scale = 1f;
+    public float x = 4f;
+    public float y = 4f;
+    public float scale = 1f;
     public int hideDelay = 20;
 //    public boolean showEntity = true;
   }
@@ -31,6 +31,10 @@ public class Config {
 
   public static class Bar {
     public NumberType damageNumberType = NumberType.LAST;
+    public int friendColor = 0x00ff00ff;
+    public int friendColorSecondary = 0x008000ff;
+    public int foeColor = 0xff0000ff;
+    public int foeColorSecondary = 0x800000ff;
   }
 
   public static class InWorld {

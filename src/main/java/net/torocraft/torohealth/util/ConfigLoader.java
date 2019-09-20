@@ -27,13 +27,7 @@ public class ConfigLoader {
   }
 
   private static void read() {
-    File file = getFile();
-    try (FileReader reader = new FileReader(file)) {
-      ToroHealth.CONFIG = GSON.fromJson(reader, Config.class);
-    } catch (Exception e) {
-      e.printStackTrace();
-      ToroHealth.CONFIG = new Config();
-    }
+    ToroHealth.CONFIG = get();
   }
 
   public static void save() {
@@ -42,6 +36,21 @@ public class ConfigLoader {
       writer.write(GSON.toJson(ToroHealth.CONFIG));
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  public static void set(Config config) {
+    ToroHealth.CONFIG = config;
+    save();
+  }
+
+  public static Config get() {
+    File file = getFile();
+    try (FileReader reader = new FileReader(file)) {
+      return GSON.fromJson(reader, Config.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return new Config();
     }
   }
 
