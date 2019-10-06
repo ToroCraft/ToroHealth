@@ -11,27 +11,17 @@ import net.minecraft.util.math.MathHelper;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.util.Config;
 import net.torocraft.torohealth.util.EntityUtil;
+import net.torocraft.torohealth.util.EntityUtil.Relation;
 
 import java.util.Iterator;
+
+import static org.lwjgl.glfw.GLFWGammaRamp.RED;
 
 public class HealthBarRenderer {
 
   private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
-
-  private static final float SCALE = 0.03f;
-
-  private static final int GREEN = 0x00FF00FF;
-  private static final int DARK_GREEN = 0x008000FF;
-  private static final int YELLOW = 0xFFFF00FF;
-  private static final int WHITE = 0xFFFFFFFF;
-  private static final int RED = 0xFF0000FF;
-  private static final int DARK_RED = 0x800000FF;
   private static final int DARK_GRAY = 0x808080FF;
-  private static final float zLevel = 0;
-
-  private static final float VERTICAL_MARGIN = 0.35f;
   private static final float FULL_SIZE = 40;
-  private static final double HALF_SIZE = FULL_SIZE / 2;
 
   public static void renderTrackedEntity(float cameraYaw, float cameraPitch) {
     for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
@@ -68,8 +58,11 @@ public class HealthBarRenderer {
   }
 
   public static void render(LivingEntity entity, double x, double y, float width, boolean inWorld) {
-    int color = determineColor(entity);
-    int color2 = color == RED ? DARK_RED : DARK_GREEN;
+
+    Relation relation = EntityUtil.determineRelation(entity);
+
+    int color = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColor : ToroHealth.CONFIG.bar.foeColor;
+    int color2 = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColorSecondary : ToroHealth.CONFIG.bar.foeColorSecondary;
 
     BarState state = BarState.getState(entity);
 
@@ -128,13 +121,5 @@ public class HealthBarRenderer {
     buffer.vertex(-half + size + x, h + y, zOffset * zOffsetAmount).texture((u + uw) * c, (v + vh) * c).next();
     buffer.vertex(-half + size + x, y, zOffset * zOffsetAmount).texture(((u + uw) * c), v * c).next();
     tessellator.draw();
-  }
-
-  private static int determineColor(LivingEntity entity) {
-    if (EntityUtil.determineRelation(entity) == EntityUtil.Relation.FRIEND) {
-      return GREEN;
-    } else {
-      return RED;
-    }
   }
 }
