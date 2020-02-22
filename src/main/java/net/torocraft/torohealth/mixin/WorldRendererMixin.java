@@ -1,8 +1,12 @@
 package net.torocraft.torohealth.mixin;
 
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.torocraft.torohealth.ToroHealth;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.torocraft.torohealth.bars.HealthBarRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,14 +19,13 @@ public class WorldRendererMixin {
   @Shadow
   private EntityRenderDispatcher entityRenderDispatcher;
 
-  @Inject(method = "renderEntities", at = @At(value = "HEAD"))
-  public void renderEntitiesPre(CallbackInfo info) {
-    ToroHealth.IN_WORLD_BARS.start();
+  @Inject(method = "renderEntity", at = @At(value = "RETURN"))
+  private void renderEntity(Entity entity, double x, double y, double z, float g, MatrixStack m, VertexConsumerProvider v, CallbackInfo info) {
+    if (entity instanceof LivingEntity) {
+      LivingEntity livingEntity = (LivingEntity) entity;
+      float cameraYaw = entityRenderDispatcher.camera.getYaw();
+      float cameraPitch = entityRenderDispatcher.camera.getPitch();
+      HealthBarRenderer.renderInWorld(livingEntity, x, y, z, cameraYaw, cameraPitch);
+    }
   }
-
-  @Inject(method = "renderEntities", at = @At(value = "RETURN"))
-  public void renderEntitiesPost(CallbackInfo info) {
-    ToroHealth.IN_WORLD_BARS.render(entityRenderDispatcher);
-  }
-
 }

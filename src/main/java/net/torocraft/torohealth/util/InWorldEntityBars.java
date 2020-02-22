@@ -1,5 +1,6 @@
 package net.torocraft.torohealth.util;
 
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.Entity;
 import net.torocraft.torohealth.ToroHealth;
@@ -22,14 +23,14 @@ public class InWorldEntityBars {
     distanceSq = (float) Math.pow(ToroHealth.CONFIG.inWorld.distance, 2);
   }
 
-  public void addEntity(EntityRenderDispatcher renderManager, Entity entity, double x, double y, double z) {
+  public void addEntity(Camera camera, Entity entity, double x, double y, double z) {
     if (Mode.NONE.equals(getConfig().mode)) return;
 
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
 
-    double entityDistSq = entity.squaredDistanceTo(renderManager.camera.getPos());
+    double entityDistSq = entity.squaredDistanceTo(camera.getPos());
     if (entityDistSq <= distanceSq) {
       EntityTracker.INSTANCE.add(entity, x, y, z);
     }
@@ -38,8 +39,8 @@ public class InWorldEntityBars {
   public void render(EntityRenderDispatcher entityRenderDispatcher) {
     if (Mode.NONE.equals(getConfig().mode)) return;
 
-    float cameraYaw = entityRenderDispatcher.cameraYaw;
-    float cameraPitch = entityRenderDispatcher.cameraPitch;
+    float cameraYaw = entityRenderDispatcher.camera.getYaw();
+    float cameraPitch = entityRenderDispatcher.camera.getPitch();
     HealthBarRenderer.renderTrackedEntity(cameraYaw, cameraPitch);
   }
 

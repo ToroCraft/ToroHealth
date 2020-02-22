@@ -67,7 +67,7 @@ public class BarState {
       return true;
     }
 
-    if (!world.isBlockLoaded(entity.getBlockPos())) {
+    if (!world.isChunkLoaded(entity.getBlockPos())) {
       return true;
     }
 

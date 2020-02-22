@@ -15,8 +15,6 @@ import net.torocraft.torohealth.util.EntityUtil.Relation;
 
 import java.util.Iterator;
 
-import static org.lwjgl.glfw.GLFWGammaRamp.RED;
-
 public class HealthBarRenderer {
 
   private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
@@ -45,7 +43,7 @@ public class HealthBarRenderer {
 
     GlStateManager.enableBlend();
     GlStateManager.disableAlphaTest();
-    GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+    GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ONE.value, GlStateManager.DstFactor.ZERO.value);
     GlStateManager.shadeModel(7425);
 
     render(entity, 0, 0, FULL_SIZE, true);
@@ -66,8 +64,8 @@ public class HealthBarRenderer {
 
     BarState state = BarState.getState(entity);
 
-    float percent = entity.getHealth() / entity.getHealthMaximum();
-    float percent2 = state.previousHealthDisplay / entity.getHealthMaximum();
+    float percent = entity.getHealth() / entity.getMaximumHealth();
+    float percent2 = state.previousHealthDisplay / entity.getMaximumHealth();
     int zOffset = 0;
 
     drawBar(x, y, width, 1, DARK_GRAY, zOffset++, inWorld);
@@ -114,8 +112,8 @@ public class HealthBarRenderer {
     float zOffsetAmount = inWorld ? -0.1f : 0.1f;
 
     Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBufferBuilder();
-    buffer.begin(7, VertexFormats.POSITION_UV);
+    BufferBuilder buffer = tessellator.getBuffer();
+    buffer.begin(7, VertexFormats.POSITION_TEXTURE);
     buffer.vertex(-half + x, y, zOffset * zOffsetAmount).texture(u * c, v * c).next();
     buffer.vertex(-half + x, h + y, zOffset * zOffsetAmount).texture(u * c, (v + vh) * c).next();
     buffer.vertex(-half + size + x, h + y, zOffset * zOffsetAmount).texture((u + uw) * c, (v + vh) * c).next();

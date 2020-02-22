@@ -28,7 +28,7 @@ public class BarDisplay {
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     HealthBarRenderer.render(entity, 63, 14, 130, false);
     String name = getEntityName(entity);
-    String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getHealthMaximum();
+    String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaximumHealth();
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
     gui.drawString(mc.textRenderer, name, xOffset, (int) 2, 16777215);

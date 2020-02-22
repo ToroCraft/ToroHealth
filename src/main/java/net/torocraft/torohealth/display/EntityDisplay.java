@@ -1,13 +1,15 @@
 package net.torocraft.torohealth.display;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
 
 public class EntityDisplay {
 
@@ -29,7 +31,7 @@ public class EntityDisplay {
 
   public void draw() {
     if (entity != null) {
-      drawEntity(xOffset, yOffset, entityScale, -40, -20, entity);
+      drawEntity((int)xOffset, (int)yOffset, entityScale, -40, -20, entity);
     }
   }
 
@@ -50,42 +52,42 @@ public class EntityDisplay {
     }
   }
 
-  private static void drawEntity(float x, float y, float scale, float yaw, float pitch, LivingEntity entity) {
-    GlStateManager.enableColorMaterial();
-    GlStateManager.pushMatrix();
-    GlStateManager.translatef(x, y, 50.0F);
-    GlStateManager.scalef(-scale, scale, scale);
-    GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
-    float float_3 = entity.field_6283;
-    float float_4 = entity.yaw;
-    float float_5 = entity.pitch;
-    float float_6 = entity.prevHeadYaw;
-    float float_7 = entity.headYaw;
-    GlStateManager.rotatef(135.0F, 0.0F, 1.0F, 0.0F);
-    GuiLighting.enable();
-    GlStateManager.rotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-    GlStateManager.rotatef(-((float) Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
-    entity.field_6283 = yaw;
-    entity.yaw = -4;
-    entity.pitch = pitch;
+  public static void drawEntity(int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
+    float h = (float)Math.atan((double)(yaw / 40.0F));
+    float l = (float)Math.atan((double)(pitch / 40.0F));
+    RenderSystem.pushMatrix();
+    RenderSystem.translatef((float)x, (float)y, 1050.0F);
+    RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+    MatrixStack matrixStack = new MatrixStack();
+    matrixStack.translate(0.0D, 0.0D, 1000.0D);
+    matrixStack.scale((float)scale, (float)scale, (float)scale);
+    Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+    Quaternion quaternion2 = Vector3f.POSITIVE_X.getDegreesQuaternion(l * 20.0F);
+    quaternion.hamiltonProduct(quaternion2);
+    matrixStack.multiply(quaternion);
+    float m = entity.bodyYaw;
+    float n = entity.yaw;
+    float o = entity.pitch;
+    float p = entity.prevHeadYaw;
+    float q = entity.headYaw;
+    entity.bodyYaw = 180.0F + h * 20.0F;
+    entity.yaw = 180.0F + h * 40.0F;
+    entity.pitch = -l * 20.0F;
     entity.headYaw = entity.yaw;
     entity.prevHeadYaw = entity.yaw;
-    GlStateManager.translatef(0.0F, 0.0F, 0.0F);
-    EntityRenderDispatcher entityRenderDispatcher_1 = MinecraftClient.getInstance().getEntityRenderManager();
-    entityRenderDispatcher_1.method_3945(180.0F);
-    entityRenderDispatcher_1.setRenderShadows(false);
-    entityRenderDispatcher_1.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-    entityRenderDispatcher_1.setRenderShadows(true);
-    entity.field_6283 = float_3;
-    entity.yaw = float_4;
-    entity.pitch = float_5;
-    entity.prevHeadYaw = float_6;
-    entity.headYaw = float_7;
-    GlStateManager.popMatrix();
-    GuiLighting.disable();
-    GlStateManager.disableRescaleNormal();
-    GlStateManager.activeTexture(GLX.GL_TEXTURE1);
-    GlStateManager.disableTexture();
-    GlStateManager.activeTexture(GLX.GL_TEXTURE0);
-  }
+    EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
+    quaternion2.conjugate();
+    entityRenderDispatcher.setRotation(quaternion2);
+    entityRenderDispatcher.setRenderShadows(false);
+    VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+    entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
+    immediate.draw();
+    entityRenderDispatcher.setRenderShadows(true);
+    entity.bodyYaw = m;
+    entity.yaw = n;
+    entity.pitch = o;
+    entity.prevHeadYaw = p;
+    entity.headYaw = q;
+    RenderSystem.popMatrix();
+ }
 }
