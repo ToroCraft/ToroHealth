@@ -2,7 +2,8 @@ package net.torocraft.torohealth.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.FabricLoader;
+
+import net.fabricmc.loader.api.FabricLoader;
 import net.torocraft.torohealth.ToroHealth;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class ConfigLoader {
 
   private static File getFile() {
     if (file == null) {
-     file = new File(FabricLoader.INSTANCE.getConfigDirectory(), FILENAME);
+     file = new File(FabricLoader.getInstance().getConfigDirectory(), FILENAME);
     }
     return file;
   }

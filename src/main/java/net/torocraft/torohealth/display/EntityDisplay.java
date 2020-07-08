@@ -1,6 +1,5 @@
 package net.torocraft.torohealth.display;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -29,9 +28,9 @@ public class EntityDisplay {
     updateScale();
   }
 
-  public void draw() {
+  public void draw(MatrixStack matrix) {
     if (entity != null) {
-      drawEntity((int)xOffset, (int)yOffset, entityScale, -40, -20, entity);
+      drawEntity(matrix, (int)xOffset, (int)yOffset, entityScale, -40, -20, entity);
     }
   }
 
@@ -52,13 +51,13 @@ public class EntityDisplay {
     }
   }
 
-  public static void drawEntity(int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
+  public static void drawEntity(MatrixStack matrixStack, int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
     float h = (float)Math.atan((double)(yaw / 40.0F));
     float l = (float)Math.atan((double)(pitch / 40.0F));
-    RenderSystem.pushMatrix();
-    RenderSystem.translatef((float)x, (float)y, 1050.0F);
-    RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-    MatrixStack matrixStack = new MatrixStack();
+    matrixStack.push();
+    matrixStack.translate((float)x, (float)y, 1050.0F);
+    matrixStack.scale(1.0F, 1.0F, -1.0F);
+    matrixStack.push();
     matrixStack.translate(0.0D, 0.0D, 1000.0D);
     matrixStack.scale((float)scale, (float)scale, (float)scale);
     Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
@@ -82,12 +81,13 @@ public class EntityDisplay {
     VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
     entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
     immediate.draw();
+    matrixStack.pop();
+    matrixStack.pop();
     entityRenderDispatcher.setRenderShadows(true);
     entity.bodyYaw = m;
     entity.yaw = n;
     entity.pitch = o;
     entity.prevHeadYaw = p;
     entity.headYaw = q;
-    RenderSystem.popMatrix();
  }
 }

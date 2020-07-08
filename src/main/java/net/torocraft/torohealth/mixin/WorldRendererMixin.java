@@ -20,12 +20,9 @@ public class WorldRendererMixin {
   private EntityRenderDispatcher entityRenderDispatcher;
 
   @Inject(method = "renderEntity", at = @At(value = "RETURN"))
-  private void renderEntity(Entity entity, double x, double y, double z, float g, MatrixStack m, VertexConsumerProvider v, CallbackInfo info) {
+  private void renderEntity(Entity entity, double x, double y, double z, float g, MatrixStack matrix, VertexConsumerProvider v, CallbackInfo info) {
     if (entity instanceof LivingEntity) {
-      LivingEntity livingEntity = (LivingEntity) entity;
-      float cameraYaw = entityRenderDispatcher.camera.getYaw();
-      float cameraPitch = entityRenderDispatcher.camera.getPitch();
-      HealthBarRenderer.renderInWorld(livingEntity, x, y, z, cameraYaw, cameraPitch);
+      HealthBarRenderer.renderInWorld(matrix, (LivingEntity) entity, entityRenderDispatcher.camera);
     }
   }
 }

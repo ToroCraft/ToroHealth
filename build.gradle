@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.6-SNAPSHOT'
+	id 'fabric-loom' version '0.4-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -20,7 +20,7 @@ minecraft {
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
@@ -29,9 +29,9 @@ dependencies {
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 
-	modImplementation "io.github.prospector:modmenu:1.10.1+build.30"
-	modApi 'me.shedaniel.cloth:config-2:2.10'
-	include 'me.shedaniel.cloth:config-2:2.10'
+	modImplementation "io.github.prospector:modmenu:1.12.2+build.16"
+	modApi 'me.shedaniel.cloth:config-2:4.5.6'
+	include 'me.shedaniel.cloth:config-2:4.5.6'
 }
 
 processResources {

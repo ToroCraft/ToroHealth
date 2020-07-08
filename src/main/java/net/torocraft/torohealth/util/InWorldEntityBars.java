@@ -3,6 +3,7 @@ package net.torocraft.torohealth.util;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.Entity;
+
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.bars.EntityTracker;
 import net.torocraft.torohealth.bars.HealthBarRenderer;
@@ -38,10 +39,6 @@ public class InWorldEntityBars {
 
   public void render(EntityRenderDispatcher entityRenderDispatcher) {
     if (Mode.NONE.equals(getConfig().mode)) return;
-
-    float cameraYaw = entityRenderDispatcher.camera.getYaw();
-    float cameraPitch = entityRenderDispatcher.camera.getPitch();
-    HealthBarRenderer.renderTrackedEntity(cameraYaw, cameraPitch);
+    HealthBarRenderer.renderTrackedEntity(entityRenderDispatcher.camera);
   }
-
 }

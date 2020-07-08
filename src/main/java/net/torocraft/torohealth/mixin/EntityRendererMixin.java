@@ -18,7 +18,7 @@ public class EntityRendererMixin {
   public Camera camera;
 
   @Inject(method = "render", at = @At("RETURN"))
-  private void postRender(Entity entity, double x, double y, double z, float float_1, float float_2, MatrixStack m, VertexConsumerProvider v, int i, CallbackInfo info) {
+  private <E extends Entity> void postRender(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
     ToroHealth.IN_WORLD_BARS.addEntity(camera, entity, x, y, z);
   }
 }
