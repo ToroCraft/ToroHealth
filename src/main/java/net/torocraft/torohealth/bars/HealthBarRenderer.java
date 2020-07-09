@@ -20,8 +20,6 @@ import net.torocraft.torohealth.util.Config;
 import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
 
-import java.util.Iterator;
-
 import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
@@ -29,14 +27,6 @@ public class HealthBarRenderer {
   private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
   private static final int DARK_GRAY = 0x808080FF;
   private static final float FULL_SIZE = 40;
-
-  public static void renderTrackedEntity(Camera camera) {
-    for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
-      EntityTracker.TrackedEntity t = i.next();
-      MatrixStack matrix = new MatrixStack();
-      renderInWorld(matrix, t.entity, camera);
-    }
-  }
 
   public static void renderInWorld(MatrixStack matrix, LivingEntity entity, Camera camera) {
     float scaleToGui = 0.025f;
@@ -93,22 +83,28 @@ public class HealthBarRenderer {
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
 
     if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
-      drawDamageNumber(matrix, state.previousHealth - entity.getHealth(), entity, x, y, width);
+      drawDamageNumber(matrix, entity, state.previousHealth - entity.getHealth(), state.lastDmgDelay, state.animationShift, x, y, width, inWorld);
     } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
-      drawDamageNumber(matrix, state.lastDmg, entity, x, y, width);
+      drawDamageNumber(matrix, entity, state.lastDmg, state.lastDmgDelay, state.animationShift, x, y, width, inWorld);
     }
   }
 
-  private static void drawDamageNumber(MatrixStack matrix, float dmg, LivingEntity entity, double x, double y, float width) {
+  private static void drawDamageNumber(MatrixStack matrix, LivingEntity entity, float dmg, float delay, double shift, double x, double y, float width, boolean inWorld) {
     int i = Math.round(dmg);
-    if (i < 1) {
+    if (delay <= 0.0 || i < 1) {
       return;
     }
     String s = Integer.toString(i);
     MinecraftClient minecraft = MinecraftClient.getInstance();
-    int sw = minecraft.textRenderer.getWidth(s);
-    
-    minecraft.textRenderer.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, 0xD00000);
+    double shiftX = Math.atan(5 / delay) * shift;
+    matrix.push();
+    int color = 0xFFFFFFFF;
+    if (inWorld) {
+    	color = 0xFFD00000;
+    	matrix.translate(shiftX, delay - 20, 0.0);
+    }
+    minecraft.textRenderer.draw(matrix, s, (int) x, (int) y, color);
+    matrix.pop();
   }
 
   private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent, int color, int zOffset, boolean inWorld) {
