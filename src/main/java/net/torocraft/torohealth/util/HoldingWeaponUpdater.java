@@ -12,7 +12,8 @@ import net.torocraft.torohealth.util.Config.Mode;
 public class HoldingWeaponUpdater {
   public static void update() {
     if (Mode.NONE.equals(ToroHealth.CONFIG.inWorld.mode)) return;
-    PlayerEntity player = MinecraftClient.getInstance().player;
+    MinecraftClient minecraft = MinecraftClient.getInstance();
+    PlayerEntity player = minecraft.player;
     if (player == null) {
       ToroHealth.IS_HOLDING_WEAPON = false;
       return;

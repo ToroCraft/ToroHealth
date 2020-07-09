@@ -2,8 +2,6 @@ package net.torocraft.torohealth.bars;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.torocraft.torohealth.ToroHealth;
-
 import java.util.Iterator;
 
 public class EntityTracker {

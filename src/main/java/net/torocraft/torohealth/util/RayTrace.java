@@ -5,8 +5,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ProjectileUtil;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -17,26 +17,26 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.RayTraceContext.FluidHandling;
-import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
 public class RayTrace implements BlockView {
   private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
+  private static MinecraftClient minecraft = MinecraftClient.getInstance();
 
   @Override
   public BlockEntity getBlockEntity(BlockPos pos) {
-    return MinecraftClient.getInstance().world.getBlockEntity(pos);
+    return minecraft.world.getBlockEntity(pos);
   }
 
   @Override
   public BlockState getBlockState(BlockPos pos) {
-    return MinecraftClient.getInstance().world.getBlockState(pos);
+    return minecraft.world.getBlockState(pos);
   }
 
   @Override
   public FluidState getFluidState(BlockPos pos) {
-    return MinecraftClient.getInstance().world.getFluidState(pos);
+    return minecraft.world.getFluidState(pos);
   }
 
   public LivingEntity getEntityInCrosshair (float partialTicks, double reachDistance) {

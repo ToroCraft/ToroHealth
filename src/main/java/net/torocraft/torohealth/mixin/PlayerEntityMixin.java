@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.bars.BarState;
 import net.torocraft.torohealth.util.HoldingWeaponUpdater;
-import net.torocraft.torohealth.util.RayTrace;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

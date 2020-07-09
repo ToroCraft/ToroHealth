@@ -1,8 +1,10 @@
 package net.torocraft.torohealth.display;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
@@ -20,8 +22,8 @@ public class Hud extends Screen {
     barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
   }
 
-  public void draw() {
-    draw(ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
+  public void draw(MatrixStack matrix) {
+    draw(matrix, ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
   }
 
   public void tick() {
@@ -51,32 +53,26 @@ public class Hud extends Screen {
     return entity;
   }
 
-  private void draw(float x, float y, float scale) {
+  private void draw(MatrixStack matrix, float x, float y, float scale) {
     if (entity == null) {
       return;
     }
 
-    GlStateManager.pushMatrix();
-    GlStateManager.scalef(scale, scale, scale);
-    GlStateManager.translatef(x - 10, y - 10, 0);
-
-    drawSkin();
-    entityDisplay.draw();
-    GlStateManager.translatef(44, 0, 0);
-    barDisplay.draw(entity);
-
-    GlStateManager.popMatrix();
+    matrix.push();
+    matrix.scale(scale, scale, scale);
+    matrix.translate(x - 10, y - 10, 0);
+    this.drawSkin(matrix);
+    matrix.translate(10, 10, 0);
+    entityDisplay.draw(matrix);
+    matrix.translate(44, 0, 0);
+    barDisplay.draw(matrix, entity);
+    matrix.pop();
   }
 
-  private void drawSkin() {
+  private void drawSkin(MatrixStack matrix) {
     MinecraftClient.getInstance().getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-    int w = 160;
-    int h = 60;
-
-    blit(0, 0, 0.0f, 0.0f, w, h, w, h);
-    GlStateManager.translatef(10, 10, 0);
+    RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    int w = 160, h = 60;
+    drawTexture(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
   }
-
 }

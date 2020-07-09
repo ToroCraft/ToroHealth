@@ -3,7 +3,6 @@ package net.torocraft.torohealth.bars;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.World;
 import net.torocraft.torohealth.ToroHealth;
 
 import java.util.HashMap;
@@ -59,15 +58,15 @@ public class BarState {
     if (entry.getValue() == null) {
       return true;
     }
-
-    World world = MinecraftClient.getInstance().world;
-    Entity entity = world.getEntityById(entry.getKey());
+    
+    MinecraftClient minecraft = MinecraftClient.getInstance();
+    Entity entity = minecraft.world.getEntityById(entry.getKey());
 
     if (!((entity instanceof LivingEntity))) {
       return true;
     }
 
-    if (!world.isChunkLoaded(entity.getBlockPos())) {
+    if (!minecraft.world.isChunkLoaded(entity.getBlockPos())) {
       return true;
     }
 
