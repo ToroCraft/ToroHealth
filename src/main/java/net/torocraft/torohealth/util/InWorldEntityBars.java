@@ -1,12 +1,10 @@
 package net.torocraft.torohealth.util;
 
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.Entity;
 
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.bars.EntityTracker;
-import net.torocraft.torohealth.bars.HealthBarRenderer;
 import net.torocraft.torohealth.util.Config.InWorld;
 import net.torocraft.torohealth.util.Config.Mode;
 
@@ -35,10 +33,5 @@ public class InWorldEntityBars {
     if (entityDistSq <= distanceSq) {
       EntityTracker.INSTANCE.add(entity, x, y, z);
     }
-  }
-
-  public void render(EntityRenderDispatcher entityRenderDispatcher) {
-    if (Mode.NONE.equals(getConfig().mode)) return;
-    HealthBarRenderer.renderTrackedEntity(entityRenderDispatcher.camera);
   }
 }
