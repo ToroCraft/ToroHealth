@@ -8,6 +8,7 @@ import net.torocraft.torohealth.ToroHealth;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 public class BarState {
 
@@ -19,10 +20,12 @@ public class BarState {
   public float lastDmg;
   public float lastHealth;
   public float lastDmgDelay;
+  public double animationShift = 0.0;
   private float animationSpeed = 0;
 
-  private static final float HEALTH_INDICATOR_DELAY = 40;
-
+  private static final float HEALTH_INDICATOR_DELAY = 20;
+  private static final Random RANDOM = new Random();
+  
   public static BarState getState(Entity entity) {
     int id = entity.getEntityId();
     BarState state = states.get(id);
@@ -44,10 +47,20 @@ public class BarState {
       EntityTracker.TrackedEntity t = i.next();
       tick(t.entity);
     }
+    states.forEach((id, state) -> state.doTick());
     if (tickCount % 200 == 0) {
       cleanCache();
     }
     tickCount++;
+  }
+  
+  private void doTick() {
+	if (this.lastDmgDelay > 0) {
+	  this.lastDmgDelay--;
+	}
+	if (this.previousHealthDelay > 0) {
+	  this.previousHealthDelay--;
+	}
   }
 
   private static void cleanCache() {
@@ -62,7 +75,7 @@ public class BarState {
     MinecraftClient minecraft = MinecraftClient.getInstance();
     Entity entity = minecraft.world.getEntityById(entry.getKey());
 
-    if (!((entity instanceof LivingEntity))) {
+    if (!(entity instanceof LivingEntity)) {
       return true;
     }
 
@@ -86,16 +99,14 @@ public class BarState {
     } else if (state.lastHealth != entity.getHealth()) {
       state.lastDmg = state.lastHealth - entity.getHealth();
       state.lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;
+      state.animationShift = 30 * RANDOM.nextDouble() - 15;
       state.lastHealth = entity.getHealth();
-    } else if (state.lastDmgDelay > -1) {
-      state.lastDmgDelay--;
-    } else {
+    } else if (state.lastDmgDelay == 0.0F) {
       state.lastHealth = entity.getHealth();
       state.lastDmg = 0;
     }
 
     if (state.previousHealthDelay > 0) {
-      state.previousHealthDelay--;
       state.animationSpeed = (state.previousHealthDisplay - entity.getHealth()) / 40;
     } else if (state.previousHealthDelay < 1 && state.previousHealthDisplay > entity.getHealth()) {
       state.previousHealthDisplay -= state.animationSpeed;

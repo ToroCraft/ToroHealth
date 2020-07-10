@@ -1,16 +1,11 @@
-# Fabric Example Mod
+# ToroHealth Damage Indicators
 
-## Setup
+With ToroHealth Damage Indicators, damage given, received, or mitigated will be displayed as a number that pops off of the entity.
 
-1. Edit build.gradle and mod.json to suit your needs.
-    * The "mixins" object can be removed from mod.json if you do not need to use mixins.
-    * Please replace all occurences of "modid" with your own mod ID - sometimes, a different string may also suffice.
-2. Run the following command:
+Also, health bars will appear in the top left corner for the entity in the player's crosshairs.
 
-```
-./gradlew idea
-```
+Customization options are available for changing the color of the damage numbers and the display style of the health bar (Compact or Standard).  I will soon be adding options to re-position the health bars and may make some visual tweaks to them.
 
-## License
+### [Download from here](https://minecraft.curseforge.com/projects/torohealth-damage-indicators)
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+![Screenshot](https://i.imgur.com/C9oBhZ5.png)
