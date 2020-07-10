@@ -1,13 +1,16 @@
 package net.torocraft.torohealth.util;
 
 public class Config {
-  public enum Mode {NONE, WHEN_HOLDING_WEAPON, ALWAYS}
-  public enum NumberType {NONE, LAST, CUMULATIVE}
+  public enum Mode {
+    NONE, WHEN_HOLDING_WEAPON, ALWAYS
+  }
+  public enum NumberType {
+    NONE, LAST, CUMULATIVE
+  }
 
   public Hud hud = new Hud();
   public Bar bar = new Bar();
   public InWorld inWorld = new InWorld();
-  //public Particle particle = new Particle();
 
   public static class Hud {
     public int distance = 60;
@@ -15,7 +18,6 @@ public class Config {
     public float y = 4f;
     public float scale = 1f;
     public int hideDelay = 20;
-//    public boolean showEntity = true;
   }
 
   public static class Particle {

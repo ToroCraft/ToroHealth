@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.torocraft.torohealth.ToroHealth;
-import net.torocraft.torohealth.bars.BarState;
+import net.torocraft.torohealth.bars.BarStates;
 import net.torocraft.torohealth.util.HoldingWeaponUpdater;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +25,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
       return;
     }
     ToroHealth.HUD.setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
-    BarState.tick();
+    BarStates.tick();
     HoldingWeaponUpdater.update();
     ToroHealth.HUD.tick();
   }

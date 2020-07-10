@@ -1,24 +1,19 @@
 package net.torocraft.torohealth.util;
 
 import io.github.prospector.modmenu.api.ModMenuApi;
-
+import java.util.function.Function;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.util.Config.Mode;
 import net.torocraft.torohealth.util.Config.NumberType;
-
-import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuEntry implements ModMenuApi {

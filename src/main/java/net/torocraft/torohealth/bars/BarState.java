@@ -1,18 +1,10 @@
 package net.torocraft.torohealth.bars;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.torocraft.torohealth.ToroHealth;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
 
 public class BarState {
 
-  private static final Map<Integer, BarState> states = new HashMap<>();
+  public final LivingEntity entity;
 
   public float previousHealth;
   public float previousHealthDisplay;
@@ -20,100 +12,45 @@ public class BarState {
   public float lastDmg;
   public float lastHealth;
   public float lastDmgDelay;
-  public double animationShift = 0.0;
   private float animationSpeed = 0;
-
-  private static final float HEALTH_INDICATOR_DELAY = 20;
-  private static final Random RANDOM = new Random();
   
-  public static BarState getState(Entity entity) {
-    int id = entity.getEntityId();
-    BarState state = states.get(id);
-    if (state == null) {
-      state = new BarState();
-      states.put(id, state);
-    }
-    return state;
+  private static final float HEALTH_INDICATOR_DELAY = 10;
+
+  public BarState(LivingEntity entity) {
+    this.entity = entity;
   }
 
-  private static int tickCount = 0;
-
-  public static void tick() {
-    LivingEntity selectedEntity = ToroHealth.HUD.getEntity();
-    if (selectedEntity != null) {
-      tick(selectedEntity);
+  public void tick() {
+    if (this.lastDmgDelay > 0) {
+      this.lastDmgDelay--;
     }
-    for (Iterator<EntityTracker.TrackedEntity> i = EntityTracker.INSTANCE.iterator(); i.hasNext(); ) {
-      EntityTracker.TrackedEntity t = i.next();
-      tick(t.entity);
-    }
-    states.forEach((id, state) -> state.doTick());
-    if (tickCount % 200 == 0) {
-      cleanCache();
-    }
-    tickCount++;
-  }
-  
-  private void doTick() {
-	if (this.lastDmgDelay > 0) {
-	  this.lastDmgDelay--;
-	}
-	if (this.previousHealthDelay > 0) {
-	  this.previousHealthDelay--;
-	}
-  }
-
-  private static void cleanCache() {
-    states.entrySet().removeIf(BarState::stateExpired);
-  }
-
-  private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
-    if (entry.getValue() == null) {
-      return true;
-    }
-    
-    MinecraftClient minecraft = MinecraftClient.getInstance();
-    Entity entity = minecraft.world.getEntityById(entry.getKey());
-
-    if (!(entity instanceof LivingEntity)) {
-      return true;
+    if (this.previousHealthDelay > 0) {
+      this.previousHealthDelay--;
     }
 
-    if (!minecraft.world.isChunkLoaded(entity.getBlockPos())) {
-      return true;
+    if (lastHealth < 0.1) {
+      lastHealth = entity.getHealth();
+      lastDmg = 0;
+    } else if (lastHealth != entity.getHealth()) {
+      lastDmg = lastHealth - entity.getHealth();
+      lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;
+      lastHealth = entity.getHealth();
+    } else if (lastDmgDelay == 0.0F) {
+      lastHealth = entity.getHealth();
+      lastDmg = 0;
     }
 
-    return !entity.isAlive();
-  }
-
-  private static void tick(LivingEntity entity) {
-    BarState state = BarState.getState(entity);
-
-    if (state.animationSpeed == 0) {
-      state.animationSpeed = entity.getHealth() / 125;
-    }
-
-    if (state.lastHealth < 0.1) {
-      state.lastHealth = entity.getHealth();
-      state.lastDmg = 0;
-    } else if (state.lastHealth != entity.getHealth()) {
-      state.lastDmg = state.lastHealth - entity.getHealth();
-      state.lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;
-      state.animationShift = 30 * RANDOM.nextDouble() - 15;
-      state.lastHealth = entity.getHealth();
-    } else if (state.lastDmgDelay == 0.0F) {
-      state.lastHealth = entity.getHealth();
-      state.lastDmg = 0;
-    }
-
-    if (state.previousHealthDelay > 0) {
-      state.animationSpeed = (state.previousHealthDisplay - entity.getHealth()) / 40;
-    } else if (state.previousHealthDelay < 1 && state.previousHealthDisplay > entity.getHealth()) {
-      state.previousHealthDisplay -= state.animationSpeed;
+    if (previousHealthDelay > 0) {
+      float diff = previousHealthDisplay - entity.getHealth();
+      if (diff > 0) {
+        animationSpeed = diff / 10f;
+      }
+    } else if (previousHealthDelay < 1 && previousHealthDisplay > entity.getHealth()) {
+      previousHealthDisplay -= animationSpeed;
     } else {
-      state.previousHealthDisplay = entity.getHealth();
-      state.previousHealth = entity.getHealth();
-      state.previousHealthDelay = HEALTH_INDICATOR_DELAY;
+      previousHealthDisplay = entity.getHealth();
+      previousHealth = entity.getHealth();
+      previousHealthDelay = HEALTH_INDICATOR_DELAY;
     }
   }
 }
