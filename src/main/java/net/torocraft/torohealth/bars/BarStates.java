@@ -2,9 +2,10 @@ package net.torocraft.torohealth.bars;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class BarStates {
 
@@ -22,6 +23,7 @@ public class BarStates {
   }
 
   public static void tick() {
+    
     for (BarState state : STATES.values()) {
       state.tick();
     }
@@ -36,19 +38,23 @@ public class BarStates {
     STATES.entrySet().removeIf(BarStates::stateExpired);
   }
 
+  public static BlockPos getEntityPos(Entity e) {
+    return e.func_233580_cy_();
+  }
+
   private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
     if (entry.getValue() == null) {
       return true;
     }
 
-    MinecraftClient minecraft = MinecraftClient.getInstance();
-    Entity entity = minecraft.world.getEntityById(entry.getKey());
+    Minecraft minecraft = Minecraft.getInstance();
+    Entity entity = minecraft.world.getEntityByID(entry.getKey());
 
     if (!(entity instanceof LivingEntity)) {
       return true;
     }
 
-    if (!minecraft.world.isChunkLoaded(entity.getBlockPos())) {
+    if (entity.getDistanceSq(minecraft.player) > (100*100)) {
       return true;
     }
 

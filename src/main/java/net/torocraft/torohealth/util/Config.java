@@ -36,7 +36,8 @@ public class Config {
   }
 
   public static class InWorld {
-    public Mode mode = Mode.NONE;
+   // public Mode mode = Mode.NONE;
+    public Mode mode = Mode.WHEN_HOLDING_WEAPON;
     public float distance = 60f;
   }
 
