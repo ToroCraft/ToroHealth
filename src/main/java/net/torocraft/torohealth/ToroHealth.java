@@ -11,15 +11,14 @@ import net.torocraft.torohealth.util.RayTrace;
 @Mod(ToroHealth.MODID)
 public class ToroHealth {
   public static final String MODID = "torohealth";
-  private static final String FILENAME = ToroHealth.MODID + ".json";
   
-  public static Config CONFIG = new Config();
+  public static Config CONFIG;
   public static Hud HUD = new Hud();
   public static RayTrace RAYTRACE = new RayTrace();
   public static boolean IS_HOLDING_WEAPON = false;
 
   public ToroHealth() {
-    ModLoadingContext.get().registerConfig(Type.COMMON, ConfigLoader.COMMON_SPEC, "tutorial-common.toml");
+    ModLoadingContext.get().registerConfig(Type.COMMON, ConfigLoader.COMMON_SPEC, ToroHealth.MODID + ".toml");
   }
 
 }

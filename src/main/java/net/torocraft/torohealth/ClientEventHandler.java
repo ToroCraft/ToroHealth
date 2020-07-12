@@ -31,7 +31,7 @@ public class ClientEventHandler {
       return;
     }
     ToroHealth.HUD
-        .setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
+        .setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance.get()));
     BarStates.tick();
     HoldingWeaponUpdater.update();
     ToroHealth.HUD.tick();

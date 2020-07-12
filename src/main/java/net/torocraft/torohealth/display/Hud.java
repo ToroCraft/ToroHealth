@@ -22,7 +22,7 @@ public class Hud extends Screen {
   }
 
   public void draw(MatrixStack matrix) {
-    draw(matrix, ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
+    draw(matrix, ToroHealth.CONFIG.hud.x.get().floatValue(), ToroHealth.CONFIG.hud.y.get().floatValue(), ToroHealth.CONFIG.hud.scale.get().floatValue());
   }
 
   public void tick() {
@@ -34,7 +34,7 @@ public class Hud extends Screen {
       age = 0;
     }
 
-    if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay) {
+    if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay.get()) {
       setEntityWork(null);
     }
 

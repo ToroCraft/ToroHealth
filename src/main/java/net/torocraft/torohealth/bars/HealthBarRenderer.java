@@ -17,8 +17,6 @@ import net.torocraft.torohealth.util.Config.InWorld;
 import net.torocraft.torohealth.util.Config.Mode;
 import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
-// import net.torocraft.torohealth.util.EntityUtil;
-// import net.torocraft.torohealth.util.EntityUtil.Relation;
 import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
@@ -33,38 +31,23 @@ public class HealthBarRenderer {
 
   public static void renderInWorld(MatrixStack matrix, LivingEntity entity) {
     
-    if (Mode.NONE.equals(getConfig().mode)) return;
+    if (Mode.NONE.equals(getConfig().mode.get())) return;
 
-    if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
+    if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode.get()) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
 
-    Quaternion camera = Minecraft.getInstance().getRenderManager().getCameraOrientation();
+    Minecraft mc = Minecraft.getInstance();
 
-    float scaleToGui = 0.025f;
-    //boolean sneaking = entity.isInSneakingPose();
-    //float height = entity.getHeight() + 0.5F - (sneaking ? 0.25F : 0.0F);
-    
-    // double x = entity.getX();
-    // double y = entity.getY();
-    // double z = entity.getZ();
-    
-    // Vec3d camPos = camera.getPos();
-    // double camX = camPos.x;
-    // double camY = camPos.y;
-    // double camZ = camPos.z;
-    
+    if(entity.getDistance(mc.player) > ToroHealth.CONFIG.inWorld.distance.get()){
+      return;
+    };
+
+    Quaternion camera = mc.getRenderManager().getCameraOrientation();
+
     float f = entity.getHeight() + 0.5F;
 
     matrix.push();
-    // matrixStackIn.translate(0.0D, (double)f, 0.0D);
-    // matrixStackIn.rotate(this.renderManager.getCameraOrientation());
-    // matrixStackIn.scale(-0.025F, -0.025F, 0.025F);
-
-    // matrix.translate(x - camX, (y + height) - camY, z - camZ);
-    // matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    // matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-    // matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
     matrix.translate(0.0D, (double)f, 0.0D);
     matrix.rotate(camera);
@@ -103,9 +86,9 @@ public class HealthBarRenderer {
     drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
 
-    if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
+    if (ToroHealth.CONFIG.bar.damageNumberType.get().equals(Config.NumberType.CUMULATIVE)) {
       drawDamageNumber(matrix, entity, state.previousHealth - entity.getHealth(), x, y, width);
-    } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
+    } else if (ToroHealth.CONFIG.bar.damageNumberType.get().equals(Config.NumberType.LAST)) {
       drawDamageNumber(matrix, entity, state.lastDmg, x, y, width);
     }
   }
