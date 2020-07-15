@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +41,9 @@ public class ClientEventHandler {
   @SubscribeEvent
   @OnlyIn(Dist.CLIENT)
   public static void hudRender(RenderGameOverlayEvent.Post event) {
-    ToroHealth.HUD.draw(event.getMatrixStack());
+    if (event.getType().equals(ElementType.BOSSHEALTH)){
+      ToroHealth.HUD.draw(event.getMatrixStack());
+    }
   }
 
 }
