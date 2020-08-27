@@ -74,7 +74,7 @@ public class EntityDisplay {
     entity.pitch = -l * 20.0F;
     entity.headYaw = entity.yaw;
     entity.prevHeadYaw = entity.yaw;
-    EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
+    EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher(); //  getEntityRenderManager();
     quaternion2.conjugate();
     entityRenderDispatcher.setRotation(quaternion2);
     entityRenderDispatcher.setRenderShadows(false);

@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "torohealth",
   "version": "${version}",
-
   "name": "ToroHealth Damage Indicators",
   "description": "Displays damage indicators and health bars for all entities.",
   "authors": [
@@ -13,32 +12,29 @@
     "issues": "https://github.com/ToroCraft/ToroHealth/issues",
     "sources": "https://github.com/ToroCraft/ToroHealth"
   },
-
   "license": "GPL3",
   "icon": "assets/torohealth/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
       "net.torocraft.torohealth.ToroHealth"
-    ], "modmenu": [
+    ],
+    "modmenu": [
       "net.torocraft.torohealth.util.ModMenuEntry"
     ]
   },
   "mixins": [
     "torohealth.mixins.json"
   ],
-
   "suggests": {
     "modmenu": "*"
   },
-
   "custom": {
     "modmenu:clientsideOnly": true
-  }	,
-
+  },
   "depends": {
-    "fabricloader": ">=0.4.0",
-    "fabric": "*"
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
   }
 }
