@@ -20,8 +20,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.RayTraceContext;
-import net.minecraft.world.RayTraceContext.FluidHandling;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.world.RaycastContext.FluidHandling;
 
 public class RayTrace implements BlockView {
   private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
@@ -55,7 +55,7 @@ public class RayTrace implements BlockView {
     Vec3d max = position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
     Box searchBox = viewer.getBoundingBox().stretch(look.multiply(reachDistance)).expand(1.0D, 1.0D, 1.0D);
 
-    EntityHitResult result = ProjectileUtil.rayTrace(viewer, position, max, searchBox, isVisible, reachDistance * reachDistance);
+    EntityHitResult result = ProjectileUtil.raycast(viewer, position, max, searchBox, isVisible, reachDistance * reachDistance);
 
     if (result == null || result.getEntity() == null) {
       return null;
@@ -64,7 +64,7 @@ public class RayTrace implements BlockView {
     if (result.getEntity() instanceof LivingEntity) {
       LivingEntity target = (LivingEntity) result.getEntity();
 
-      HitResult blockHit = rayTrace(setupRayTraceContext(client.player, reachDistance, FluidHandling.NONE));
+      HitResult blockHit = raycast(setupRayTraceContext(client.player, reachDistance, FluidHandling.NONE));
 
       if (!blockHit.getType().equals(Type.MISS)) {
         double blockDistance = blockHit.getPos().distanceTo(position);
@@ -79,7 +79,7 @@ public class RayTrace implements BlockView {
     return null;
   }
 
-  private RayTraceContext setupRayTraceContext(PlayerEntity player, double distance, RayTraceContext.FluidHandling fluidHandling) {
+  private RaycastContext setupRayTraceContext(PlayerEntity player, double distance, RaycastContext.FluidHandling fluidHandling) {
     float pitch = player.pitch;
     float yaw = player.yaw;
     Vec3d fromPos = player.getCameraPosVec(1.0F);
@@ -90,18 +90,18 @@ public class RayTrace implements BlockView {
     float yComponent = MathHelper.sin(-pitch * 0.017453292F);
     float zComponent = float_3 * float_5;
     Vec3d toPos = fromPos.add((double)xComponent * distance, (double)yComponent * distance, (double)zComponent * distance);
-    return new RayTraceContext(fromPos, toPos, RayTraceContext.ShapeType.OUTLINE, fluidHandling, player);
+    return new RaycastContext(fromPos, toPos, RaycastContext.ShapeType.OUTLINE, fluidHandling, player);
   }
 
   @Override
-  public BlockHitResult rayTrace(RayTraceContext context) {
-    return BlockView.rayTrace(context, (c, pos) -> {
+  public BlockHitResult raycast(RaycastContext context) {
+    return BlockView.raycast(context, (c, pos) -> {
       BlockState block = this.getBlockState(pos);
       if (!block.isOpaque()) {
         return null;
       }
       VoxelShape blockShape = c.getBlockShape(block, this, pos);
-      return this.rayTraceBlock(c.getStart(), c.getEnd(), pos, blockShape, block);
+      return this.raycastBlock(c.getStart(), c.getEnd(), pos, blockShape, block);
     }, (c) -> {
       Vec3d v = c.getStart().subtract(c.getEnd());
       return BlockHitResult.createMissed(c.getEnd(), Direction.getFacing(v.x, v.y, v.z), new BlockPos(c.getEnd()));

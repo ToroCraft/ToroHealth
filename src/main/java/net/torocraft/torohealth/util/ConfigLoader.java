@@ -55,7 +55,7 @@ public class ConfigLoader {
 
   private static File getFile() {
     if (file == null) {
-      file = new File(FabricLoader.getInstance().getConfigDirectory(), FILENAME);
+      file = new File(FabricLoader.getInstance().getConfigDir().toFile(), FILENAME);
     }
     return file;
   }

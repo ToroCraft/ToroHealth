@@ -32,7 +32,7 @@ public class BarDisplay {
     String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth();
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-    gui.drawStringWithShadow(matrix, mc.textRenderer, name, xOffset, (int) 2, 16777215);
+    DrawableHelper.drawStringWithShadow(matrix, mc.textRenderer, name, xOffset, (int) 2, 16777215);
 
     mc.textRenderer.drawWithShadow(matrix, name, xOffset, 2, 16777215);
     xOffset += mc.textRenderer.getWidth(name) + 5;
