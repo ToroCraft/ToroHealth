@@ -14,16 +14,17 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.torocraft.torohealth.ToroHealth;
-import net.torocraft.torohealth.util.Config;
-import net.torocraft.torohealth.util.Config.InWorld;
-import net.torocraft.torohealth.util.Config.Mode;
+import net.torocraft.torohealth.config.Config;
+import net.torocraft.torohealth.config.Config.InWorld;
+import net.torocraft.torohealth.config.Config.Mode;
 import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
 import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
 
-  private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
+  private static final Identifier GUI_BARS_TEXTURES =
+      new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
   private static final int DARK_GRAY = 0x808080FF;
   private static final float FULL_SIZE = 40;
 
@@ -32,8 +33,9 @@ public class HealthBarRenderer {
   }
 
   public static void renderInWorld(MatrixStack matrix, LivingEntity entity, Camera camera) {
-    
-    if (Mode.NONE.equals(getConfig().mode)) return;
+
+    if (Mode.NONE.equals(getConfig().mode))
+      return;
 
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
@@ -42,27 +44,28 @@ public class HealthBarRenderer {
     float scaleToGui = 0.025f;
     boolean sneaking = entity.isInSneakingPose();
     float height = entity.getHeight() + 0.5F - (sneaking ? 0.25F : 0.0F);
-    
+
     double x = entity.getX();
     double y = entity.getY();
     double z = entity.getZ();
-    
+
     Vec3d camPos = camera.getPos();
     double camX = camPos.x;
     double camY = camPos.y;
     double camZ = camPos.z;
-    
+
     matrix.push();
     matrix.translate(x - camX, (y + height) - camY, z - camZ);
     matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
     matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
-    
+
     RenderSystem.disableLighting();
     RenderSystem.enableDepthTest();
     RenderSystem.disableAlphaTest();
     RenderSystem.enableBlend();
-    RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+    RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+        GL11.GL_ZERO);
     RenderSystem.shadeModel(7425);
 
     render(matrix, entity, 0, 0, FULL_SIZE, true);
@@ -70,16 +73,19 @@ public class HealthBarRenderer {
     RenderSystem.shadeModel(7424);
     RenderSystem.disableBlend();
     RenderSystem.enableAlphaTest();
-    
+
     matrix.pop();
   }
 
-  public static void render(MatrixStack matrix, LivingEntity entity, double x, double y, float width, boolean inWorld) {
+  public static void render(MatrixStack matrix, LivingEntity entity, double x, double y,
+      float width, boolean inWorld) {
 
     Relation relation = EntityUtil.determineRelation(entity);
 
-    int color = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColor : ToroHealth.CONFIG.bar.foeColor;
-    int color2 = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColorSecondary : ToroHealth.CONFIG.bar.foeColorSecondary;
+    int color = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColor
+        : ToroHealth.CONFIG.bar.foeColor;
+    int color2 = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColorSecondary
+        : ToroHealth.CONFIG.bar.foeColorSecondary;
 
     BarState state = BarStates.getState(entity);
 
@@ -99,7 +105,8 @@ public class HealthBarRenderer {
     }
   }
 
-  private static void drawDamageNumber(MatrixStack matrix, LivingEntity entity, float dmg, double x, double y, float width) {
+  private static void drawDamageNumber(MatrixStack matrix, LivingEntity entity, float dmg, double x,
+      double y, float width) {
     int i = Math.round(dmg);
     if (i < 1) {
       return;
@@ -110,7 +117,8 @@ public class HealthBarRenderer {
     minecraft.textRenderer.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, 0xd00000);
   }
 
-  private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent, int color, int zOffset, boolean inWorld) {
+  private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent,
+      int color, int zOffset, boolean inWorld) {
     float c = 0.00390625F;
     int u = 0;
     int v = 6 * 5 * 2 + 5;
@@ -135,10 +143,14 @@ public class HealthBarRenderer {
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder buffer = tessellator.getBuffer();
     buffer.begin(7, VertexFormats.POSITION_TEXTURE);
-    buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount).texture(u * c, v * c).next();
-    buffer.vertex(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount).texture(u * c, (v + vh) * c).next();
-    buffer.vertex(matrix4f, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount).texture((u + uw) * c, (v + vh) * c).next();
-    buffer.vertex(matrix4f, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount).texture(((u + uw) * c), v * c).next();
+    buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
+        .texture(u * c, v * c).next();
+    buffer.vertex(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
+        .texture(u * c, (v + vh) * c).next();
+    buffer.vertex(matrix4f, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
+        .texture((u + uw) * c, (v + vh) * c).next();
+    buffer.vertex(matrix4f, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
+        .texture(((u + uw) * c), v * c).next();
     tessellator.draw();
   }
 }

@@ -1,6 +1,8 @@
-package net.torocraft.torohealth.util;
+package net.torocraft.torohealth.config;
 
-public class Config {
+import net.torocraft.torohealth.config.loader.IConfig;
+
+public class Config implements IConfig {
   public enum Mode {
     NONE, WHEN_HOLDING_WEAPON, ALWAYS
   }
@@ -8,6 +10,7 @@ public class Config {
     NONE, LAST, CUMULATIVE
   }
 
+  public boolean watchForChanges = true;
   public Hud hud = new Hud();
   public Bar bar = new Bar();
   public InWorld inWorld = new InWorld();
@@ -38,6 +41,15 @@ public class Config {
   public static class InWorld {
     public Mode mode = Mode.NONE;
     public float distance = 60f;
+  }
+
+  @Override
+  public void update() {
+  }
+
+  @Override
+  public boolean shouldWatch() {
+    return watchForChanges;
   }
 
 }
