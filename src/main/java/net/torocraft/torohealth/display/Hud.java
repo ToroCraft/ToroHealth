@@ -8,9 +8,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.config.Config.AnchorPoint;
 
 public class Hud extends Screen {
-  private static final Identifier BACKGROUND_TEXTURE = new Identifier(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
+  private static final Identifier BACKGROUND_TEXTURE =
+      new Identifier(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;
@@ -18,11 +20,46 @@ public class Hud extends Screen {
 
   public Hud() {
     super(new LiteralText("ToroHealth HUD"));
+    this.client = MinecraftClient.getInstance();
     barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
   }
 
   public void draw(MatrixStack matrix) {
-    draw(matrix, ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
+    float x = determineX();
+    float y = determineY();
+    draw(matrix, x, y, ToroHealth.CONFIG.hud.scale);
+  }
+
+  private float determineX() {
+    float x = ToroHealth.CONFIG.hud.x;
+    AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
+    float wScreen = client.getWindow().getScaledWidth();
+
+    switch (anchor) {
+      case BOTTOM_CENTER:
+      case TOP_CENTER:
+        return (wScreen / 2) + x;
+      case BOTTOM_RIGHT:
+      case TOP_RIGHT:
+        return (wScreen) + x;
+      default:
+        return x;
+    }
+  }
+
+  private float determineY() {
+    float y = ToroHealth.CONFIG.hud.y;
+    AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
+    float hScreen = client.getWindow().getScaledHeight();
+
+    switch (anchor) {
+      case BOTTOM_CENTER:
+      case BOTTOM_LEFT:
+      case BOTTOM_RIGHT:
+        return y + hScreen;
+      default:
+        return y;
+    }
   }
 
   public void tick() {

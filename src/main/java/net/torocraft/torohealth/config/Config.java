@@ -6,8 +6,13 @@ public class Config implements IConfig {
   public enum Mode {
     NONE, WHEN_HOLDING_WEAPON, ALWAYS
   }
+
   public enum NumberType {
     NONE, LAST, CUMULATIVE
+  }
+
+  public enum AnchorPoint {
+    TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
   }
 
   public boolean watchForChanges = true;
@@ -21,6 +26,7 @@ public class Config implements IConfig {
     public float y = 4f;
     public float scale = 1f;
     public int hideDelay = 20;
+    public AnchorPoint anchorPoint = AnchorPoint.TOP_LEFT;
   }
 
   public static class Particle {
