@@ -11,7 +11,6 @@ public class ConfigLoader<T extends IConfig> {
 
   private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-  // private final Class<T> configClass;
   private final Consumer<T> onLoad;
   private final File file;
   private final T defaultConfig;
@@ -31,6 +30,9 @@ public class ConfigLoader<T extends IConfig> {
     }
 
     config = read();
+
+    Defaulter.setDefaults(config, defaultConfig.getClass());
+
     config.update();
     onLoad.accept(config);
 
