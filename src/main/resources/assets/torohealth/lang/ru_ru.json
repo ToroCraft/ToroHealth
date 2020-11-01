@@ -1,0 +1,21 @@
+{
+  "config.title": "Настройка ToroHealth",
+  "config.category.hud": "Интерфейс",
+  "config.hud.hideDelay": "Задержка до исчезновения",
+  "config.hud.x": "Положение по оси X",
+  "config.hud.y": "Положение по оси Y",
+  "config.hud.scale": "Масштаб",
+  "config.torohealth.category.bar": "Индикаторы здоровья",
+  "config.bar.damageNumberType": "Отображение урона",
+  "config.torohealth.category.inWorld": "Окружение",
+  "config.inWorld.mode": "Отображение индикаторов",
+  "config.inWorld.distance": "Дальность отображения",
+  "config.torohealth.friendColor.title": "Цвет индикаторов здоровья союзников",
+  "config.torohealth.friendColorSecondary.title":"Цвет индикаторов здоровья союзников (вторичный)",
+  "config.torohealth.foeColor.title": "Цвет индикаторов здоровья противников",
+  "config.torohealth.foeColorSecondary.title":"Цвет индикаторов здоровья противников (вторичный)",
+  "config.torohealth.red": "Красный",
+  "config.torohealth.green": "Зелёный",
+  "config.torohealth.blue": "Синий",
+  "config.torohealth.alpha": "Альфа"
+}
