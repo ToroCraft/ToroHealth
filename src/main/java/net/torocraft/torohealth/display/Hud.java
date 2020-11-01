@@ -35,6 +35,10 @@ public class Hud extends Screen {
     AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
     float wScreen = client.getWindow().getScaledWidth();
 
+    if (anchor == null) {
+      return x;
+    }
+
     switch (anchor) {
       case BOTTOM_CENTER:
       case TOP_CENTER:
@@ -51,6 +55,10 @@ public class Hud extends Screen {
     float y = ToroHealth.CONFIG.hud.y;
     AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
     float hScreen = client.getWindow().getScaledHeight();
+
+    if (anchor == null) {
+      return y;
+    }
 
     switch (anchor) {
       case BOTTOM_CENTER:
