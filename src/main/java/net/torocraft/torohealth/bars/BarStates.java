@@ -23,7 +23,6 @@ public class BarStates {
   }
 
   public static void tick() {
-    
     for (BarState state : STATES.values()) {
       state.tick();
     }
@@ -54,7 +53,7 @@ public class BarStates {
       return true;
     }
 
-    if (entity.getDistanceSq(minecraft.player) > (100*100)) {
+    if (entity.getDistanceSq(minecraft.player) > (100 * 100)) {
       return true;
     }
 

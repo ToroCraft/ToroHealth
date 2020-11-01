@@ -10,7 +10,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.torocraft.torohealth.ToroHealth;
 
 public class Hud extends Screen {
-  private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
+  private static final ResourceLocation BACKGROUND_TEXTURE =
+      new ResourceLocation(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;
@@ -22,7 +23,7 @@ public class Hud extends Screen {
   }
 
   public void draw(MatrixStack matrix) {
-    draw(matrix, ToroHealth.CONFIG.hud.x.get().floatValue(), ToroHealth.CONFIG.hud.y.get().floatValue(), ToroHealth.CONFIG.hud.scale.get().floatValue());
+    draw(matrix, ToroHealth.CONFIG.hud.x, ToroHealth.CONFIG.hud.y, ToroHealth.CONFIG.hud.scale);
   }
 
   public void tick() {
@@ -34,7 +35,7 @@ public class Hud extends Screen {
       age = 0;
     }
 
-    if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay.get()) {
+    if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay) {
       setEntityWork(null);
     }
 
@@ -68,7 +69,8 @@ public class Hud extends Screen {
     matrix.pop();
   }
 
-  public void drawTexture(MatrixStack matrices, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+  public void drawTexture(MatrixStack matrices, int x, int y, float u, float v, int width,
+      int height, int textureWidth, int textureHeight) {
     func_238463_a_(matrices, x, y, u, v, width, height, textureWidth, textureHeight);
   }
 

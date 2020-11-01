@@ -62,4 +62,4 @@ Health bars will appear in the top left corner for the entity in the player's cr
     mandatory=true
     versionRange="[1.16.3]"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"

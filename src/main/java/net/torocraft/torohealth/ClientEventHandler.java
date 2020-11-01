@@ -32,7 +32,7 @@ public class ClientEventHandler {
       return;
     }
     ToroHealth.HUD
-        .setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance.get()));
+        .setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
     BarStates.tick();
     HoldingWeaponUpdater.update();
     ToroHealth.HUD.tick();
@@ -41,7 +41,7 @@ public class ClientEventHandler {
   @SubscribeEvent
   @OnlyIn(Dist.CLIENT)
   public static void hudRender(RenderGameOverlayEvent.Post event) {
-    if (event.getType().equals(ElementType.BOSSHEALTH)){
+    if (event.getType().equals(ElementType.BOSSHEALTH)) {
       ToroHealth.HUD.draw(event.getMatrixStack());
     }
   }
