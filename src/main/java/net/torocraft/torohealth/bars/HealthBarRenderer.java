@@ -41,14 +41,16 @@ public class HealthBarRenderer {
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
+    MinecraftClient client = MinecraftClient.getInstance();
 
     float scaleToGui = 0.025f;
     boolean sneaking = entity.isInSneakingPose();
     float height = entity.getHeight() + 0.5F - (sneaking ? 0.25F : 0.0F);
 
-    double x = entity.getX();
-    double y = entity.getY();
-    double z = entity.getZ();
+    float tickDelta = client.getTickDelta();
+    double x = MathHelper.lerp((double) tickDelta, entity.prevX, entity.getX());
+    double y = MathHelper.lerp((double) tickDelta, entity.prevY, entity.getY());
+    double z = MathHelper.lerp((double) tickDelta, entity.prevZ, entity.getZ());
 
     Vec3d camPos = camera.getPos();
     double camX = camPos.x;
