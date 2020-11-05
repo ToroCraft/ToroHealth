@@ -1,6 +1,7 @@
 package net.torocraft.torohealth.bars;
 
 import net.minecraft.entity.LivingEntity;
+import net.torocraft.torohealth.ToroHealth;
 
 public class BarState {
 
@@ -35,7 +36,9 @@ public class BarState {
       lastDmg = lastHealth - entity.getHealth();
       lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;
       lastHealth = entity.getHealth();
-      BarStates.PARTICLES.add(new BarParticle(entity, lastDmg));
+      if (ToroHealth.CONFIG.particle.show) {
+        BarStates.PARTICLES.add(new BarParticle(entity, lastDmg));
+      }
     } else if (lastDmgDelay == 0.0F) {
       lastHealth = entity.getHealth();
       lastDmg = 0;

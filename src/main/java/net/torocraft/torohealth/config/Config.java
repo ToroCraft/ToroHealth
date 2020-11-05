@@ -19,6 +19,7 @@ public class Config implements IConfig {
   public Hud hud = new Hud();
   public Bar bar = new Bar();
   public InWorld inWorld = new InWorld();
+  public Particle particle = new Particle();
 
   public static class Hud {
     public int distance = 60;
@@ -27,13 +28,15 @@ public class Config implements IConfig {
     public float scale = 1f;
     public int hideDelay = 20;
     public AnchorPoint anchorPoint = AnchorPoint.TOP_LEFT;
+    public boolean showEntity = true;
+    public boolean showBar = true;
+    public boolean showSkin = true;
   }
 
   public static class Particle {
     public boolean show = true;
-    public String statusDisplayPosition = "TOP LEFT";
-    public Integer damageColor = 0xff0000;
-    public Integer healColor = 0x00ff00;
+    // public Integer damageColor = 0xff0000;
+    // public Integer healColor = 0x00ff00;
   }
 
   public static class Bar {

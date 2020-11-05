@@ -99,10 +99,12 @@ public class HealthBarRenderer {
     drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
 
-    if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
-      drawDamageNumber(matrix, state.previousHealth - entity.getHealth(), x, y, width);
-    } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
-      drawDamageNumber(matrix, state.lastDmg, x, y, width);
+    if (!inWorld) {
+      if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
+        drawDamageNumber(matrix, state.previousHealth - entity.getHealth(), x, y, width);
+      } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
+        drawDamageNumber(matrix, state.lastDmg, x, y, width);
+      }
     }
   }
 
