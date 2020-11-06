@@ -1,6 +1,8 @@
 package net.torocraft.torohealth.bars;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -10,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 public class BarStates {
 
   private static final Map<Integer, BarState> STATES = new HashMap<>();
+  public static List<BarParticle> PARTICLES = new ArrayList<>();
   private static int tickCount = 0;
 
   public static BarState getState(LivingEntity entity) {
@@ -30,6 +33,10 @@ public class BarStates {
     if (tickCount % 200 == 0) {
       cleanCache();
     }
+
+    PARTICLES.forEach(p -> p.tick());
+    PARTICLES.removeIf(p -> p.age > 50);
+
     tickCount++;
   }
 

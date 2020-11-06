@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SwordItem;
 import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.ToroHealthClient;
 import net.torocraft.torohealth.config.Config.Mode;
 
 public class HoldingWeaponUpdater {
@@ -16,10 +17,10 @@ public class HoldingWeaponUpdater {
     Minecraft minecraft = Minecraft.getInstance();
     PlayerEntity player = minecraft.player;
     if (player == null) {
-      ToroHealth.IS_HOLDING_WEAPON = false;
+      ToroHealthClient.IS_HOLDING_WEAPON = false;
       return;
     }
-    ToroHealth.IS_HOLDING_WEAPON =
+    ToroHealthClient.IS_HOLDING_WEAPON =
         isWeapon(player.getHeldItemMainhand()) || isWeapon(player.getHeldItemOffhand());
   }
 

@@ -12,6 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Quaternion;
 import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.ToroHealthClient;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.InWorld;
 import net.torocraft.torohealth.config.Config.Mode;
@@ -35,7 +36,7 @@ public class HealthBarRenderer {
     if (Mode.NONE.equals(getConfig().mode))
       return;
 
-    if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
+    if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealthClient.IS_HOLDING_WEAPON) {
       return;
     }
 
@@ -92,15 +93,17 @@ public class HealthBarRenderer {
     drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
 
-    if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
-      drawDamageNumber(matrix, entity, state.previousHealth - entity.getHealth(), x, y, width);
-    } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
-      drawDamageNumber(matrix, entity, state.lastDmg, x, y, width);
+    if (!inWorld) {
+      if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
+        drawDamageNumber(matrix, state.previousHealth - entity.getHealth(), x, y, width);
+      } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
+        drawDamageNumber(matrix, state.lastDmg, x, y, width);
+      }
     }
   }
 
-  private static void drawDamageNumber(MatrixStack matrix, LivingEntity entity, float dmg, double x,
-      double y, float width) {
+  public static void drawDamageNumber(MatrixStack matrix, float dmg, double x, double y,
+      float width) {
     int i = Math.round(dmg);
     if (i < 1) {
       return;

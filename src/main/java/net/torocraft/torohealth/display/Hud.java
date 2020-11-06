@@ -98,11 +98,17 @@ public class Hud extends Screen {
     matrix.push();
     matrix.scale(scale, scale, scale);
     matrix.translate(x - 10, y - 10, 0);
-    this.drawSkin(matrix);
+    if (ToroHealth.CONFIG.hud.showSkin) {
+      this.drawSkin(matrix);
+    }
     matrix.translate(10, 10, 0);
-    entityDisplay.draw(matrix);
+    if (ToroHealth.CONFIG.hud.showEntity) {
+      entityDisplay.draw(matrix);
+    }
     matrix.translate(44, 0, 0);
-    barDisplay.draw(matrix, entity);
+    if (ToroHealth.CONFIG.hud.showBar) {
+      barDisplay.draw(matrix, entity);
+    }
     matrix.pop();
   }
 
