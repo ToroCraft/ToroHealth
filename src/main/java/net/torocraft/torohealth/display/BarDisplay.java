@@ -11,7 +11,8 @@ import net.torocraft.torohealth.bars.HealthBarRenderer;
 
 public class BarDisplay {
 
-  private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
+  private static final ResourceLocation ICON_TEXTURES =
+      new ResourceLocation("textures/gui/icons.png");
   private final Minecraft mc;
   private final AbstractGui gui;
 
@@ -24,17 +25,14 @@ public class BarDisplay {
     return entity.getDisplayName().getString();
   }
 
-  public void drawStringWithShadow(MatrixStack matrices, FontRenderer textRenderer, String text, int x, int y, int color) {
-    gui.func_238476_c_(matrices, textRenderer, text, x, y, color);
-  }
-
-  public void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-    gui.func_238474_b_(matrices, x, y, u, v, width, height);
+  public void drawStringWithShadow(MatrixStack matrices, FontRenderer textRenderer, String text,
+      int x, int y, int color) {
+    gui.drawString(matrices, textRenderer, text, x, y, color);
   }
 
   public int drawWithShadow(MatrixStack matrices, String text, float x, float y, int color) {
-    return mc.fontRenderer.func_238405_a_(matrices, text, x, y, color);
- }
+    return mc.fontRenderer.drawString(matrices, text, x, y, color);
+  }
 
   public void draw(MatrixStack matrix, LivingEntity entity) {
     int xOffset = 0;
@@ -68,11 +66,11 @@ public class BarDisplay {
 
   private void renderArmorIcon(MatrixStack matrix, int x, int y) {
     mc.getTextureManager().bindTexture(ICON_TEXTURES);
-    drawTexture(matrix, x, y, 34, 9, 9, 9);
+    gui.blit(matrix, x, y, 34, 9, 9, 9);
   }
 
   private void renderHeartIcon(MatrixStack matrix, int x, int y) {
     mc.getTextureManager().bindTexture(ICON_TEXTURES);
-    drawTexture(matrix, x, y, 16 + 36, 0, 9, 9);
+    gui.blit(matrix, x, y, 16 + 36, 0, 9, 9);
   }
 }

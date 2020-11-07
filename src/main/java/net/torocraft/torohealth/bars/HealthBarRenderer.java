@@ -111,7 +111,7 @@ public class HealthBarRenderer {
     String s = Integer.toString(i);
     Minecraft minecraft = Minecraft.getInstance();
     int sw = minecraft.fontRenderer.getStringWidth(s);
-    minecraft.fontRenderer.func_238421_b_(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5,
+    minecraft.fontRenderer.drawString(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5,
         0xd00000);
   }
 

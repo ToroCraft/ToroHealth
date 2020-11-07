@@ -21,7 +21,7 @@ public class Hud extends Screen {
 
   public Hud() {
     super(new StringTextComponent("ToroHealth HUD"));
-    this.field_230706_i_ = Minecraft.getInstance();
+    this.minecraft = Minecraft.getInstance();
     barDisplay = new BarDisplay(Minecraft.getInstance(), this);
   }
 
@@ -34,7 +34,7 @@ public class Hud extends Screen {
   private float determineX() {
     float x = ToroHealth.CONFIG.hud.x;
     AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
-    float wScreen = field_230706_i_.getMainWindow().getScaledWidth();
+    float wScreen = minecraft.getMainWindow().getScaledWidth();
 
     switch (anchor) {
       case BOTTOM_CENTER:
@@ -51,7 +51,7 @@ public class Hud extends Screen {
   private float determineY() {
     float y = ToroHealth.CONFIG.hud.y;
     AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
-    float hScreen = field_230706_i_.getMainWindow().getScaledHeight();
+    float hScreen = minecraft.getMainWindow().getScaledHeight();
 
     switch (anchor) {
       case BOTTOM_CENTER:
@@ -114,7 +114,7 @@ public class Hud extends Screen {
 
   public void drawTexture(MatrixStack matrices, int x, int y, float u, float v, int width,
       int height, int textureWidth, int textureHeight) {
-    func_238463_a_(matrices, x, y, u, v, width, height, textureWidth, textureHeight);
+    blit(matrices, x, y, u, v, width, height, textureWidth, textureHeight);
   }
 
   private void drawSkin(MatrixStack matrix) {

@@ -22,7 +22,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 
 public class RayTrace implements IBlockReader {
-  private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.canBeCollidedWith();
+  private static Predicate<Entity> isVisible =
+      entity -> !entity.isSpectator() && entity.canBeCollidedWith();
   private static Minecraft minecraft = Minecraft.getInstance();
 
   @Override
@@ -40,7 +41,7 @@ public class RayTrace implements IBlockReader {
     return minecraft.world.getFluidState(pos);
   }
 
-  public LivingEntity getEntityInCrosshair (float partialTicks, double reachDistance) {
+  public LivingEntity getEntityInCrosshair(float partialTicks, double reachDistance) {
     Minecraft client = Minecraft.getInstance();
     Entity viewer = client.getRenderViewEntity();
 
@@ -50,10 +51,13 @@ public class RayTrace implements IBlockReader {
 
     Vector3d position = viewer.getEyePosition(partialTicks);
     Vector3d look = viewer.getLook(1.0F);
-    Vector3d max = position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
-    AxisAlignedBB searchBox = viewer.getBoundingBox().expand(look.scale(reachDistance)).expand(1.0D, 1.0D, 1.0D);
+    Vector3d max =
+        position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
+    AxisAlignedBB searchBox =
+        viewer.getBoundingBox().expand(look.scale(reachDistance)).expand(1.0D, 1.0D, 1.0D);
 
-    EntityRayTraceResult result = ProjectileHelper.rayTraceEntities(viewer, position, max, searchBox, isVisible, reachDistance * reachDistance);
+    EntityRayTraceResult result = ProjectileHelper.rayTraceEntities(viewer, position, max,
+        searchBox, isVisible, reachDistance * reachDistance);
 
     if (result == null || result.getEntity() == null) {
       return null;
@@ -62,7 +66,8 @@ public class RayTrace implements IBlockReader {
     if (result.getEntity() instanceof LivingEntity) {
       LivingEntity target = (LivingEntity) result.getEntity();
 
-      BlockRayTraceResult blockHit = rayTraceBlocks(setupRayTraceContext(client.player, reachDistance, RayTraceContext.FluidMode.NONE));
+      BlockRayTraceResult blockHit = rayTraceBlocks(
+          setupRayTraceContext(client.player, reachDistance, RayTraceContext.FluidMode.NONE));
 
       if (!blockHit.getType().equals(RayTraceResult.Type.MISS)) {
         double blockDistance = blockHit.getHitVec().distanceTo(position);
@@ -77,7 +82,8 @@ public class RayTrace implements IBlockReader {
     return null;
   }
 
-  private RayTraceContext setupRayTraceContext(PlayerEntity player, double distance, RayTraceContext.FluidMode fluidHandling) {
+  private RayTraceContext setupRayTraceContext(PlayerEntity player, double distance,
+      RayTraceContext.FluidMode fluidHandling) {
     float pitch = player.rotationPitch;
     float yaw = player.rotationYaw;
     Vector3d fromPos = player.getEyePosition(1.0F);
@@ -87,22 +93,26 @@ public class RayTrace implements IBlockReader {
     float xComponent = float_4 * float_5;
     float yComponent = MathHelper.sin(-pitch * 0.017453292F);
     float zComponent = float_3 * float_5;
-    Vector3d toPos = fromPos.add((double)xComponent * distance, (double)yComponent * distance, (double)zComponent * distance);
-    return new RayTraceContext(fromPos, toPos, RayTraceContext.BlockMode.OUTLINE, fluidHandling, player);
+    Vector3d toPos = fromPos.add((double) xComponent * distance, (double) yComponent * distance,
+        (double) zComponent * distance);
+    return new RayTraceContext(fromPos, toPos, RayTraceContext.BlockMode.OUTLINE, fluidHandling,
+        player);
   }
 
   @Override
   public BlockRayTraceResult rayTraceBlocks(RayTraceContext context) {
-    return (BlockRayTraceResult) IBlockReader.func_217300_a(context, (c, pos) -> {
+    return IBlockReader.doRayTrace(context, (c, pos) -> {
       BlockState block = this.getBlockState(pos);
       if (!block.isSolid()) {
         return null;
       }
       VoxelShape blockShape = c.getBlockShape(block, this, pos);
-      return this.rayTraceBlocks(c.func_222253_b(), c.func_222250_a(), pos, blockShape, block);
+      return this.rayTraceBlocks(c.getStartVec(), c.getEndVec(), pos, blockShape, block);
+
     }, (c) -> {
-      Vector3d v = c.func_222253_b().subtract(c.func_222250_a());
-      return BlockRayTraceResult.createMiss(c.func_222250_a(), Direction.getFacingFromVector(v.x, v.y, v.z), new BlockPos(c.func_222250_a()));
+      Vector3d v = c.getStartVec().subtract(c.getEndVec());
+      return BlockRayTraceResult.createMiss(c.getEndVec(),
+          Direction.getFacingFromVector(v.x, v.y, v.z), new BlockPos(c.getEndVec()));
     });
   }
 }

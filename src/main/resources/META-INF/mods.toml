@@ -25,6 +25,6 @@ issueTrackerURL="https://github.com/ToroCraft/ToroHealth/issues"
 [[dependencies.torohealth]]
   modId="minecraft"
   mandatory=true
-  versionRange="[1.16.3]"
+  versionRange="[1.16.4]"
   ordering="NONE"
   side="CLIENT"

@@ -7,7 +7,6 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
 
 public class BarStates {
 
@@ -42,10 +41,6 @@ public class BarStates {
 
   private static void cleanCache() {
     STATES.entrySet().removeIf(BarStates::stateExpired);
-  }
-
-  public static BlockPos getEntityPos(Entity e) {
-    return e.func_233580_cy_();
   }
 
   private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
