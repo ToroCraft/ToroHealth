@@ -41,6 +41,10 @@ public class HealthBarRenderer {
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
+
+    if(getConfig().hideArmorStands && entity instanceof ArmorStandEntity) {
+      return;
+    }
     MinecraftClient client = MinecraftClient.getInstance();
 
     float scaleToGui = 0.025f;
