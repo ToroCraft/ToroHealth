@@ -31,6 +31,7 @@ public class Config implements IConfig {
     public boolean showEntity = true;
     public boolean showBar = true;
     public boolean showSkin = true;
+    public boolean hideArmorStands = false;
   }
 
   public static class Particle {
@@ -49,6 +50,7 @@ public class Config implements IConfig {
 
   public static class InWorld {
     public Mode mode = Mode.NONE;
+    public boolean hideArmorStands = true;
     public float distance = 60f;
   }
 
