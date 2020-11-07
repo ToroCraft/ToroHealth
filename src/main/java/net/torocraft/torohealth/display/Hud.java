@@ -67,16 +67,21 @@ public class Hud extends Screen {
   }
 
   public void setEntity(LivingEntity entity) {
+    if(ToroHealth.CONFIG.hud.hideArmorStands && entity instanceof ArmorStandEntity) {
+      if(age > ToroHealth.CONFIG.hud.hideDelay)
+        setEntityWork(null);
+      return;
+    }
+
     if (entity != null) {
       age = 0;
+      if (entity != this.entity) {
+        setEntityWork(entity);
+      }
     }
 
     if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay) {
       setEntityWork(null);
-    }
-
-    if (entity != null && entity != this.entity) {
-      setEntityWork(entity);
     }
   }
 
