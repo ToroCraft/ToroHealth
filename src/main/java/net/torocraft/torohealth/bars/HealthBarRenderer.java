@@ -52,6 +52,10 @@ public class HealthBarRenderer {
       return;
     }
 
+    if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealth.HUD.getEntity() != entity) {
+      return;
+    }
+
     if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorld.distance) {
       return;
     }
