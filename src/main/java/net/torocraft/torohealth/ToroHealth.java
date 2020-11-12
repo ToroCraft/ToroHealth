@@ -7,9 +7,31 @@ import net.torocraft.torohealth.config.loader.ConfigLoader;
 import net.torocraft.torohealth.display.Hud;
 import net.torocraft.torohealth.util.RayTrace;
 
+
+/*
+ * 
+ * - look into TOML support
+ * 
+ * - in world healt bar range
+ * 
+ * - in world only when looking at entity
+ * 
+ * - improved particles (add heal, color support, and hang in air longer
+ * 
+ * - a inworld settings to show full bar stats
+ * 
+ * - remove inworld bar from main player
+ * 
+ * - remove inworld bar from entity display in hud
+ * 
+ * - hearts mode
+ * 
+ * 
+ */
 public class ToroHealth implements ModInitializer {
 
   public static final String MODID = "torohealth";
+
 
   public static Config CONFIG = new Config();
   public static Hud HUD = new Hud();
