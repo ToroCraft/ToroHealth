@@ -9,10 +9,7 @@ import net.torocraft.torohealth.util.RayTrace;
 
 
 /*
- * 
  * - look into TOML support
- * 
- * - in world healt bar range
  * 
  * - in world only when looking at entity
  * 
@@ -25,7 +22,6 @@ import net.torocraft.torohealth.util.RayTrace;
  * - remove inworld bar from entity display in hud
  * 
  * - hearts mode
- * 
  * 
  */
 public class ToroHealth implements ModInitializer {

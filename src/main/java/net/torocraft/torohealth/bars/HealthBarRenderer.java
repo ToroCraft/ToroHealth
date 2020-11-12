@@ -52,6 +52,10 @@ public class HealthBarRenderer {
       return;
     }
 
+    if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorld.distance) {
+      return;
+    }
+
     float scaleToGui = 0.025f;
     boolean sneaking = entity.isInSneakingPose();
     float height = entity.getHeight() + 0.5F - (sneaking ? 0.25F : 0.0F);
