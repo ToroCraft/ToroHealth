@@ -50,6 +50,7 @@ public class Config implements IConfig {
   public static class InWorld {
     public Mode mode = Mode.NONE;
     public float distance = 60f;
+    public boolean onlyWhenLookingAt = false;
   }
 
   @Override

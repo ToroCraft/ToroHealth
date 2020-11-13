@@ -41,7 +41,24 @@ public class HealthBarRenderer {
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
+
     MinecraftClient client = MinecraftClient.getInstance();
+
+    if (camera == null) {
+      camera = client.getEntityRenderDispatcher().camera;
+    }
+
+    if (camera == null) {
+      return;
+    }
+
+    if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealth.HUD.getEntity() != entity) {
+      return;
+    }
+
+    if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorld.distance) {
+      return;
+    }
 
     float scaleToGui = 0.025f;
     boolean sneaking = entity.isInSneakingPose();
