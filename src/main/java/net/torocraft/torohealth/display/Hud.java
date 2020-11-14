@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
+import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.AnchorPoint;
 
 public class Hud extends Screen {
@@ -16,6 +17,7 @@ public class Hud extends Screen {
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;
+  private Config config;
   private int age;
 
   public Hud() {
@@ -24,15 +26,16 @@ public class Hud extends Screen {
     barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
   }
 
-  public void draw(MatrixStack matrix) {
+  public void draw(MatrixStack matrix, Config config) {
+    this.config = config;
     float x = determineX();
     float y = determineY();
-    draw(matrix, x, y, ToroHealth.CONFIG.hud.scale);
+    draw(matrix, x, y, config.hud.scale);
   }
 
   private float determineX() {
-    float x = ToroHealth.CONFIG.hud.x;
-    AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
+    float x = config.hud.x;
+    AnchorPoint anchor = config.hud.anchorPoint;
     float wScreen = client.getWindow().getScaledWidth();
 
     switch (anchor) {
@@ -48,8 +51,8 @@ public class Hud extends Screen {
   }
 
   private float determineY() {
-    float y = ToroHealth.CONFIG.hud.y;
-    AnchorPoint anchor = ToroHealth.CONFIG.hud.anchorPoint;
+    float y = config.hud.y;
+    AnchorPoint anchor = config.hud.anchorPoint;
     float hScreen = client.getWindow().getScaledHeight();
 
     switch (anchor) {
@@ -71,7 +74,7 @@ public class Hud extends Screen {
       age = 0;
     }
 
-    if (entity == null && age > ToroHealth.CONFIG.hud.hideDelay) {
+    if (entity == null && age > config.hud.hideDelay) {
       setEntityWork(null);
     }
 
@@ -97,15 +100,15 @@ public class Hud extends Screen {
     matrix.push();
     matrix.scale(scale, scale, scale);
     matrix.translate(x - 10, y - 10, 0);
-    if (ToroHealth.CONFIG.hud.showSkin) {
+    if (config.hud.showSkin) {
       this.drawSkin(matrix);
     }
     matrix.translate(10, 10, 0);
-    if (ToroHealth.CONFIG.hud.showEntity) {
+    if (config.hud.showEntity) {
       entityDisplay.draw(matrix);
     }
     matrix.translate(44, 0, 0);
-    if (ToroHealth.CONFIG.hud.showBar) {
+    if (config.hud.showBar) {
       barDisplay.draw(matrix, entity);
     }
     matrix.pop();

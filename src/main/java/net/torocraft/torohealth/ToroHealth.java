@@ -15,10 +15,6 @@ import net.torocraft.torohealth.util.RayTrace;
  * 
  * - a inworld settings to show full bar stats
  * 
- * - remove inworld bar from main player
- * 
- * - remove inworld bar from entity display in hud
- * 
  * - hearts mode
  * 
  */
