@@ -44,6 +44,10 @@ public class HealthBarRenderer {
 
     MinecraftClient client = MinecraftClient.getInstance();
 
+    if (client.player == entity) {
+      return;
+    }
+
     if (camera == null) {
       camera = client.getEntityRenderDispatcher().camera;
     }
