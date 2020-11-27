@@ -13,8 +13,6 @@ import net.torocraft.torohealth.util.RayTrace;
  * 
  * - improved particles (add heal, color support, and hang in air longer
  * 
- * - a inworld settings to show full bar stats
- * 
  * - hearts mode
  * 
  */

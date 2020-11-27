@@ -51,6 +51,7 @@ public class Config implements IConfig {
     public Mode mode = Mode.NONE;
     public float distance = 60f;
     public boolean onlyWhenLookingAt = false;
+    public boolean onlyWhenHurt = false;
   }
 
   @Override
