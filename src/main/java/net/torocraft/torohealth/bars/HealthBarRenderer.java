@@ -40,13 +40,29 @@ public class HealthBarRenderer {
       return;
     }
 
-    Minecraft mc = Minecraft.getInstance();
+    Minecraft client = Minecraft.getInstance();
 
-    if (entity.getDistance(mc.player) > ToroHealth.CONFIG.inWorld.distance) {
+    if (client.player == entity) {
       return;
-    } ;
+    }
 
-    Quaternion camera = mc.getRenderManager().getCameraOrientation();
+    if (entity.getDistance(client.player) > ToroHealth.CONFIG.inWorld.distance) {
+      return;
+    }
+
+    Quaternion camera = client.getRenderManager().getCameraOrientation();
+
+    if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealthClient.HUD.getEntity() != entity) {
+      return;
+    }
+
+    if (ToroHealth.CONFIG.inWorld.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
+      return;
+    }
+
+    if (entity.getDistance(client.getRenderViewEntity()) > ToroHealth.CONFIG.inWorld.distance) {
+      return;
+    }
 
     float f = entity.getHeight() + 0.5F;
 
