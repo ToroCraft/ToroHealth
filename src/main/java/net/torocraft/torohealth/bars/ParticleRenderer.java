@@ -4,9 +4,9 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderer {
@@ -28,7 +28,7 @@ public class ParticleRenderer {
     double z = MathHelper.lerp((double) tickDelta, particle.zPrev, particle.z);
 
     ActiveRenderInfo camera = client.gameRenderer.getActiveRenderInfo();
-    Vector3d camPos = camera.getProjectedView();
+    Vec3d camPos = camera.getProjectedView();
     double camX = camPos.x;
     double camY = camPos.y;
     double camZ = camPos.z;
@@ -47,7 +47,7 @@ public class ParticleRenderer {
         GL11.GL_ZERO);
     RenderSystem.shadeModel(7425);
 
-    HealthBarRenderer.drawDamageNumber(matrix, particle.damage, 0, 0, 10);
+    HealthBarRenderer.drawDamageNumber(particle.damage, 0, 0, 10);
 
     RenderSystem.shadeModel(7424);
     RenderSystem.disableBlend();

@@ -1,15 +1,17 @@
 package net.torocraft.torohealth.display;
 
-
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 public class EntityDisplay {
 
@@ -29,9 +31,9 @@ public class EntityDisplay {
     updateScale();
   }
 
-  public void draw(MatrixStack matrix) {
+  public void draw() {
     if (entity != null) {
-      drawEntity(matrix, (int)xOffset, (int)yOffset, entityScale, -40, -20, entity);
+      drawEntity((int)xOffset, (int)yOffset, entityScale, -40, -20, entity);
     }
   }
 
@@ -52,13 +54,16 @@ public class EntityDisplay {
     }
   }
 
-  public static void drawEntity(MatrixStack matrixStack, int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
+  public static void drawEntity(int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
     float h = (float)Math.atan((double)(yaw / 40.0F));
     float l = (float)Math.atan((double)(pitch / 40.0F));
-    matrixStack.push();
-    matrixStack.translate((float)x, (float)y, 1050.0F);
-    matrixStack.scale(1.0F, 1.0F, -1.0F);
-    matrixStack.push();
+    RenderSystem.pushMatrix();
+
+    RenderSystem.translatef((float)x, (float)y, 1050.0F);
+    RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+
+    MatrixStack matrixStack = new MatrixStack();
+
     matrixStack.translate(0.0D, 0.0D, 1000.0D);
     matrixStack.scale((float)scale, (float)scale, (float)scale);
     Quaternion quaternion =  Vector3f.ZP.rotationDegrees(180.0F);
@@ -85,8 +90,7 @@ public class EntityDisplay {
 
     entityRenderDispatcher.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
     immediate.finish();
-    matrixStack.pop();
-    matrixStack.pop();
+    RenderSystem.popMatrix();
     entityRenderDispatcher.setRenderShadow(true);
     entity.renderYawOffset = m;
     entity.rotationYaw = n;

@@ -1,6 +1,6 @@
 modLoader="javafml"
 
-loaderVersion="[32,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license="GPL3"
 issueTrackerURL="https://github.com/ToroCraft/ToroHealth/issues"
 
@@ -18,13 +18,13 @@ issueTrackerURL="https://github.com/ToroCraft/ToroHealth/issues"
 [[dependencies.torohealth]]
   modId="forge"
   mandatory=true
-  versionRange="[32,)"
+  versionRange="[31,)"
   ordering="NONE"
   side="CLIENT"
 
 [[dependencies.torohealth]]
   modId="minecraft"
   mandatory=true
-  versionRange="[1.16.4]"
+  versionRange="[1.15.2]"
   ordering="NONE"
   side="CLIENT"

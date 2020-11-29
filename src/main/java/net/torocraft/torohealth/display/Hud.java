@@ -25,10 +25,10 @@ public class Hud extends Screen {
     barDisplay = new BarDisplay(Minecraft.getInstance(), this);
   }
 
-  public void draw(MatrixStack matrix) {
+  public void draw() {
     float x = determineX();
     float y = determineY();
-    draw(matrix, x, y, ToroHealth.CONFIG.hud.scale);
+    draw(x, y, ToroHealth.CONFIG.hud.scale);
   }
 
   private float determineX() {
@@ -90,37 +90,37 @@ public class Hud extends Screen {
     return entity;
   }
 
-  private void draw(MatrixStack matrix, float x, float y, float scale) {
+  private void draw(float x, float y, float scale) {
     if (entity == null) {
       return;
     }
 
-    matrix.push();
-    matrix.scale(scale, scale, scale);
-    matrix.translate(x - 10, y - 10, 0);
+    RenderSystem.pushMatrix();
+    RenderSystem.scalef(scale, scale, scale);
+    RenderSystem.translatef(x - 10, y - 10, 0);
     if (ToroHealth.CONFIG.hud.showSkin) {
-      this.drawSkin(matrix);
+      this.drawSkin();
     }
-    matrix.translate(10, 10, 0);
+    RenderSystem.translatef(10, 10, 0);
     if (ToroHealth.CONFIG.hud.showEntity) {
-      entityDisplay.draw(matrix);
+      entityDisplay.draw();
     }
-    matrix.translate(44, 0, 0);
+    RenderSystem.translatef(44, 0, 0);
     if (ToroHealth.CONFIG.hud.showBar) {
-      barDisplay.draw(matrix, entity);
+      barDisplay.draw(entity);
     }
-    matrix.pop();
+    RenderSystem.popMatrix();
   }
 
-  public void drawTexture(MatrixStack matrices, int x, int y, float u, float v, int width,
+  public void drawTexture(int x, int y, float u, float v, int width,
       int height, int textureWidth, int textureHeight) {
-    blit(matrices, x, y, u, v, width, height, textureWidth, textureHeight);
+    blit(x, y, u, v, width, height, textureWidth, textureHeight);
   }
 
-  private void drawSkin(MatrixStack matrix) {
+  private void drawSkin() {
     Minecraft.getInstance().getTextureManager().bindTexture(BACKGROUND_TEXTURE);
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     int w = 160, h = 60;
-    drawTexture(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
+    drawTexture(0, 0, 0.0f, 0.0f, w, h, w, h);
   }
 }

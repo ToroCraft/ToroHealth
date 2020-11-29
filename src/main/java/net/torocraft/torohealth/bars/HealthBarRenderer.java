@@ -4,13 +4,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Quaternion;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.ToroHealthClient;
 import net.torocraft.torohealth.config.Config;
@@ -64,7 +64,7 @@ public class HealthBarRenderer {
         GL11.GL_ZERO);
     RenderSystem.shadeModel(7425);
 
-    render(matrix, entity, 0, 0, FULL_SIZE, true);
+    render(entity, 0, 0, FULL_SIZE, true);
 
     RenderSystem.shadeModel(7424);
     RenderSystem.disableBlend();
@@ -73,7 +73,7 @@ public class HealthBarRenderer {
     matrix.pop();
   }
 
-  public static void render(MatrixStack matrix, LivingEntity entity, double x, double y,
+  public static void render(LivingEntity entity, double x, double y,
       float width, boolean inWorld) {
     Relation relation = EntityUtil.determineRelation(entity);
 
@@ -88,21 +88,20 @@ public class HealthBarRenderer {
     float percent2 = state.previousHealthDisplay / entity.getMaxHealth();
     int zOffset = 0;
 
-    Matrix4f m4f = matrix.getLast().getMatrix();
-    drawBar(m4f, x, y, width, 1, DARK_GRAY, zOffset++, inWorld);
-    drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
-    drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
+    drawBar(x, y, width, 1, DARK_GRAY, zOffset++, inWorld);
+    drawBar(x, y, width, percent2, color2, zOffset++, inWorld);
+    drawBar(x, y, width, percent, color, zOffset, inWorld);
 
     if (!inWorld) {
       if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
-        drawDamageNumber(matrix, state.previousHealth - entity.getHealth(), x, y, width);
+        drawDamageNumber(state.previousHealth - entity.getHealth(), x, y, width);
       } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
-        drawDamageNumber(matrix, state.lastDmg, x, y, width);
+        drawDamageNumber(state.lastDmg, x, y, width);
       }
     }
   }
 
-  public static void drawDamageNumber(MatrixStack matrix, float dmg, double x, double y,
+  public static void drawDamageNumber(float dmg, double x, double y,
       float width) {
     int i = Math.round(dmg);
     if (i < 1) {
@@ -111,11 +110,10 @@ public class HealthBarRenderer {
     String s = Integer.toString(i);
     Minecraft minecraft = Minecraft.getInstance();
     int sw = minecraft.fontRenderer.getStringWidth(s);
-    minecraft.fontRenderer.drawString(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5,
-        0xd00000);
+    minecraft.fontRenderer.drawString(s, (int) (x + (width / 2) - sw), (int) y + 5, 0xd00000);
   }
 
-  private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent,
+  private static void drawBar(double x, double y, float width, float percent,
       int color, int zOffset, boolean inWorld) {
     float c = 0.00390625F;
     int u = 0;
@@ -141,13 +139,13 @@ public class HealthBarRenderer {
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder buffer = tessellator.getBuffer();
     buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-    buffer.pos(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount).tex(u * c, v * c)
+    buffer.pos((float) (-half + x), (float) y, zOffset * zOffsetAmount).tex(u * c, v * c)
         .endVertex();
-    buffer.pos(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
+    buffer.pos((float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
         .tex(u * c, (v + vh) * c).endVertex();
-    buffer.pos(matrix4f, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
+    buffer.pos((float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
         .tex((u + uw) * c, (v + vh) * c).endVertex();
-    buffer.pos(matrix4f, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
+    buffer.pos((float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
         .tex(((u + uw) * c), v * c).endVertex();
     tessellator.draw();
   }
