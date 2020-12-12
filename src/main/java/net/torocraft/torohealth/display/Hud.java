@@ -17,7 +17,7 @@ public class Hud extends Screen {
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;
-  private Config config;
+  private Config config = new Config();
   private int age;
 
   public Hud() {
@@ -28,6 +28,9 @@ public class Hud extends Screen {
 
   public void draw(MatrixStack matrix, Config config) {
     this.config = config;
+    if (this.config == null) {
+      this.config = new Config();
+    }
     float x = determineX();
     float y = determineY();
     draw(matrix, x, y, config.hud.scale);
