@@ -100,7 +100,7 @@ public class HealthBarRenderer {
 
     BarState state = BarStates.getState(entity);
 
-    float percent = entity.getHealth() / entity.getMaxHealth();
+    float percent = Math.min(1, entity.getHealth() / entity.getMaxHealth());
     float percent2 = state.previousHealthDisplay / entity.getMaxHealth();
     int zOffset = 0;
 
@@ -120,15 +120,16 @@ public class HealthBarRenderer {
 
   public static void drawDamageNumber(MatrixStack matrix, float dmg, double x, double y,
       float width) {
-    int i = Math.round(dmg);
-    if (i < 1) {
+    int i = Math.abs(Math.round(dmg));
+    if (i == 0) {
       return;
     }
     String s = Integer.toString(i);
     Minecraft minecraft = Minecraft.getInstance();
     int sw = minecraft.fontRenderer.getStringWidth(s);
-    minecraft.fontRenderer.drawString(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5,
-        0xd00000);
+    int color =
+        dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
+    minecraft.fontRenderer.drawString(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
   }
 
   private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent,

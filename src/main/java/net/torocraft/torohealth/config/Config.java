@@ -35,8 +35,8 @@ public class Config implements IConfig {
 
   public static class Particle {
     public boolean show = true;
-    // public Integer damageColor = 0xff0000;
-    // public Integer healColor = 0x00ff00;
+    public Integer damageColor = 0xff0000;
+    public Integer healColor = 0x00ff00;
   }
 
   public static class Bar {
