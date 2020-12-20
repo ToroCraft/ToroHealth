@@ -100,7 +100,7 @@ public class HealthBarRenderer {
 
     BarState state = BarStates.getState(entity);
 
-    float percent = Math.min(1, entity.getHealth() / entity.getMaxHealth());
+    float percent = Math.min(1, state.health / entity.getMaxHealth());
     float percent2 = state.previousHealthDisplay / entity.getMaxHealth();
     int zOffset = 0;
 
@@ -111,14 +111,14 @@ public class HealthBarRenderer {
 
     if (!inWorld) {
       if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
-        drawDamageNumber(matrix, state.previousHealth - entity.getHealth(), x, y, width);
+        drawDamageNumber(matrix, state.lastDmgCumulative, x, y, width);
       } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
         drawDamageNumber(matrix, state.lastDmg, x, y, width);
       }
     }
   }
 
-  public static void drawDamageNumber(MatrixStack matrix, float dmg, double x, double y,
+  public static void drawDamageNumber(MatrixStack matrix, int dmg, double x, double y,
       float width) {
     int i = Math.abs(Math.round(dmg));
     if (i == 0) {
