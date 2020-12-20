@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.GhastEntity;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
@@ -31,7 +32,7 @@ public class EntityDisplay {
 
   public void draw(MatrixStack matrix) {
     if (entity != null) {
-      drawEntity(matrix, (int)xOffset, (int)yOffset, entityScale, -40, -20, entity);
+      drawEntity(matrix, (int) xOffset, (int) yOffset, entityScale, -40, -20, entity);
     }
   }
 
@@ -44,6 +45,10 @@ public class EntityDisplay {
     int scaleX = MathHelper.ceil(RENDER_WIDTH / entity.getWidth());
     entityScale = Math.min(scaleX, scaleY);
 
+    if (entity instanceof ChickenEntity) {
+      entityScale *= 0.7;
+    }
+
     xOffset = WIDTH / 2;
 
     yOffset = HEIGHT / 2 + RENDER_HEIGHT / 2;
@@ -52,24 +57,25 @@ public class EntityDisplay {
     }
   }
 
-  public static void drawEntity(MatrixStack matrixStack, int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
-    float h = (float)Math.atan((double)(yaw / 40.0F));
-    float l = (float)Math.atan((double)(pitch / 40.0F));
+  public static void drawEntity(MatrixStack matrixStack, int x, int y, int scale, float yaw,
+      float pitch, LivingEntity entity) {
+    float h = (float) Math.atan((double) (yaw / 40.0F));
+    float l = (float) Math.atan((double) (pitch / 40.0F));
     matrixStack.push();
-    matrixStack.translate((float)x, (float)y, 1050.0F);
+    matrixStack.translate((float) x, (float) y, 1050.0F);
     matrixStack.scale(1.0F, 1.0F, -1.0F);
     matrixStack.push();
     matrixStack.translate(0.0D, 0.0D, 1000.0D);
-    matrixStack.scale((float)scale, (float)scale, (float)scale);
-    Quaternion quaternion =  Vector3f.ZP.rotationDegrees(180.0F);
+    matrixStack.scale((float) scale, (float) scale, (float) scale);
+    Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
     Quaternion quaternion2 = Vector3f.XP.rotationDegrees(l * 20.0F);
     quaternion.multiply(quaternion2);
     matrixStack.rotate(quaternion);
-    float m = entity.renderYawOffset;  //bodyYaw;
-    float n = entity.rotationYaw;  //yaw;
-    float o = entity.rotationPitch;  //pitch;
-    float p = entity.prevRotationYawHead;  //prevHeadYaw;
-    float q = entity.rotationYawHead;  //headYaw;
+    float m = entity.renderYawOffset; // bodyYaw;
+    float n = entity.rotationYaw; // yaw;
+    float o = entity.rotationPitch; // pitch;
+    float p = entity.prevRotationYawHead; // prevHeadYaw;
+    float q = entity.rotationYawHead; // headYaw;
     entity.renderYawOffset = 180.0F + h * 20.0F;
     entity.rotationYaw = 180.0F + h * 40.0F;
     entity.rotationPitch = -l * 20.0F;
@@ -79,11 +85,14 @@ public class EntityDisplay {
     quaternion2.conjugate();
     entityRenderDispatcher.setCameraOrientation(quaternion2);
     entityRenderDispatcher.setRenderShadow(false);
-    //VertexConsumerProvider.Immediate immediate = Minecraft.getInstance().getBufferBuilders().getEntityVertexConsumers();
+    // VertexConsumerProvider.Immediate immediate =
+    // Minecraft.getInstance().getBufferBuilders().getEntityVertexConsumers();
 
-    IRenderTypeBuffer.Impl immediate = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+    IRenderTypeBuffer.Impl immediate =
+        Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
 
-    entityRenderDispatcher.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
+    entityRenderDispatcher.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack,
+        immediate, 15728880);
     immediate.finish();
     matrixStack.pop();
     matrixStack.pop();
@@ -93,5 +102,5 @@ public class EntityDisplay {
     entity.rotationPitch = o;
     entity.prevRotationYawHead = p;
     entity.rotationYawHead = q;
- }
+  }
 }
