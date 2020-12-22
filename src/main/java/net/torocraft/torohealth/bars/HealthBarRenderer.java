@@ -90,6 +90,7 @@ public class HealthBarRenderer {
 
     RenderSystem.disableLighting();
     RenderSystem.enableDepthTest();
+    RenderSystem.enableFog();
     RenderSystem.disableAlphaTest();
     RenderSystem.enableBlend();
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
