@@ -47,6 +47,10 @@ public class EntityDisplay {
     if (entity instanceof ChickenEntity) {
       entityScale *= 0.7;
     }
+    
+    if (entity instanceof VillagerEntity && entity.isSleeping()) {
+      entityScale = entity.isBaby() ? 31 : 16;
+    }
 
     xOffset = WIDTH / 2;
 
