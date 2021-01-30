@@ -14,7 +14,7 @@
   },
   "license": "GPL3",
   "icon": "assets/torohealth/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "net.torocraft.torohealth.ToroHealth"
