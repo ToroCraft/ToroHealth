@@ -17,7 +17,7 @@ public class BarStates {
   public static BarState getState(LivingEntity entity) {
     int id = entity.getEntityId();
     BarState state = STATES.get(id);
-    if (state == null) {
+    if (state == null || state.entity != entity) {
       state = new BarState(entity);
       STATES.put(id, state);
     }
