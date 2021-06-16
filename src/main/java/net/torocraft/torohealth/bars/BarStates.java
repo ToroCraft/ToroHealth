@@ -15,7 +15,7 @@ public class BarStates {
   private static int tickCount = 0;
 
   public static BarState getState(LivingEntity entity) {
-    int id = entity.getEntityId();
+    int id = entity.getId();
     BarState state = STATES.get(id);
     if (state == null) {
       state = new BarState(entity);

@@ -80,8 +80,8 @@ public class RayTrace implements BlockView {
   }
 
   private RaycastContext setupRayTraceContext(PlayerEntity player, double distance, RaycastContext.FluidHandling fluidHandling) {
-    float pitch = player.pitch;
-    float yaw = player.yaw;
+    float pitch = player.getPitch();
+    float yaw = player.getYaw();
     Vec3d fromPos = player.getCameraPosVec(1.0F);
     float float_3 = MathHelper.cos(-yaw * 0.017453292F - 3.1415927F);
     float float_4 = MathHelper.sin(-yaw * 0.017453292F - 3.1415927F);
@@ -95,7 +95,7 @@ public class RayTrace implements BlockView {
 
   @Override
   public BlockHitResult raycast(RaycastContext context) {
-    return BlockView.raycast(context, (c, pos) -> {
+    return BlockView.raycast(context.getStart(),context.getEnd(),context, (c, pos) -> {
       BlockState block = this.getBlockState(pos);
       if (!block.isOpaque()) {
         return null;
@@ -107,4 +107,14 @@ public class RayTrace implements BlockView {
       return BlockHitResult.createMissed(c.getEnd(), Direction.getFacing(v.x, v.y, v.z), new BlockPos(c.getEnd()));
     });
   }
+
+@Override
+public int getBottomY() {
+	return 0;
+}
+
+@Override
+public int getHeight() {
+	return 0;
+}
 }

@@ -112,8 +112,8 @@ public class Hud extends Screen {
   }
 
   private void drawSkin(MatrixStack matrix) {
-    MinecraftClient.getInstance().getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-    RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+	RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     int w = 160, h = 60;
     drawTexture(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
   }

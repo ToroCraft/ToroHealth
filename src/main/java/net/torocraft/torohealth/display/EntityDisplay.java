@@ -4,11 +4,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 public class EntityDisplay {
 
@@ -60,20 +60,20 @@ public class EntityDisplay {
     matrixStack.push();
     matrixStack.translate(0.0D, 0.0D, 1000.0D);
     matrixStack.scale((float)scale, (float)scale, (float)scale);
-    Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-    Quaternion quaternion2 = Vector3f.POSITIVE_X.getDegreesQuaternion(l * 20.0F);
+    Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+    Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(l * 20.0F);
     quaternion.hamiltonProduct(quaternion2);
     matrixStack.multiply(quaternion);
     float m = entity.bodyYaw;
-    float n = entity.yaw;
-    float o = entity.pitch;
+    float n = entity.getYaw();
+    float o = entity.getPitch();
     float p = entity.prevHeadYaw;
     float q = entity.headYaw;
     entity.bodyYaw = 180.0F + h * 20.0F;
-    entity.yaw = 180.0F + h * 40.0F;
-    entity.pitch = -l * 20.0F;
-    entity.headYaw = entity.yaw;
-    entity.prevHeadYaw = entity.yaw;
+    entity.setYaw(180.0F + h * 40.0F);
+    entity.setPitch(-l * 20.0F);
+    entity.headYaw = entity.getYaw();
+    entity.prevHeadYaw = entity.getYaw();
     EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher(); //  getEntityRenderManager();
     quaternion2.conjugate();
     entityRenderDispatcher.setRotation(quaternion2);
@@ -85,8 +85,8 @@ public class EntityDisplay {
     matrixStack.pop();
     entityRenderDispatcher.setRenderShadows(true);
     entity.bodyYaw = m;
-    entity.yaw = n;
-    entity.pitch = o;
+    entity.setYaw(n);
+    entity.setPitch(o);
     entity.prevHeadYaw = p;
     entity.headYaw = q;
  }

@@ -1,6 +1,6 @@
 package net.torocraft.torohealth.display;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -26,11 +26,11 @@ public class BarDisplay {
   public void draw(MatrixStack matrix, LivingEntity entity) {
     int xOffset = 0;
 
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     HealthBarRenderer.render(matrix, entity, 63, 14, 130, false);
     String name = getEntityName(entity);
     String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth();
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     DrawableHelper.drawStringWithShadow(matrix, mc.textRenderer, name, xOffset, (int) 2, 16777215);
 
@@ -43,7 +43,6 @@ public class BarDisplay {
     mc.textRenderer.drawWithShadow(matrix, health, xOffset, 2, 0xe0e0e0);
     xOffset += mc.textRenderer.getWidth(health) + 5;
 
-
     int armor = entity.getArmor();
 
     if (armor > 0) {
@@ -54,12 +53,12 @@ public class BarDisplay {
   }
 
   private void renderArmorIcon(MatrixStack matrix, int x, int y) {
-    mc.getTextureManager().bindTexture(ICON_TEXTURES);
+	RenderSystem.setShaderTexture(0, ICON_TEXTURES);
     gui.drawTexture(matrix, x, y, 34, 9, 9, 9);
   }
 
   private void renderHeartIcon(MatrixStack matrix, int x, int y) {
-    mc.getTextureManager().bindTexture(ICON_TEXTURES);
+	RenderSystem.setShaderTexture(0, ICON_TEXTURES);
     gui.drawTexture(matrix, x, y, 16 + 36, 0, 9, 9);
   }
 }

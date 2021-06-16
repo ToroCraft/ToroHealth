@@ -3,7 +3,7 @@
   "id": "torohealth",
   "version": "${version}",
   "name": "ToroHealth Damage Indicators",
-  "description": "Displays damage indicators and health bars for all entities.",
+  "description": "Displays damage indicators and health bars for all entities.\nUnofficial port to 1.17 by Tomatobird8",
   "authors": [
     "ToroCraft"
   ],
@@ -32,6 +32,6 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.17.x"
   }
 }
