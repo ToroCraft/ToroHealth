@@ -6,6 +6,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.torocraft.torohealth.bars.HealthBarRenderer;
 
 public class BarDisplay {
@@ -29,7 +30,9 @@ public class BarDisplay {
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     HealthBarRenderer.render(matrix, entity, 63, 14, 130, false);
     String name = getEntityName(entity);
-    String health = (int) Math.ceil(entity.getHealth()) + "/" + (int) entity.getMaxHealth();
+    int healthMax = MathHelper.ceil(entity.getMaxHealth());
+    int healthCur = Math.min(MathHelper.ceil(entity.getHealth()), healthMax);
+    String healthText = healthCur + "/" + healthMax;
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     DrawableHelper.drawStringWithShadow(matrix, mc.textRenderer, name, xOffset, (int) 2, 16777215);
@@ -40,8 +43,8 @@ public class BarDisplay {
     renderHeartIcon(matrix, xOffset, (int) 1);
     xOffset += 10;
 
-    mc.textRenderer.drawWithShadow(matrix, health, xOffset, 2, 0xe0e0e0);
-    xOffset += mc.textRenderer.getWidth(health) + 5;
+    mc.textRenderer.drawWithShadow(matrix, healthText, xOffset, 2, 0xe0e0e0);
+    xOffset += mc.textRenderer.getWidth(healthText) + 5;
 
     int armor = entity.getArmor();
 

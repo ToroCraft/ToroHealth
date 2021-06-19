@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 import net.torocraft.torohealth.ToroHealth;
 
 public class BarParticle {
-  public float damage;
+  public int damage;
 
   public double x = 0;
   public double y = 0;
@@ -25,7 +25,7 @@ public class BarParticle {
   public double vy = 0;
   public double vz = 0;
 
-  public BarParticle(Entity entity, float damage) {
+  public BarParticle(Entity entity, int damage) {
     MinecraftClient client = MinecraftClient.getInstance();
     Vec3d entityLocation = entity.getPos().add(0, entity.getHeight() / 2, 0);
     Vec3d cameraLocation = client.gameRenderer.getCamera().getPos();

@@ -35,8 +35,8 @@ public class Config implements IConfig {
 
   public static class Particle {
     public boolean show = true;
-    // public Integer damageColor = 0xff0000;
-    // public Integer healColor = 0x00ff00;
+    public Integer damageColor = 0xff0000;
+    public Integer healColor = 0x00ff00;
   }
 
   public static class Bar {
@@ -51,6 +51,7 @@ public class Config implements IConfig {
     public Mode mode = Mode.NONE;
     public float distance = 60f;
     public boolean onlyWhenLookingAt = false;
+    public boolean onlyWhenHurt = false;
   }
 
   @Override

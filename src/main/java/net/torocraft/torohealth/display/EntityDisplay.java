@@ -6,6 +6,8 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
@@ -42,6 +44,14 @@ public class EntityDisplay {
     int scaleY = MathHelper.ceil(RENDER_HEIGHT / entity.getHeight());
     int scaleX = MathHelper.ceil(RENDER_WIDTH / entity.getWidth());
     entityScale = Math.min(scaleX, scaleY);
+    
+    if (entity instanceof ChickenEntity) {
+        entityScale *= 0.7;
+      }
+    
+    if (entity instanceof VillagerEntity && entity.isSleeping()) {
+        entityScale = entity.isBaby() ? 31 : 16;
+      }
 
     xOffset = WIDTH / 2;
 
