@@ -9,15 +9,11 @@ import net.torocraft.torohealth.util.RayTrace;
 
 
 /*
+ * - fix bar shaders
+ * 
  * - look into TOML support
  * 
- * - improved particles (add heal, color support, and hang in air longer
- * 
- * - a inworld settings to show full bar stats
- * 
- * - remove inworld bar from main player
- * 
- * - remove inworld bar from entity display in hud
+ * - improved particles (add heal, color support, and hang in air longer)
  * 
  * - hearts mode
  * 

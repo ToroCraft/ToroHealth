@@ -3,6 +3,7 @@ package net.torocraft.torohealth.bars;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -39,6 +40,7 @@ public class ParticleRenderer {
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
     //TODO
+    RenderSystem.setShader(GameRenderer::getPositionColorShader);
     //RenderSystem.disableLighting();
     RenderSystem.enableDepthTest();
     //RenderSystem.disableAlphaTest();
