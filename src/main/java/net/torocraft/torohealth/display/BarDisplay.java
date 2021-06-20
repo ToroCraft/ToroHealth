@@ -1,8 +1,9 @@
 package net.torocraft.torohealth.display;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
@@ -27,13 +28,17 @@ public class BarDisplay {
   public void draw(MatrixStack matrix, LivingEntity entity) {
     int xOffset = 0;
 
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShaderTexture(0, ICON_TEXTURES);
+    RenderSystem.enableBlend();
+
     HealthBarRenderer.render(matrix, entity, 63, 14, 130, false);
     String name = getEntityName(entity);
     int healthMax = MathHelper.ceil(entity.getMaxHealth());
     int healthCur = Math.min(MathHelper.ceil(entity.getHealth()), healthMax);
     String healthText = healthCur + "/" + healthMax;
-    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     DrawableHelper.drawStringWithShadow(matrix, mc.textRenderer, name, xOffset, (int) 2, 16777215);
 
@@ -46,7 +51,6 @@ public class BarDisplay {
     mc.textRenderer.drawWithShadow(matrix, healthText, xOffset, 2, 0xe0e0e0);
     xOffset += mc.textRenderer.getWidth(healthText) + 5;
 
-
     int armor = entity.getArmor();
 
     if (armor > 0) {
@@ -57,12 +61,12 @@ public class BarDisplay {
   }
 
   private void renderArmorIcon(MatrixStack matrix, int x, int y) {
-    mc.getTextureManager().bindTexture(ICON_TEXTURES);
+    RenderSystem.setShaderTexture(0, ICON_TEXTURES);
     gui.drawTexture(matrix, x, y, 34, 9, 9, 9);
   }
 
   private void renderHeartIcon(MatrixStack matrix, int x, int y) {
-    mc.getTextureManager().bindTexture(ICON_TEXTURES);
+    RenderSystem.setShaderTexture(0, ICON_TEXTURES);
     gui.drawTexture(matrix, x, y, 16 + 36, 0, 9, 9);
   }
 }

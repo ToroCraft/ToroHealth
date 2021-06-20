@@ -7,15 +7,6 @@ import net.torocraft.torohealth.config.loader.ConfigLoader;
 import net.torocraft.torohealth.display.Hud;
 import net.torocraft.torohealth.util.RayTrace;
 
-
-/*
- * - look into TOML support
- * 
- * - improved particles (add heal, color support, and hang in air longer
- * 
- * - hearts mode
- * 
- */
 public class ToroHealth implements ModInitializer {
 
   public static final String MODID = "torohealth";

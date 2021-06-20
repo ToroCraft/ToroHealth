@@ -4,15 +4,17 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.InWorld;
@@ -84,24 +86,18 @@ public class HealthBarRenderer {
 
     matrix.push();
     matrix.translate(x - camX, (y + height) - camY, z - camZ);
-    matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+    matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+    matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-    RenderSystem.disableLighting();
+    RenderSystem.setShader(GameRenderer::getPositionColorShader);
     RenderSystem.enableDepthTest();
-    RenderSystem.enableFog();
-    RenderSystem.disableAlphaTest();
     RenderSystem.enableBlend();
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
         GL11.GL_ZERO);
-    RenderSystem.shadeModel(7425);
 
     render(matrix, entity, 0, 0, FULL_SIZE, true);
-
-    RenderSystem.shadeModel(7424);
     RenderSystem.disableBlend();
-    RenderSystem.enableAlphaTest();
 
     matrix.pop();
   }
@@ -166,8 +162,10 @@ public class HealthBarRenderer {
     float b = (color >> 8 & 255) / 255.0F;
     float a = (color & 255) / 255.0F;
 
-    MinecraftClient.getInstance().getTextureManager().bindTexture(GUI_BARS_TEXTURES);
-    RenderSystem.color4f(r, g, b, a);
+    RenderSystem.setShaderColor(r, g, b, a);
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
+    RenderSystem.enableBlend();
 
     float half = width / 2;
 
@@ -175,7 +173,7 @@ public class HealthBarRenderer {
 
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder buffer = tessellator.getBuffer();
-    buffer.begin(7, VertexFormats.POSITION_TEXTURE);
+    buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
     buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
         .texture(u * c, v * c).next();
     buffer.vertex(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
