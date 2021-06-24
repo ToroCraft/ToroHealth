@@ -99,7 +99,12 @@ public class Hud extends Screen {
     if (entity == null) {
       return;
     }
-
+    
+    if(client.world.getEntityById(entity.getEntityId()) != entity) {
+      setEntityWork(null);
+      return;
+    }
+    
     matrix.push();
     matrix.scale(scale, scale, scale);
     matrix.translate(x - 10, y - 10, 0);
