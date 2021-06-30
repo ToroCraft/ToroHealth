@@ -1,12 +1,18 @@
 package net.torocraft.torohealth.display;
 
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 public class EntityDisplay {
 
@@ -28,7 +34,7 @@ public class EntityDisplay {
 
   public void draw(MatrixStack matrix) {
     if (entity != null) {
-      InventoryScreen.drawEntity((int) xOffset + 4, (int) yOffset + 3, entityScale, -80, -20,
+      drawEntity(matrix, (int) xOffset, (int) yOffset, entityScale, -80, -20,
           entity);
     }
   }
@@ -56,6 +62,61 @@ public class EntityDisplay {
     if (entity instanceof GhastEntity) {
       yOffset -= 10;
     }
+  }
+
+  /**
+   * copied from InventoryScreen.drawEntity() to expose the matrixStack
+   */
+  public static void drawEntity(MatrixStack matrixStack2, int x, int y, int size, float mouseX,
+      float mouseY, LivingEntity entity) {
+    float f = (float) Math.atan((double) (mouseX / 40.0F));
+    float g = (float) Math.atan((double) (mouseY / 40.0F));
+    MatrixStack matrixStack = RenderSystem.getModelViewStack();
+    matrixStack.push();
+    matrixStack.translate((double) x, (double) y, 1050.0D);
+    matrixStack.scale(1.0F, 1.0F, -1.0F);
+    RenderSystem.applyModelViewMatrix();
+    // MatrixStack matrixStack2 = new MatrixStack();
+    matrixStack2.push();
+    matrixStack2.translate(0.0D, 0.0D, 1000.0D);
+    matrixStack2.scale((float) size, (float) size, (float) size);
+    Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+    Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
+    quaternion.hamiltonProduct(quaternion2);
+    matrixStack2.multiply(quaternion);
+    float h = entity.bodyYaw;
+    float i = entity.getYaw();
+    float j = entity.getPitch();
+    float k = entity.prevHeadYaw;
+    float l = entity.headYaw;
+    entity.bodyYaw = 180.0F + f * 20.0F;
+    entity.setYaw(180.0F + f * 40.0F);
+    entity.setPitch(-g * 20.0F);
+    entity.headYaw = entity.getYaw();
+    entity.prevHeadYaw = entity.getYaw();
+    DiffuseLighting.method_34742();
+    EntityRenderDispatcher entityRenderDispatcher =
+        MinecraftClient.getInstance().getEntityRenderDispatcher();
+    quaternion2.conjugate();
+    entityRenderDispatcher.setRotation(quaternion2);
+    entityRenderDispatcher.setRenderShadows(false);
+    VertexConsumerProvider.Immediate immediate =
+        MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+    RenderSystem.runAsFancy(() -> {
+      entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack2, immediate,
+          15728880);
+    });
+    immediate.draw();
+    entityRenderDispatcher.setRenderShadows(true);
+    entity.bodyYaw = h;
+    entity.setYaw(i);
+    entity.setPitch(j);
+    entity.prevHeadYaw = k;
+    entity.headYaw = l;
+    matrixStack.pop();
+    matrixStack2.pop();
+    RenderSystem.applyModelViewMatrix();
+    DiffuseLighting.enableGuiDepthLighting();
   }
 
 }
