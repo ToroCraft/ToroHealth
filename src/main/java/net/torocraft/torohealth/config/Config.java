@@ -31,6 +31,7 @@ public class Config implements IConfig {
     public boolean showEntity = true;
     public boolean showBar = true;
     public boolean showSkin = true;
+    public boolean onlyWhenHurt = false;
   }
 
   public static class Particle {

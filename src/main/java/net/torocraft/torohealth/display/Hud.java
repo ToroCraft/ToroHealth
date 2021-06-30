@@ -99,6 +99,10 @@ public class Hud extends Screen {
     if (entity == null) {
       return;
     }
+    
+    if (config.hud.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
+      return;
+    }
 
     matrix.push();
     matrix.scale(scale, scale, scale);
