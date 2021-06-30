@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
+import net.torocraft.torohealth.ToroHealth;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderer {
@@ -19,6 +20,11 @@ public class ParticleRenderer {
   }
 
   private static void renderParticle(MatrixStack matrix, BarParticle particle, Camera camera) {
+    double distanceSquared = camera.getPos().squaredDistanceTo(particle.x, particle.y, particle.z);
+    if (distanceSquared > ToroHealth.CONFIG.particle.distanceSquared) {
+      return;
+    }
+
     float scaleToGui = 0.025f;
 
     MinecraftClient client = MinecraftClient.getInstance();

@@ -38,6 +38,8 @@ public class Config implements IConfig {
     public boolean show = true;
     public Integer damageColor = 0xff0000;
     public Integer healColor = 0x00ff00;
+    public int distance = 60;
+    public transient int distanceSquared = 0;
   }
 
   public static class Bar {
@@ -57,6 +59,7 @@ public class Config implements IConfig {
 
   @Override
   public void update() {
+    particle.distanceSquared = particle.distance * particle.distance;
   }
 
   @Override
