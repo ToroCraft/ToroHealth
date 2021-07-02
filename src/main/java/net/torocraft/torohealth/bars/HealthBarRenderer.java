@@ -27,7 +27,7 @@ public class HealthBarRenderer {
 
   private static final Identifier GUI_BARS_TEXTURES =
       new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
-  private static final int DARK_GRAY = 0x808080FF;
+  private static final int DARK_GRAY = 0x808080;
   private static final float FULL_SIZE = 40;
 
   private static InWorld getConfig() {
@@ -157,12 +157,11 @@ public class HealthBarRenderer {
     double size = percent * width;
     double h = inWorld ? 4 : 6;
 
-    float r = (color >> 24 & 255) / 255.0F;
-    float g = (color >> 16 & 255) / 255.0F;
-    float b = (color >> 8 & 255) / 255.0F;
-    float a = (color & 255) / 255.0F;
+    float r = (color >> 16 & 255) / 255.0F;
+    float g = (color >> 8 & 255) / 255.0F;
+    float b = (color & 255) / 255.0F;
 
-    RenderSystem.setShaderColor(r, g, b, a);
+    RenderSystem.setShaderColor(r, g, b, 1);
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
     RenderSystem.enableBlend();
