@@ -27,6 +27,9 @@ public class Hud extends Screen {
   }
 
   public void draw(MatrixStack matrix, Config config) {
+    if (this.client.options.debugEnabled) {
+      return;
+    }
     this.config = config;
     if (this.config == null) {
       this.config = new Config();
