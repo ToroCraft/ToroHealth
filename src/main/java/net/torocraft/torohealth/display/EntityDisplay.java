@@ -32,10 +32,9 @@ public class EntityDisplay {
     updateScale();
   }
 
-  public void draw(MatrixStack matrix) {
+  public void draw(MatrixStack matrix, float scale) {
     if (entity != null) {
-      drawEntity(matrix, (int) xOffset, (int) yOffset, entityScale, -80, -20,
-          entity);
+      drawEntity(matrix, (int) xOffset, (int) yOffset, entityScale, -80, -20, entity, scale);
     }
   }
 
@@ -68,15 +67,14 @@ public class EntityDisplay {
    * copied from InventoryScreen.drawEntity() to expose the matrixStack
    */
   public static void drawEntity(MatrixStack matrixStack2, int x, int y, int size, float mouseX,
-      float mouseY, LivingEntity entity) {
+      float mouseY, LivingEntity entity, float scale) {
     float f = (float) Math.atan((double) (mouseX / 40.0F));
     float g = (float) Math.atan((double) (mouseY / 40.0F));
     MatrixStack matrixStack = RenderSystem.getModelViewStack();
     matrixStack.push();
-    matrixStack.translate((double) x, (double) y, 1050.0D);
+    matrixStack.translate((double) x * scale, (double) y * scale, 1050.0D * scale);
     matrixStack.scale(1.0F, 1.0F, -1.0F);
     RenderSystem.applyModelViewMatrix();
-    // MatrixStack matrixStack2 = new MatrixStack();
     matrixStack2.push();
     matrixStack2.translate(0.0D, 0.0D, 1000.0D);
     matrixStack2.scale((float) size, (float) size, (float) size);
