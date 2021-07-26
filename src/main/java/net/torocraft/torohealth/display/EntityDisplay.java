@@ -34,7 +34,11 @@ public class EntityDisplay {
 
   public void draw(MatrixStack matrix, float scale) {
     if (entity != null) {
-      drawEntity(matrix, (int) xOffset, (int) yOffset, entityScale, -80, -20, entity, scale);
+      try {
+        drawEntity(matrix, (int) xOffset, (int) yOffset, entityScale, -80, -20, entity, scale);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
