@@ -1,6 +1,9 @@
 package net.torocraft.torohealth.util;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -36,5 +39,13 @@ public class EntityUtil {
     } else {
       return Relation.UNKNOWN;
     }
+  }
+
+  public static boolean showHealthBar(Entity entity, MinecraftClient client) {
+    return entity instanceof LivingEntity
+            && !(entity instanceof ArmorStandEntity)
+            && (!entity.isInvisibleTo(client.player) || entity.isGlowing())
+            && entity != client.player
+            && !entity.isSpectator();
   }
 }

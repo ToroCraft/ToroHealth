@@ -1,6 +1,5 @@
 package net.torocraft.torohealth.util;
 
-import java.util.function.Predicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -23,8 +22,9 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.RaycastContext.FluidHandling;
 
+import java.util.function.Predicate;
+
 public class RayTrace implements BlockView {
-  private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
   private static MinecraftClient minecraft = MinecraftClient.getInstance();
 
   @Override
@@ -55,6 +55,7 @@ public class RayTrace implements BlockView {
     Vec3d max = position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
     Box searchBox = viewer.getBoundingBox().stretch(look.multiply(reachDistance)).expand(1.0D, 1.0D, 1.0D);
 
+    Predicate<Entity> isVisible = entity -> entity.collides() && EntityUtil.showHealthBar(entity, client);
     EntityHitResult result = ProjectileUtil.raycast(viewer, position, max, searchBox, isVisible, reachDistance * reachDistance);
 
     if (result == null || result.getEntity() == null) {
