@@ -13,6 +13,8 @@ import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SquidEntity;
 
+import java.util.stream.StreamSupport;
+
 public class EntityUtil {
 
   public enum Relation {
@@ -44,7 +46,10 @@ public class EntityUtil {
   public static boolean showHealthBar(Entity entity, MinecraftClient client) {
     return entity instanceof LivingEntity
             && !(entity instanceof ArmorStandEntity)
-            && (!entity.isInvisibleTo(client.player) || entity.isGlowing())
+            && (!entity.isInvisibleTo(client.player)
+                || entity.isGlowing()
+                || entity.isOnFire()
+                || StreamSupport.stream(entity.getItemsEquipped().spliterator(), false).anyMatch(is -> !is.isEmpty()))
             && entity != client.player
             && !entity.isSpectator();
   }
