@@ -31,7 +31,7 @@ public class BarDisplay {
     HealthBarRenderer.render(matrix, entity, 63, 14, 130, false);
     String name = getEntityName(entity);
     int healthMax = MathHelper.ceil(entity.getMaxHealth());
-    int healthCur = Math.min(MathHelper.ceil(entity.getHealth()), healthMax);
+    int healthCur = MathHelper.ceil(entity.getHealth());
     String healthText = healthCur + "/" + healthMax;
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -52,7 +52,7 @@ public class BarDisplay {
     if (armor > 0) {
       renderArmorIcon(matrix, xOffset, (int) 1);
       xOffset += 10;
-      mc.textRenderer.drawWithShadow(matrix, entity.getArmor() + "", xOffset, 2, 0xe0e0e0);
+      mc.textRenderer.drawWithShadow(matrix, armor + "", xOffset, 2, 0xe0e0e0);
     }
   }
 

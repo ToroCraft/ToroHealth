@@ -118,8 +118,8 @@ public class HealthBarRenderer {
 
     BarState state = BarStates.getState(entity);
 
-    float percent = Math.min(1, state.health / entity.getMaxHealth());
-    float percent2 = state.previousHealthDisplay / entity.getMaxHealth();
+    float percent = Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
+    float percent2 = Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
     int zOffset = 0;
 
     Matrix4f m4f = matrix.peek().getModel();
