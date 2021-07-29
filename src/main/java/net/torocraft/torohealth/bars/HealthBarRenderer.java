@@ -21,6 +21,9 @@ import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HealthBarRenderer {
 
   private static final Identifier GUI_BARS_TEXTURES =
@@ -32,7 +35,9 @@ public class HealthBarRenderer {
     return ToroHealth.CONFIG.inWorld;
   }
 
-  public static void renderInWorld(MatrixStack matrix, LivingEntity entity, Camera camera) {
+  private static List<LivingEntity> renderedEntities = new ArrayList<>();
+
+  public static void prepareRenderInWorld(LivingEntity entity) {
 
     if (Mode.NONE.equals(getConfig().mode)) {
       return;
@@ -48,14 +53,6 @@ public class HealthBarRenderer {
       return;
     }
 
-    if (camera == null) {
-      camera = client.getEntityRenderDispatcher().camera;
-    }
-
-    if (camera == null) {
-      return;
-    }
-
     if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealth.HUD.getEntity() != entity) {
       return;
     }
@@ -68,43 +65,64 @@ public class HealthBarRenderer {
       return;
     }
 
-    float scaleToGui = 0.025f;
-    boolean sneaking = entity.isInSneakingPose();
-    float height = entity.getHeight() + 0.5F - (sneaking ? 0.25F : 0.0F);
+    renderedEntities.add(entity);
 
-    float tickDelta = client.getTickDelta();
-    double x = MathHelper.lerp((double) tickDelta, entity.prevX, entity.getX());
-    double y = MathHelper.lerp((double) tickDelta, entity.prevY, entity.getY());
-    double z = MathHelper.lerp((double) tickDelta, entity.prevZ, entity.getZ());
+  }
 
-    Vec3d camPos = camera.getPos();
-    double camX = camPos.x;
-    double camY = camPos.y;
-    double camZ = camPos.z;
+  public static void renderInWorld(MatrixStack matrix, Camera camera) {
 
-    matrix.push();
-    matrix.translate(x - camX, (y + height) - camY, z - camZ);
-    matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-    matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
+    MinecraftClient client = MinecraftClient.getInstance();
 
-    RenderSystem.disableLighting();
-    RenderSystem.enableDepthTest();
-    RenderSystem.enableFog();
-    RenderSystem.disableAlphaTest();
-    RenderSystem.enableBlend();
-    RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
-        GL11.GL_ZERO);
-    RenderSystem.shadeModel(7425);
+    if (camera == null) {
+      camera = client.getEntityRenderDispatcher().camera;
+    }
 
-    render(matrix, entity, 0, 0, FULL_SIZE, true);
+    if (camera == null) {
+      renderedEntities.clear();
+      return;
+    }
 
-    RenderSystem.shadeModel(7424);
-    RenderSystem.disableBlend();
-    RenderSystem.enableAlphaTest();
-    RenderSystem.enableLighting();
+    for (LivingEntity entity : renderedEntities) {
+      float scaleToGui = 0.025f;
+      boolean sneaking = entity.isInSneakingPose();
+      float height = entity.getHeight() + 0.6F - (sneaking ? 0.25F : 0.0F);
 
-    matrix.pop();
+      float tickDelta = client.getTickDelta();
+      double x = MathHelper.lerp((double) tickDelta, entity.prevX, entity.getX());
+      double y = MathHelper.lerp((double) tickDelta, entity.prevY, entity.getY());
+      double z = MathHelper.lerp((double) tickDelta, entity.prevZ, entity.getZ());
+
+      Vec3d camPos = camera.getPos();
+      double camX = camPos.x;
+      double camY = camPos.y;
+      double camZ = camPos.z;
+
+      matrix.push();
+      matrix.translate(x - camX, (y + height) - camY, z - camZ);
+      matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+      matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+      matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
+
+      RenderSystem.disableLighting();
+      RenderSystem.enableDepthTest();
+      RenderSystem.enableFog();
+      RenderSystem.disableAlphaTest();
+      RenderSystem.enableBlend();
+      RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+              GL11.GL_ZERO);
+      RenderSystem.shadeModel(7425);
+
+      render(matrix, entity, 0, 0, FULL_SIZE, true);
+
+      RenderSystem.shadeModel(7424);
+      RenderSystem.disableBlend();
+      RenderSystem.enableAlphaTest();
+      RenderSystem.enableLighting();
+
+      matrix.pop();
+    }
+
+    renderedEntities.clear();
   }
 
   public static void render(MatrixStack matrix, LivingEntity entity, double x, double y,
