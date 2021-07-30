@@ -35,7 +35,7 @@ public class HealthBarRenderer {
     return ToroHealth.CONFIG.inWorld;
   }
 
-  private static List<LivingEntity> renderedEntities = new ArrayList<>();
+  private static final List<LivingEntity> renderedEntities = new ArrayList<>();
 
   public static void prepareRenderInWorld(LivingEntity entity) {
 
@@ -82,6 +82,19 @@ public class HealthBarRenderer {
       return;
     }
 
+    if (renderedEntities.isEmpty()) {
+      return;
+    }
+
+    RenderSystem.disableLighting();
+    RenderSystem.enableDepthTest();
+    RenderSystem.enableFog();
+    RenderSystem.disableAlphaTest();
+    RenderSystem.enableBlend();
+    RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+            GL11.GL_ZERO);
+    RenderSystem.shadeModel(7425);
+
     for (LivingEntity entity : renderedEntities) {
       float scaleToGui = 0.025f;
       boolean sneaking = entity.isInSneakingPose();
@@ -103,24 +116,15 @@ public class HealthBarRenderer {
       matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
       matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-      RenderSystem.disableLighting();
-      RenderSystem.enableDepthTest();
-      RenderSystem.enableFog();
-      RenderSystem.disableAlphaTest();
-      RenderSystem.enableBlend();
-      RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
-              GL11.GL_ZERO);
-      RenderSystem.shadeModel(7425);
-
       render(matrix, entity, 0, 0, FULL_SIZE, true);
-
-      RenderSystem.shadeModel(7424);
-      RenderSystem.disableBlend();
-      RenderSystem.enableAlphaTest();
-      RenderSystem.enableLighting();
 
       matrix.pop();
     }
+
+    RenderSystem.shadeModel(7424);
+    RenderSystem.disableBlend();
+    RenderSystem.enableAlphaTest();
+    RenderSystem.enableLighting();
 
     renderedEntities.clear();
   }
