@@ -25,7 +25,7 @@ public class BarState {
   }
 
   public void tick() {
-    health = Math.min(entity.getHealth(), entity.getMaxHealth());
+    health = entity.getHealth();
     incrementTimers();
 
     if (lastHealth < 0.1) {
