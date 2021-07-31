@@ -51,6 +51,7 @@ public class ParticleRenderer {
     RenderSystem.shadeModel(7424);
     RenderSystem.disableBlend();
     RenderSystem.enableAlphaTest();
+    RenderSystem.enableLighting();
 
     matrix.pop();
   }
