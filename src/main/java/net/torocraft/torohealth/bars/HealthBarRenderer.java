@@ -44,7 +44,7 @@ public class HealthBarRenderer {
 
     MinecraftClient client = MinecraftClient.getInstance();
 
-    if (client.player == entity) {
+    if (!EntityUtil.showHealthBar(entity, client)) {
       return;
     }
 

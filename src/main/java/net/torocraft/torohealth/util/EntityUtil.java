@@ -1,7 +1,11 @@
 package net.torocraft.torohealth.util;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.AmbientEntity;
+import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.SlimeEntity;
@@ -9,6 +13,8 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SquidEntity;
+
+import java.util.stream.StreamSupport;
 
 public class EntityUtil {
 
@@ -36,5 +42,17 @@ public class EntityUtil {
     } else {
       return Relation.UNKNOWN;
     }
+  }
+
+  public static boolean showHealthBar(Entity entity, MinecraftClient client) {
+    return entity instanceof LivingEntity
+            && !(entity instanceof ArmorStandEntity)
+            && (!entity.isInvisibleTo(client.player)
+                || entity.isGlowing()
+                || entity.isOnFire()
+                || entity instanceof CreeperEntity && ((CreeperEntity) entity).shouldRenderOverlay() // charged creeper
+                || StreamSupport.stream(entity.getItemsEquipped().spliterator(), false).anyMatch(is -> !is.isEmpty()))
+            && entity != client.player
+            && !entity.isSpectator();
   }
 }
