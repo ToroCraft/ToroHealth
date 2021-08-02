@@ -1,6 +1,8 @@
 package net.torocraft.torohealth.bars;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
@@ -34,7 +36,9 @@ public class HealthBarRenderer {
     return ToroHealth.CONFIG.inWorld;
   }
 
-  public static void renderInWorld(MatrixStack matrix, LivingEntity entity, Camera camera) {
+  private static final List<LivingEntity> renderedEntities = new ArrayList<>();
+
+  public static void prepareRenderInWorld(LivingEntity entity) {
 
     if (Mode.NONE.equals(getConfig().mode)) {
       return;
@@ -46,15 +50,7 @@ public class HealthBarRenderer {
 
     MinecraftClient client = MinecraftClient.getInstance();
 
-    if (client.player == entity) {
-      return;
-    }
-
-    if (camera == null) {
-      camera = client.getEntityRenderDispatcher().camera;
-    }
-
-    if (camera == null) {
+    if (!EntityUtil.showHealthBar(entity, client)) {
       return;
     }
 
@@ -70,25 +66,26 @@ public class HealthBarRenderer {
       return;
     }
 
-    float scaleToGui = 0.025f;
-    boolean sneaking = entity.isInSneakingPose();
-    float height = entity.getHeight() + 0.5F - (sneaking ? 0.25F : 0.0F);
+    renderedEntities.add(entity);
 
-    float tickDelta = client.getTickDelta();
-    double x = MathHelper.lerp((double) tickDelta, entity.prevX, entity.getX());
-    double y = MathHelper.lerp((double) tickDelta, entity.prevY, entity.getY());
-    double z = MathHelper.lerp((double) tickDelta, entity.prevZ, entity.getZ());
+  }
 
-    Vec3d camPos = camera.getPos();
-    double camX = camPos.x;
-    double camY = camPos.y;
-    double camZ = camPos.z;
+  public static void renderInWorld(MatrixStack matrix, Camera camera) {
 
-    matrix.push();
-    matrix.translate(x - camX, (y + height) - camY, z - camZ);
-    matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-    matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
+    MinecraftClient client = MinecraftClient.getInstance();
+
+    if (camera == null) {
+      camera = client.getEntityRenderDispatcher().camera;
+    }
+
+    if (camera == null) {
+      renderedEntities.clear();
+      return;
+    }
+
+    if (renderedEntities.isEmpty()) {
+      return;
+    }
 
     RenderSystem.setShader(GameRenderer::getPositionColorShader);
     RenderSystem.enableDepthTest();
@@ -96,10 +93,35 @@ public class HealthBarRenderer {
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
         GL11.GL_ZERO);
 
-    render(matrix, entity, 0, 0, FULL_SIZE, true);
+    for (LivingEntity entity : renderedEntities) {
+      float scaleToGui = 0.025f;
+      boolean sneaking = entity.isInSneakingPose();
+      float height = entity.getHeight() + 0.6F - (sneaking ? 0.25F : 0.0F);
+
+      float tickDelta = client.getTickDelta();
+      double x = MathHelper.lerp((double) tickDelta, entity.prevX, entity.getX());
+      double y = MathHelper.lerp((double) tickDelta, entity.prevY, entity.getY());
+      double z = MathHelper.lerp((double) tickDelta, entity.prevZ, entity.getZ());
+
+      Vec3d camPos = camera.getPos();
+      double camX = camPos.x;
+      double camY = camPos.y;
+      double camZ = camPos.z;
+
+      matrix.push();
+      matrix.translate(x - camX, (y + height) - camY, z - camZ);
+      matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+      matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+      matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
+
+      render(matrix, entity, 0, 0, FULL_SIZE, true);
+
+      matrix.pop();
+    }
+
     RenderSystem.disableBlend();
 
-    matrix.pop();
+    renderedEntities.clear();
   }
 
   public static void render(MatrixStack matrix, LivingEntity entity, double x, double y,
@@ -114,8 +136,10 @@ public class HealthBarRenderer {
 
     BarState state = BarStates.getState(entity);
 
-    float percent = Math.min(1, state.health / entity.getMaxHealth());
-    float percent2 = state.previousHealthDisplay / entity.getMaxHealth();
+    float percent =
+        Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
+    float percent2 =
+        Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
     int zOffset = 0;
 
     Matrix4f m4f = matrix.peek().getModel();
@@ -163,7 +187,7 @@ public class HealthBarRenderer {
 
     RenderSystem.setShaderColor(r, g, b, 1);
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
-    RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
+     RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
     RenderSystem.enableBlend();
 
     float half = width / 2;
@@ -174,13 +198,13 @@ public class HealthBarRenderer {
     BufferBuilder buffer = tessellator.getBuffer();
     buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
     buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
-        .texture(u * c, v * c).next();
+    .texture(u * c, v * c).next();
     buffer.vertex(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
-        .texture(u * c, (v + vh) * c).next();
+    .texture(u * c, (v + vh) * c).next();
     buffer.vertex(matrix4f, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
-        .texture((u + uw) * c, (v + vh) * c).next();
+    .texture((u + uw) * c, (v + vh) * c).next();
     buffer.vertex(matrix4f, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
-        .texture(((u + uw) * c), v * c).next();
+    .texture(((u + uw) * c), v * c).next();
     tessellator.draw();
   }
 }

@@ -28,7 +28,7 @@ public class WorldRendererMixin {
   private void renderEntity(Entity entity, double x, double y, double z, float g,
       MatrixStack matrix, VertexConsumerProvider v, CallbackInfo info) {
     if (entity instanceof LivingEntity) {
-      HealthBarRenderer.renderInWorld(matrix, (LivingEntity) entity, entityRenderDispatcher.camera);
+      HealthBarRenderer.prepareRenderInWorld((LivingEntity) entity);
     }
   }
 
@@ -36,6 +36,7 @@ public class WorldRendererMixin {
   private void render(MatrixStack matrices, float tickDelta, long limitTime,
       boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
       LightmapTextureManager lightmapTextureManager, Matrix4f matrix, CallbackInfo info) {
+    HealthBarRenderer.renderInWorld(matrices, camera);
     ParticleRenderer.renderParticles(matrices, camera);
   }
 
