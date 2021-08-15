@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
@@ -15,7 +15,7 @@ public class BarStates {
   private static int tickCount = 0;
 
   public static BarState getState(LivingEntity entity) {
-    int id = entity.getEntityId();
+    int id = entity.getId();
     BarState state = STATES.get(id);
     if (state == null) {
       state = new BarState(entity);
@@ -48,14 +48,14 @@ public class BarStates {
       return true;
     }
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Entity entity = minecraft.world.getEntityByID(entry.getKey());
+    MinecraftClient minecraft = MinecraftClient.getInstance();
+    Entity entity = minecraft.world.getEntityById(entry.getKey());
 
     if (!(entity instanceof LivingEntity)) {
       return true;
     }
 
-    if (entity.getDistanceSq(minecraft.player) > (100 * 100)) {
+    if (!minecraft.world.isChunkLoaded(entity.getBlockPos())) {
       return true;
     }
 

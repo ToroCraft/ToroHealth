@@ -1,8 +1,8 @@
 package net.torocraft.torohealth.bars;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.Vec3d;
 import net.torocraft.torohealth.ToroHealth;
 
 public class BarParticle {
@@ -25,15 +25,13 @@ public class BarParticle {
   public double vy = 0;
   public double vz = 0;
 
-
   public BarParticle(Entity entity, int damage) {
-    Minecraft client = Minecraft.getInstance();
-    Vector3d entityLocation = entity.getPositionVec().add(0, entity.getHeight() / 2, 0);
-    Vector3d cameraLocation = client.gameRenderer.getActiveRenderInfo().getProjectedView();
-
+    MinecraftClient client = MinecraftClient.getInstance();
+    Vec3d entityLocation = entity.getPos().add(0, entity.getHeight() / 2, 0);
+    Vec3d cameraLocation = client.gameRenderer.getCamera().getPos();
     double offsetBy = entity.getWidth();
-    Vector3d offset = cameraLocation.subtract(entityLocation).normalize().scale(offsetBy);
-    Vector3d pos = entityLocation.add(offset);
+    Vec3d offset = cameraLocation.subtract(entityLocation).normalize().multiply(offsetBy);
+    Vec3d pos = entityLocation.add(offset);
 
     age = 0;
     this.damage = damage;

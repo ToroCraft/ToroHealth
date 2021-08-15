@@ -1,14 +1,19 @@
 package net.torocraft.torohealth.util;
 
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.GhastEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.entity.passive.AmbientEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.SquidEntity;
-import net.minecraft.entity.passive.fish.AbstractFishEntity;
+import java.util.stream.StreamSupport;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Squid;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 
 public class EntityUtil {
 
@@ -17,24 +22,34 @@ public class EntityUtil {
   }
 
   public static Relation determineRelation(Entity entity) {
-    if (entity instanceof MonsterEntity) {
+    if (entity instanceof Monster) {
       return Relation.FOE;
-    } else if (entity instanceof SlimeEntity) {
+    } else if (entity instanceof Slime) {
       return Relation.FOE;
-    } else if (entity instanceof GhastEntity) {
+    } else if (entity instanceof Ghast) {
       return Relation.FOE;
-    } else if (entity instanceof AnimalEntity) {
+    } else if (entity instanceof Animal) {
       return Relation.FRIEND;
-    } else if (entity instanceof SquidEntity) {
+    } else if (entity instanceof Squid) {
       return Relation.FRIEND;
-    } else if (entity instanceof AmbientEntity) {
+    } else if (entity instanceof AmbientCreature) {
       return Relation.FRIEND;
-    } else if (entity instanceof AgeableEntity) {
+    } else if (entity instanceof AgeableMob) {
       return Relation.FRIEND;
-    } else if (entity instanceof AbstractFishEntity) {
+    } else if (entity instanceof AbstractFish) {
       return Relation.FRIEND;
     } else {
       return Relation.UNKNOWN;
     }
+  }
+
+  public static boolean showHealthBar(Entity entity, Minecraft client) {
+    return entity instanceof LivingEntity && !(entity instanceof ArmorStand)
+        && (!entity.isInvisibleTo(client.player) || entity.isCurrentlyGlowing() || entity.isOnFire()
+            || entity instanceof Creeper && ((Creeper) entity).isPowered()
+
+            || StreamSupport.stream(entity.getAllSlots().spliterator(), false)
+                .anyMatch(is -> !is.isEmpty()))
+        && entity != client.player && !entity.isSpectator();
   }
 }

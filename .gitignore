@@ -1,3 +1,4 @@
+.history
 # gradle
 
 .gradle/
@@ -27,3 +28,6 @@ bin/
 # fabric
 
 run/
+
+*.7z
+logs
