@@ -1,19 +1,19 @@
 package net.torocraft.torohealth.display;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.AnchorPoint;
 
 public class Hud extends Screen {
-  private static final Identifier BACKGROUND_TEXTURE =
-      new Identifier(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
+  private static final ResourceLocation BACKGROUND_TEXTURE =
+      new ResourceLocation(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;
@@ -21,13 +21,13 @@ public class Hud extends Screen {
   private int age;
 
   public Hud() {
-    super(new LiteralText("ToroHealth HUD"));
-    this.client = MinecraftClient.getInstance();
-    barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
+    super(new TextComponent("ToroHealth HUD"));
+    this.minecraft = Minecraft.getInstance();
+    barDisplay = new BarDisplay(Minecraft.getInstance(), this);
   }
 
-  public void draw(MatrixStack matrix, Config config) {
-    if (this.client.options.debugEnabled) {
+  public void draw(PoseStack matrix, Config config) {
+    if (this.minecraft.options.renderDebug) {
       return;
     }
     this.config = config;
@@ -42,7 +42,7 @@ public class Hud extends Screen {
   private float determineX() {
     float x = config.hud.x;
     AnchorPoint anchor = config.hud.anchorPoint;
-    float wScreen = client.getWindow().getScaledWidth();
+    float wScreen = minecraft.getWindow().getGuiScaledHeight();
 
     switch (anchor) {
       case BOTTOM_CENTER:
@@ -59,7 +59,7 @@ public class Hud extends Screen {
   private float determineY() {
     float y = config.hud.y;
     AnchorPoint anchor = config.hud.anchorPoint;
-    float hScreen = client.getWindow().getScaledHeight();
+    float hScreen = minecraft.getWindow().getGuiScaledHeight();
 
     switch (anchor) {
       case BOTTOM_CENTER:
@@ -98,7 +98,7 @@ public class Hud extends Screen {
     return entity;
   }
 
-  private void draw(MatrixStack matrix, float x, float y, float scale) {
+  private void draw(PoseStack matrix, float x, float y, float scale) {
     if (entity == null) {
       return;
     }
@@ -107,7 +107,7 @@ public class Hud extends Screen {
       return;
     }
 
-    matrix.push();
+    matrix.pushPose();
     matrix.scale(scale, scale, scale);
     matrix.translate(x - 10, y - 10, 0);
     if (config.hud.showSkin) {
@@ -121,13 +121,13 @@ public class Hud extends Screen {
     if (config.hud.showBar) {
       barDisplay.draw(matrix, entity);
     }
-    matrix.pop();
+    matrix.popPose();
   }
 
-  private void drawSkin(MatrixStack matrix) {
+  private void drawSkin(PoseStack matrix) {
     RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     int w = 160, h = 60;
-    drawTexture(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
+    blit(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
   }
 }
