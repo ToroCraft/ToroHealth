@@ -1,6 +1,7 @@
 
 package net.torocraft.torohealth;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.LivingEntity;
 // import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -25,17 +26,20 @@ public class ClientEventHandler {
     MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::hudRender);
   }
 
+  private static Minecraft minecraft = Minecraft.getInstance();
+
   private static void entityRender(
       RenderLivingEvent.Post<? extends LivingEntity, ? extends EntityModel<?>> event) {
-    HealthBarRenderer.renderInWorld(event.getMatrixStack(), event.getEntity());
+    HealthBarRenderer.renderInWorld(event.getMatrixStack(), minecraft.gameRenderer.getMainCamera());
   }
 
   private static void renderParticles(RenderWorldLastEvent event) {
-    ParticleRenderer.renderParticles(event.getMatrixStack());
+    ParticleRenderer.renderParticles(event.getMatrixStack(),
+        minecraft.gameRenderer.getMainCamera());
   }
 
   private static void playerTick(PlayerTickEvent event) {
-    if (!event.player.world.isRemote) {
+    if (!event.player.level.isClientSide) {
       return;
     }
     ToroHealthClient.HUD.setEntity(
@@ -46,7 +50,7 @@ public class ClientEventHandler {
   }
 
   private static void hudRender(RenderGameOverlayEvent.Post event) {
-    if (event.getType().equals(ElementType.BOSSHEALTH)) {
+    if (event.getType().equals(ElementType.BOSSINFO)) {
       ToroHealthClient.HUD.draw(event.getMatrixStack(), ToroHealth.CONFIG);
     }
   }
