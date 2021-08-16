@@ -27,6 +27,7 @@ public class ToroHealth {
   public ToroHealth() {
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     MinecraftForge.EVENT_BUS.register(this);
+    ClientEventHandler.init();
   }
 
   private void setup(final FMLCommonSetupEvent event) {
