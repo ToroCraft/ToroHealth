@@ -1,48 +1,48 @@
 package net.torocraft.torohealth.bars;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.torocraft.torohealth.ToroHealth;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderer {
 
-  public static void renderParticles(MatrixStack matrix, Camera camera) {
+  public static void renderParticles(PoseStack matrix, Camera camera) {
     for (BarParticle p : BarStates.PARTICLES) {
       renderParticle(matrix, p, camera);
     }
   }
 
-  private static void renderParticle(MatrixStack matrix, BarParticle particle, Camera camera) {
-    double distanceSquared = camera.getPos().squaredDistanceTo(particle.x, particle.y, particle.z);
+  private static void renderParticle(PoseStack matrix, BarParticle particle, Camera camera) {
+    double distanceSquared = camera.getPosition().distanceToSqr(particle.x, particle.y, particle.z);
     if (distanceSquared > ToroHealth.CONFIG.particle.distanceSquared) {
       return;
     }
 
     float scaleToGui = 0.025f;
 
-    MinecraftClient client = MinecraftClient.getInstance();
-    float tickDelta = client.getTickDelta();
+    Minecraft client = Minecraft.getInstance();
+    float tickDelta = client.getDeltaFrameTime();
 
-    double x = MathHelper.lerp((double) tickDelta, particle.xPrev, particle.x);
-    double y = MathHelper.lerp((double) tickDelta, particle.yPrev, particle.y);
-    double z = MathHelper.lerp((double) tickDelta, particle.zPrev, particle.z);
+    double x = Mth.lerp((double) tickDelta, particle.xPrev, particle.x);
+    double y = Mth.lerp((double) tickDelta, particle.yPrev, particle.y);
+    double z = Mth.lerp((double) tickDelta, particle.zPrev, particle.z);
 
-    Vec3d camPos = camera.getPos();
+    Vec3 camPos = camera.getPosition();
     double camX = camPos.x;
     double camY = camPos.y;
     double camZ = camPos.z;
 
-    matrix.push();
+    matrix.pushPose();
     matrix.translate(x - camX, y - camY, z - camZ);
-    matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+    matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getXRot()));
+    matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getYRot()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
     RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -55,6 +55,6 @@ public class ParticleRenderer {
 
     RenderSystem.disableBlend();
 
-    matrix.pop();
+    matrix.popPose();
   }
 }

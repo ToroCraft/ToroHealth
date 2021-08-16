@@ -1,9 +1,10 @@
 package net.torocraft.torohealth.bars;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
@@ -15,20 +16,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-// import net.minecraft.client.MinecraftClient;
-// import net.minecraft.client.render.BufferBuilder;
-// import net.minecraft.client.render.Camera;
-// import net.minecraft.client.render.GameRenderer;
-// import net.minecraft.client.render.Tessellator;
-// import net.minecraft.client.render.VertexFormat;
-// import net.minecraft.client.render.VertexFormats;
-// import net.minecraft.client.util.math.MatrixStack;
-// import net.minecraft.entity.LivingEntity;
-// import net.minecraft.util.Identifier;
-// import net.minecraft.util.math.Mth;
-// import net.minecraft.util.math.Matrix4f;
-// import net.minecraft.util.math.Vec3d;
-// import net.minecraft.util.math.Vec3f;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.InWorld;
@@ -155,7 +142,7 @@ public class HealthBarRenderer {
         Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
     int zOffset = 0;
 
-    Matrix4f m4f = matrix.peek().getModel();
+    Matrix4f m4f = matrix.last().pose();
     drawBar(m4f, x, y, width, 1, DARK_GRAY, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
@@ -169,18 +156,18 @@ public class HealthBarRenderer {
     }
   }
 
-  public static void drawDamageNumber(MatrixStack matrix, int dmg, double x, double y,
+  public static void drawDamageNumber(PoseStack matrix, int dmg, double x, double y,
       float width) {
     int i = Math.abs(Math.round(dmg));
     if (i == 0) {
       return;
     }
     String s = Integer.toString(i);
-    MinecraftClient minecraft = MinecraftClient.getInstance();
-    int sw = minecraft.textRenderer.getWidth(s);
+    Minecraft minecraft = Minecraft.getInstance();
+    int sw = minecraft.font.width(s);
     int color =
         dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
-    minecraft.textRenderer.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
+    minecraft.font.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
   }
 
   private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent,
@@ -207,17 +194,18 @@ public class HealthBarRenderer {
 
     float zOffsetAmount = inWorld ? -0.1F : 0.1F;
 
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuffer();
-    buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+    Tesselator tessellator = Tesselator.getInstance();
+    BufferBuilder buffer = tessellator.getBuilder();
+    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+
     buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
-        .texture(u * c, v * c).next();
+        .uv(u * c, v * c).endVertex();
     buffer.vertex(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
-        .texture(u * c, (v + vh) * c).next();
+        .uv(u * c, (v + vh) * c).endVertex();
     buffer.vertex(matrix4f, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
-        .texture((u + uw) * c, (v + vh) * c).next();
+        .uv((u + uw) * c, (v + vh) * c).endVertex();
     buffer.vertex(matrix4f, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
-        .texture(((u + uw) * c), v * c).next();
-    tessellator.draw();
+        .uv(((u + uw) * c), v * c).endVertex();
+    tessellator.end();
   }
 }

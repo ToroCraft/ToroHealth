@@ -1,7 +1,7 @@
 package net.torocraft.torohealth.bars;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.torocraft.torohealth.ToroHealth;
 
 public class BarState {
@@ -57,7 +57,7 @@ public class BarState {
   }
 
   private void handleHealthChange() {
-    lastDmg = MathHelper.ceil(lastHealth) - MathHelper.ceil(health);
+    lastDmg = Mth.ceil(lastHealth) - Mth.ceil(health);
     lastDmgCumulative += lastDmg;
 
     lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;

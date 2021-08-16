@@ -1,61 +1,62 @@
 package net.torocraft.torohealth.util;
 
 import java.util.function.Predicate;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.hit.HitResult.Type;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.RaycastContext.FluidHandling;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RayTrace implements BlockView {
-  private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
-  private static MinecraftClient minecraft = MinecraftClient.getInstance();
+public class RayTrace implements BlockGetter {
+  private static Predicate<Entity> isVisible =
+      entity -> !entity.isSpectator() && entity.canBeCollidedWith();
+  private static Minecraft minecraft = Minecraft.getInstance();
 
   @Override
   public BlockEntity getBlockEntity(BlockPos pos) {
-    return minecraft.world.getBlockEntity(pos);
+    return minecraft.level.getBlockEntity(pos);
   }
 
   @Override
   public BlockState getBlockState(BlockPos pos) {
-    return minecraft.world.getBlockState(pos);
+    return minecraft.level.getBlockState(pos);
   }
 
   @Override
   public FluidState getFluidState(BlockPos pos) {
-    return minecraft.world.getFluidState(pos);
+    return minecraft.level.getFluidState(pos);
   }
 
   public LivingEntity getEntityInCrosshair(float partialTicks, double reachDistance) {
-    MinecraftClient client = MinecraftClient.getInstance();
+    Minecraft client = Minecraft.getInstance();
     Entity viewer = client.getCameraEntity();
 
     if (viewer == null) {
       return null;
     }
 
-    Vec3d position = viewer.getCameraPosVec(partialTicks);
-    Vec3d look = viewer.getRotationVec(1.0F);
-    Vec3d max = position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
-    Box searchBox = viewer.getBoundingBox().stretch(look.multiply(reachDistance)).expand(1.0D, 1.0D, 1.0D);
+    Vec3 position = viewer.getEyePosition(partialTicks);
+    Vec3 look = viewer.getEyePosition(1.0F);
+    Vec3 max = position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
+    AABB searchBox =
+        viewer.getBoundingBox().expandTowards(look.scale(reachDistance)).inflate(1.0D, 1.0D, 1.0D);
 
-    EntityHitResult result = ProjectileUtil.raycast(viewer, position, max, searchBox, isVisible, reachDistance * reachDistance);
+    EntityHitResult result = ProjectileUtil.getEntityHitResult(viewer, position, max, searchBox,
+        isVisible, reachDistance * reachDistance);
 
     if (result == null || result.getEntity() == null) {
       return null;
@@ -64,10 +65,11 @@ public class RayTrace implements BlockView {
     if (result.getEntity() instanceof LivingEntity) {
       LivingEntity target = (LivingEntity) result.getEntity();
 
-      HitResult blockHit = raycast(setupRayTraceContext(client.player, reachDistance, FluidHandling.NONE));
+      HitResult blockHit =
+          clip(setupRayTraceContext(client.player, reachDistance, ClipContext.Fluid.NONE));
 
-      if (!blockHit.getType().equals(Type.MISS)) {
-        double blockDistance = blockHit.getPos().distanceTo(position);
+      if (!blockHit.getType().equals(BlockHitResult.Type.MISS)) {
+        double blockDistance = blockHit.getLocation().distanceTo(position);
         if (blockDistance > target.distanceTo(client.player)) {
           return target;
         }
@@ -79,42 +81,45 @@ public class RayTrace implements BlockView {
     return null;
   }
 
-  private RaycastContext setupRayTraceContext(PlayerEntity player, double distance, RaycastContext.FluidHandling fluidHandling) {
-    float pitch = player.getPitch();
-    float yaw = player.getYaw();
-    Vec3d fromPos = player.getCameraPosVec(1.0F);
-    float float_3 = MathHelper.cos(-yaw * 0.017453292F - 3.1415927F);
-    float float_4 = MathHelper.sin(-yaw * 0.017453292F - 3.1415927F);
-    float float_5 = -MathHelper.cos(-pitch * 0.017453292F);
+  private ClipContext setupRayTraceContext(Player player, double distance,
+      ClipContext.Fluid fluidHandling) {
+    float pitch = player.getYRot();
+    float yaw = player.getXRot();
+    Vec3 fromPos = player.getEyePosition(1.0F);
+    float float_3 = Mth.cos(-yaw * 0.017453292F - 3.1415927F);
+    float float_4 = Mth.sin(-yaw * 0.017453292F - 3.1415927F);
+    float float_5 = -Mth.cos(-pitch * 0.017453292F);
     float xComponent = float_4 * float_5;
-    float yComponent = MathHelper.sin(-pitch * 0.017453292F);
+    float yComponent = Mth.sin(-pitch * 0.017453292F);
     float zComponent = float_3 * float_5;
-    Vec3d toPos = fromPos.add((double)xComponent * distance, (double)yComponent * distance, (double)zComponent * distance);
-    return new RaycastContext(fromPos, toPos, RaycastContext.ShapeType.OUTLINE, fluidHandling, player);
+    Vec3 toPos = fromPos.add((double) xComponent * distance, (double) yComponent * distance,
+        (double) zComponent * distance);
+    return new ClipContext(fromPos, toPos, ClipContext.Block.OUTLINE, fluidHandling, player);
   }
 
   @Override
-  public BlockHitResult raycast(RaycastContext context) {
-    return BlockView.raycast(context.getStart(), context.getEnd(), context, (c, pos) -> {
+  public BlockHitResult clip(ClipContext context) {
+    return BlockGetter.traverseBlocks(context.getFrom(), context.getTo(), context, (c, pos) -> {
       BlockState block = this.getBlockState(pos);
-      if (!block.isOpaque()) {
+      if (!block.canOcclude()) {
         return null;
       }
-      VoxelShape blockShape = c.getBlockShape(block, this, pos);
-      return this.raycastBlock(c.getStart(), c.getEnd(), pos, blockShape, block);
+      VoxelShape voxelshape = c.getBlockShape(block, this, pos);
+      return this.clipWithInteractionOverride(c.getFrom(), c.getTo(), pos, voxelshape, block);
     }, (c) -> {
-      Vec3d v = c.getStart().subtract(c.getEnd());
-      return BlockHitResult.createMissed(c.getEnd(), Direction.getFacing(v.x, v.y, v.z), new BlockPos(c.getEnd()));
+      Vec3 vec3 = c.getFrom().subtract(c.getTo());
+      return BlockHitResult.miss(c.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z),
+          new BlockPos(c.getTo()));
     });
   }
 
   @Override
-  public int getBottomY() {
+  public int getHeight() {
     return 0;
   }
 
   @Override
-  public int getHeight() {
+  public int getMinBuildHeight() {
     return 0;
   }
 }

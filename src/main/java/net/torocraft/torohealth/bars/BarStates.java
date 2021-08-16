@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 public class BarStates {
 
@@ -48,14 +48,14 @@ public class BarStates {
       return true;
     }
 
-    MinecraftClient minecraft = MinecraftClient.getInstance();
-    Entity entity = minecraft.world.getEntityById(entry.getKey());
+    Minecraft minecraft = Minecraft.getInstance();
+    Entity entity = minecraft.level.getEntity(entry.getKey());
 
     if (!(entity instanceof LivingEntity)) {
       return true;
     }
 
-    if (!minecraft.world.isChunkLoaded(entity.getBlockPos())) {
+    if (!minecraft.level.hasChunkAt(entity.blockPosition())) {
       return true;
     }
 
