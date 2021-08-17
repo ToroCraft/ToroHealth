@@ -196,7 +196,7 @@ public class HealthBarRenderer {
 
     Tesselator tessellator = Tesselator.getInstance();
     BufferBuilder buffer = tessellator.getBuilder();
-    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 
     buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
         .uv(u * c, v * c).endVertex();

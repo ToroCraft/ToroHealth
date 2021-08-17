@@ -48,7 +48,7 @@ public class ClientEventHandler {
   }
 
   private static void hudRender(RenderGameOverlayEvent.Post event) {
-    if (event.getType().equals(ElementType.BOSSINFO)) {
+    if (event.getType().equals(ElementType.ALL)) {
       ToroHealthClient.HUD.draw(event.getMatrixStack(), ToroHealth.CONFIG);
     }
   }

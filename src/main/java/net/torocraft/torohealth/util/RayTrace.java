@@ -23,7 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class RayTrace implements BlockGetter {
   private static Predicate<Entity> isVisible =
-      entity -> !entity.isSpectator() && entity.canBeCollidedWith();
+      entity -> !entity.isSpectator() && entity.isPickable();
   private static Minecraft minecraft = Minecraft.getInstance();
 
   @Override
@@ -50,7 +50,7 @@ public class RayTrace implements BlockGetter {
     }
 
     Vec3 position = viewer.getEyePosition(partialTicks);
-    Vec3 look = viewer.getEyePosition(1.0F);
+    Vec3 look = viewer.getViewVector(1.0F);
     Vec3 max = position.add(look.x * reachDistance, look.y * reachDistance, look.z * reachDistance);
     AABB searchBox =
         viewer.getBoundingBox().expandTowards(look.scale(reachDistance)).inflate(1.0D, 1.0D, 1.0D);
@@ -83,8 +83,8 @@ public class RayTrace implements BlockGetter {
 
   private ClipContext setupRayTraceContext(Player player, double distance,
       ClipContext.Fluid fluidHandling) {
-    float pitch = player.getYRot();
-    float yaw = player.getXRot();
+    float pitch = player.getXRot();
+    float yaw = player.getYRot();
     Vec3 fromPos = player.getEyePosition(1.0F);
     float float_3 = Mth.cos(-yaw * 0.017453292F - 3.1415927F);
     float float_4 = Mth.sin(-yaw * 0.017453292F - 3.1415927F);
