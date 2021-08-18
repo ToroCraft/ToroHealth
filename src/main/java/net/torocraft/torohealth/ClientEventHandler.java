@@ -1,6 +1,7 @@
 
 package net.torocraft.torohealth;
 
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,12 +29,13 @@ public class ClientEventHandler {
 
   private static void entityRender(
       RenderLivingEvent.Post<? extends LivingEntity, ? extends EntityModel<?>> event) {
-    HealthBarRenderer.renderInWorld(event.getMatrixStack(), minecraft.gameRenderer.getMainCamera());
+    HealthBarRenderer.prepareRenderInWorld(event.getEntity());
   }
 
   private static void renderParticles(RenderWorldLastEvent event) {
-    ParticleRenderer.renderParticles(event.getMatrixStack(),
-        minecraft.gameRenderer.getMainCamera());
+    Camera camera = minecraft.gameRenderer.getMainCamera();
+    ParticleRenderer.renderParticles(event.getMatrixStack(), camera);
+    HealthBarRenderer.renderInWorld(event.getMatrixStack(), camera);
   }
 
   private static void playerTick(PlayerTickEvent event) {

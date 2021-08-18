@@ -110,8 +110,8 @@ public class HealthBarRenderer {
 
       matrix.pushPose();
       matrix.translate(x - camX, (y + height) - camY, z - camZ);
-      matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getXRot()));
-      matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getYRot()));
+      matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getYRot()));
+      matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getXRot()));
       matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
       render(matrix, entity, 0, 0, FULL_SIZE, true);
@@ -196,7 +196,7 @@ public class HealthBarRenderer {
 
     Tesselator tessellator = Tesselator.getInstance();
     BufferBuilder buffer = tessellator.getBuilder();
-    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
     buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
         .uv(u * c, v * c).endVertex();
