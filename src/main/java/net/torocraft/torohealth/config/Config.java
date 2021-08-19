@@ -1,7 +1,7 @@
 package net.torocraft.torohealth.config;
 
 import com.google.gson.annotations.JsonAdapter;
-import net.torocraft.torohealth.config.loader.ColorJsonAdpater;
+import net.torocraft.torohealth.config.loader.ColorJsonAdapter;
 import net.torocraft.torohealth.config.loader.IConfig;
 
 public class Config implements IConfig {
@@ -38,9 +38,9 @@ public class Config implements IConfig {
 
   public static class Particle {
     public boolean show = true;
-    @JsonAdapter(ColorJsonAdpater.class)
+    @JsonAdapter(ColorJsonAdapter.class)
     public int damageColor = 0xff0000;
-    @JsonAdapter(ColorJsonAdpater.class)
+    @JsonAdapter(ColorJsonAdapter.class)
     public int healColor = 0x00ff00;
     public int distance = 60;
     public transient int distanceSquared = 0;
@@ -48,13 +48,13 @@ public class Config implements IConfig {
 
   public static class Bar {
     public NumberType damageNumberType = NumberType.LAST;
-    @JsonAdapter(ColorJsonAdpater.class)
+    @JsonAdapter(ColorJsonAdapter.class)
     public int friendColor = 0x00ff00;
-    @JsonAdapter(ColorJsonAdpater.class)
+    @JsonAdapter(ColorJsonAdapter.class)
     public int friendColorSecondary = 0x008000;
-    @JsonAdapter(ColorJsonAdpater.class)
+    @JsonAdapter(ColorJsonAdapter.class)
     public int foeColor = 0xff0000;
-    @JsonAdapter(ColorJsonAdpater.class)
+    @JsonAdapter(ColorJsonAdapter.class)
     public int foeColorSecondary = 0x800000;
   }
 
