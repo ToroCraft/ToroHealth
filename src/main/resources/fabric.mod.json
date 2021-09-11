@@ -26,9 +26,6 @@
   "suggests": {
     "modmenu": "*"
   },
-  "custom": {
-    "modmenu:clientsideOnly": true
-  },
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
