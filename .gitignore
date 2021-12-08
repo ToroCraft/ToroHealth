@@ -5,6 +5,11 @@
 build/
 out/
 classes/
+saves/
+config/
+logs/
+options.txt
+usercache.json
 
 # eclipse
 

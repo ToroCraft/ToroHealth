@@ -27,8 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
 
-  private static final Identifier GUI_BARS_TEXTURES =
-      new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
+  private static final Identifier GUI_BARS_TEXTURES = new Identifier(ToroHealth.MODID + ":textures/gui/bars.png");
   private static final int DARK_GRAY = 0x808080;
   private static final float FULL_SIZE = 40;
 
@@ -136,13 +135,11 @@ public class HealthBarRenderer {
 
     BarState state = BarStates.getState(entity);
 
-    float percent =
-        Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
-    float percent2 =
-        Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
+    float percent = Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
+    float percent2 = Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
     int zOffset = 0;
 
-    Matrix4f m4f = matrix.peek().getModel();
+    Matrix4f m4f = matrix.peek().getPositionMatrix(); //  .getModel();
     drawBar(m4f, x, y, width, 1, DARK_GRAY, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
@@ -165,8 +162,7 @@ public class HealthBarRenderer {
     String s = Integer.toString(i);
     MinecraftClient minecraft = MinecraftClient.getInstance();
     int sw = minecraft.textRenderer.getWidth(s);
-    int color =
-        dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
+    int color = dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
     minecraft.textRenderer.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
   }
 
@@ -187,7 +183,7 @@ public class HealthBarRenderer {
 
     RenderSystem.setShaderColor(r, g, b, 1);
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
-     RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
+    RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
     RenderSystem.enableBlend();
 
     float half = width / 2;
@@ -198,13 +194,13 @@ public class HealthBarRenderer {
     BufferBuilder buffer = tessellator.getBuffer();
     buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
     buffer.vertex(matrix4f, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
-    .texture(u * c, v * c).next();
+        .texture(u * c, v * c).next();
     buffer.vertex(matrix4f, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
-    .texture(u * c, (v + vh) * c).next();
+        .texture(u * c, (v + vh) * c).next();
     buffer.vertex(matrix4f, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
-    .texture((u + uw) * c, (v + vh) * c).next();
+        .texture((u + uw) * c, (v + vh) * c).next();
     buffer.vertex(matrix4f, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
-    .texture(((u + uw) * c), v * c).next();
+        .texture(((u + uw) * c), v * c).next();
     tessellator.draw();
   }
 }
