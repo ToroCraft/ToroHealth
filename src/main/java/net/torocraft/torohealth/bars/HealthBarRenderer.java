@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.InWorld;
@@ -26,8 +27,8 @@ import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
 
-  private static final ResourceLocation GUI_BARS_TEXTURES =
-      new ResourceLocation(ToroHealth.MODID + ":textures/gui/bars.png");
+  private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(
+      ToroHealth.MODID + ":textures/gui/bars.png");
   private static final int DARK_GRAY = 0x808080;
   private static final float FULL_SIZE = 40;
 
@@ -46,7 +47,6 @@ public class HealthBarRenderer {
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
-
 
     Minecraft client = Minecraft.getInstance();
 
@@ -70,7 +70,7 @@ public class HealthBarRenderer {
 
   }
 
-  public static void renderInWorld(PoseStack matrix, Camera camera) {
+  public static void renderInWorld(float partialTick, PoseStack matrix, Camera camera) {
 
     Minecraft client = Minecraft.getInstance();
 
@@ -98,12 +98,11 @@ public class HealthBarRenderer {
       boolean sneaking = entity.isCrouching();
       float height = entity.getBbHeight() + 0.6F - (sneaking ? 0.25F : 0.0F);
 
-      float tickDelta = client.getDeltaFrameTime();
-      double x = Mth.lerp((double) tickDelta, entity.xo, entity.getX());
-      double y = Mth.lerp((double) tickDelta, entity.yo, entity.getY());
-      double z = Mth.lerp((double) tickDelta, entity.zo, entity.getZ());
+      double x = Mth.lerp((double) partialTick, entity.xo, entity.getX());
+      double y = Mth.lerp((double) partialTick, entity.yo, entity.getY());
+      double z = Mth.lerp((double) partialTick, entity.zo, entity.getZ());
 
-      Vector3f camPos = camera.getLookVector();
+      Vec3 camPos = camera.getPosition();
       double camX = camPos.x();
       double camY = camPos.y();
       double camZ = camPos.z();
@@ -136,10 +135,8 @@ public class HealthBarRenderer {
 
     BarState state = BarStates.getState(entity);
 
-    float percent =
-        Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
-    float percent2 =
-        Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
+    float percent = Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
+    float percent2 = Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
     int zOffset = 0;
 
     Matrix4f m4f = matrix.last().pose();
@@ -165,8 +162,7 @@ public class HealthBarRenderer {
     String s = Integer.toString(i);
     Minecraft minecraft = Minecraft.getInstance();
     int sw = minecraft.font.width(s);
-    int color =
-        dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
+    int color = dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
     minecraft.font.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
   }
 

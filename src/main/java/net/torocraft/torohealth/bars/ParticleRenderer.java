@@ -41,8 +41,8 @@ public class ParticleRenderer {
 
     matrix.pushPose();
     matrix.translate(x - camX, y - camY, z - camZ);
-    matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getXRot()));
-    matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getYRot()));
+    matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getYRot()));
+    matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getXRot()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
     RenderSystem.setShader(GameRenderer::getPositionColorShader);

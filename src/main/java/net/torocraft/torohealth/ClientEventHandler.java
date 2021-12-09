@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.torocraft.torohealth.bars.BarStates;
@@ -32,10 +32,10 @@ public class ClientEventHandler {
     HealthBarRenderer.prepareRenderInWorld(event.getEntity());
   }
 
-  private static void renderParticles(RenderWorldLastEvent event) {
+  private static void renderParticles(RenderLevelLastEvent event) {
     Camera camera = minecraft.gameRenderer.getMainCamera();
-    ParticleRenderer.renderParticles(event.getMatrixStack(), camera);
-    HealthBarRenderer.renderInWorld(event.getMatrixStack(), camera);
+    ParticleRenderer.renderParticles(event.getPoseStack(), camera);
+    HealthBarRenderer.renderInWorld(event.getPartialTick(), event.getPoseStack(), camera);
   }
 
   private static void playerTick(PlayerTickEvent event) {
