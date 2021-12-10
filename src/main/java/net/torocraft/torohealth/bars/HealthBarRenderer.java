@@ -38,18 +38,23 @@ public class HealthBarRenderer {
   private static final List<LivingEntity> renderedEntities = new ArrayList<>();
 
   public static void prepareRenderInWorld(LivingEntity entity) {
+    MinecraftClient client = MinecraftClient.getInstance();
 
-    if (Mode.NONE.equals(getConfig().mode)) {
+    if (!EntityUtil.showHealthBar(entity, client)) {
       return;
     }
+
+    if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorld.distance) {
+      return;
+    }
+
+    BarStates.getState(entity);
 
     if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
 
-    MinecraftClient client = MinecraftClient.getInstance();
-
-    if (!EntityUtil.showHealthBar(entity, client)) {
+    if (Mode.NONE.equals(getConfig().mode)) {
       return;
     }
 
@@ -58,10 +63,6 @@ public class HealthBarRenderer {
     }
 
     if (ToroHealth.CONFIG.inWorld.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
-      return;
-    }
-
-    if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorld.distance) {
       return;
     }
 
