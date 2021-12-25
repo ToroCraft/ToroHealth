@@ -1,0 +1,21 @@
+{
+    "config.title": "Configuration de ToroHealth",
+    "config.category.hud": "Options de l'HUD",
+    "config.hud.hideDelay": "Délai de dissimulation",
+    "config.hud.x": "Position X",
+    "config.hud.y": "Position Y",
+    "config.hud.scale": "Échelle",
+    "config.torohealth.category.bar": "Options de la barre de vie",
+    "config.bar.damageNumberType": "Type de l'indicateur de dommage",
+    "config.torohealth.category.inWorld": "Options dans le monde",
+    "config.inWorld.mode": "Mode",
+    "config.inWorld.distance": "Distance",
+    "config.torohealth.friendColor.title": "Couleur de la barre pour les amis",
+    "config.torohealth.friendColorSecondary.title":"Couleur de la barre pour les amis (Secondaire)",
+    "config.torohealth.foeColor.title": "Couleur de la barre pour les ennemis",
+    "config.torohealth.foeColorSecondary.title":"Couleur de la barre pour les ennemis (Secondaire)",
+    "config.torohealth.red": "Rouge",
+    "config.torohealth.green": "Vert",
+    "config.torohealth.blue": "Bleu",
+    "config.torohealth.alpha": "Transparence"
+  }
