@@ -6,6 +6,8 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.TridentItem;
+import net.minecraft.item.CrossbowItem;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config.Mode;
 
@@ -25,6 +27,7 @@ public class HoldingWeaponUpdater {
 
   private static boolean isWeapon(ItemStack item) {
     return item.getItem() instanceof SwordItem || item.getItem() instanceof BowItem
-        || item.getItem() instanceof PotionItem;
+        || item.getItem() instanceof PotionItem || item.getItem() instanceof TridentItem
+        || item.getItem() instanceof CrossbowItem;
   }
 }
