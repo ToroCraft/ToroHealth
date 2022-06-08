@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
@@ -21,7 +21,7 @@ public class Hud extends Screen {
   private int age;
 
   public Hud() {
-    super(new LiteralText("ToroHealth HUD"));
+    super(Text.literal("ToroHealth HUD"));
     this.client = MinecraftClient.getInstance();
     barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
   }
