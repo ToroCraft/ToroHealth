@@ -1,20 +1,20 @@
 
 package net.torocraft.torohealth;
 
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.torocraft.torohealth.bars.BarStates;
-import net.torocraft.torohealth.bars.HealthBarRenderer;
-import net.torocraft.torohealth.bars.ParticleRenderer;
-import net.torocraft.torohealth.util.HoldingWeaponUpdater;
+        import net.minecraft.client.Camera;
+        import net.minecraft.client.Minecraft;
+        import net.minecraft.client.model.EntityModel;
+        import net.minecraft.world.entity.LivingEntity;
+        import net.minecraftforge.client.event.RenderGameOverlayEvent;
+        import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+        import net.minecraftforge.client.event.RenderLivingEvent;
+        import net.minecraftforge.client.event.RenderLevelLastEvent;
+        import net.minecraftforge.common.MinecraftForge;
+        import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+        import net.torocraft.torohealth.bars.BarStates;
+        import net.torocraft.torohealth.bars.HealthBarRenderer;
+        import net.torocraft.torohealth.bars.ParticleRenderer;
+        import net.torocraft.torohealth.util.HoldingWeaponUpdater;
 
 public class ClientEventHandler {
 
@@ -28,7 +28,7 @@ public class ClientEventHandler {
   private static Minecraft minecraft = Minecraft.getInstance();
 
   private static void entityRender(
-      RenderLivingEvent.Post<? extends LivingEntity, ? extends EntityModel<?>> event) {
+          RenderLivingEvent.Post<? extends LivingEntity, ? extends EntityModel<?>> event) {
     HealthBarRenderer.prepareRenderInWorld(event.getEntity());
   }
 
@@ -43,7 +43,7 @@ public class ClientEventHandler {
       return;
     }
     ToroHealthClient.HUD.setEntity(
-        ToroHealthClient.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
+            ToroHealthClient.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
     BarStates.tick();
     HoldingWeaponUpdater.update();
     ToroHealthClient.HUD.tick();
@@ -51,7 +51,7 @@ public class ClientEventHandler {
 
   private static void hudRender(RenderGameOverlayEvent.Post event) {
     if (event.getType().equals(ElementType.ALL)) {
-      ToroHealthClient.HUD.draw(event.getMatrixStack(), ToroHealth.CONFIG);
+      ToroHealthClient.HUD.draw(event.getPoseStack(), ToroHealth.CONFIG);
     }
   }
 
