@@ -8,7 +8,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.19-forge'
+version = '1.19-forge-1'
 group = 'net.torocraft'
 archivesBaseName = 'torohealth'
 
