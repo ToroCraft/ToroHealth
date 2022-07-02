@@ -4,12 +4,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.AnchorPoint;
+
+import java.awt.*;
 
 public class Hud extends Screen {
   private static final ResourceLocation BACKGROUND_TEXTURE =
@@ -21,7 +23,7 @@ public class Hud extends Screen {
   private int age;
 
   public Hud() {
-    super(new TextComponent("ToroHealth HUD"));
+    super(Component.literal("ToroHealth HUD"));
     this.minecraft = Minecraft.getInstance();
     barDisplay = new BarDisplay(Minecraft.getInstance(), this);
   }
