@@ -6,25 +6,25 @@ issueTrackerURL="https://github.com/ToroCraft/ToroHealth/issues"
 
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]]
-  modId="torohealth"
-  version="${file.jarVersion}"
-  displayName="ToroHealth"
-  displayURL="https://www.curseforge.com/minecraft/mc-mods/torohealth-damage-indicators" #optional
-  authors="ToroCraft" 
-  description='''
+modId="torohealth"
+version="${file.jarVersion}"
+displayName="ToroHealth"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/torohealth-damage-indicators" #optional
+authors="ToroCraft"
+description='''
   Health bars will appear in the top left corner for the entity in the player's crosshairs.
   '''
 
 [[dependencies.torohealth]]
-  modId="forge"
-  mandatory=true
-  versionRange="[41.0.28,)"
-  ordering="NONE"
-  side="CLIENT"
+modId="forge"
+mandatory=true
+versionRange="[41.0.94,)"
+ordering="NONE"
+side="CLIENT"
 
 [[dependencies.torohealth]]
-  modId="minecraft"
-  mandatory=true
-  versionRange="[1.19,)"
-  ordering="NONE"
-  side="CLIENT"
+modId="minecraft"
+mandatory=true
+versionRange="[1.19,)"
+ordering="NONE"
+side="CLIENT"
