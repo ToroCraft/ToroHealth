@@ -2,68 +2,68 @@ package net.torocraft.torohealth.config.loader;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.function.Consumer;
 
 public class ConfigLoader<T extends IConfig> {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-	private final Consumer<T> onLoad;
-	private final File file;
-	private final T defaultConfig;
-	private FileWatcher watcher;
+  private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-	public ConfigLoader(T defaultConfig, String filename, Consumer<T> onLoad) {
-		this.defaultConfig = defaultConfig;
-		this.onLoad = onLoad;
-		this.file = new File(ConfigFolder.get(), filename);
-	}
+  private final Consumer<T> onLoad;
+  private final File file;
+  private final T defaultConfig;
+  private FileWatcher watcher;
 
-	public void load() {
-		T config = defaultConfig;
+  public ConfigLoader(T defaultConfig, String filename, Consumer<T> onLoad) {
+    this.defaultConfig = defaultConfig;
+    this.onLoad = onLoad;
+    this.file = new File(ConfigFolder.get(), filename);
+  }
 
-		if (!file.exists()) {
-			save(config);
-		}
+  public void load() {
+    T config = defaultConfig;
 
-		config = read();
+    if (!file.exists()) {
+      save(config);
+    }
 
-		Defaulter.setDefaults(config, defaultConfig.getClass());
+    config = read();
 
-		config.update();
-		onLoad.accept(config);
+    Defaulter.setDefaults(config, defaultConfig.getClass());
 
-		if (config.shouldWatch()) {
-			watch(file);
-		}
-	}
+    config.update();
+    onLoad.accept(config);
 
-	@SuppressWarnings("unchecked")
-	public T read() {
-		try (FileReader reader = new FileReader(file)) {
-			return (T)GSON.fromJson(reader, defaultConfig.getClass());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return defaultConfig;
-		}
-	}
+    if (config.shouldWatch()) {
+      watch(file);
+    }
+  }
 
-	public void save(T config) {
-		try (FileWriter writer = new FileWriter(file)) {
-			writer.write(GSON.toJson(config));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+  @SuppressWarnings("unchecked")
+  public T read() {
+    try (FileReader reader = new FileReader(file)) {
+      return (T) GSON.fromJson(reader, defaultConfig.getClass());
+    } catch (Exception e) {
+      e.printStackTrace();
+      return defaultConfig;
+    }
+  }
 
-	public void watch(File file) {
-		if (watcher != null) {
-			return;
-		}
+  public void save(T config) {
+    try (FileWriter writer = new FileWriter(file)) {
+      writer.write(GSON.toJson(config));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-		watcher = FileWatcher.watch(file, () -> load());
-	}
+  public void watch(File file) {
+    if (watcher != null) {
+      return;
+    }
+    watcher = FileWatcher.watch(file, () -> load());
+  }
+
 }

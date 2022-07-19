@@ -12,127 +12,125 @@ import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.AnchorPoint;
 
+import java.awt.*;
+
 public class Hud extends Screen {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
-	private EntityDisplay entityDisplay = new EntityDisplay();
-	private LivingEntity entity;
-	private BarDisplay barDisplay;
-	private Config config = new Config();
-	private int age;
+  private static final ResourceLocation BACKGROUND_TEXTURE =
+      new ResourceLocation(ToroHealth.MODID + ":textures/gui/default_skin_basic.png");
+  private EntityDisplay entityDisplay = new EntityDisplay();
+  private LivingEntity entity;
+  private BarDisplay barDisplay;
+  private Config config = new Config();
+  private int age;
 
-	public Hud() {
-		super(Component.literal("ToroHealth HUD"));
+  public Hud() {
+    super(Component.literal("ToroHealth HUD"));
+    this.minecraft = Minecraft.getInstance();
+    barDisplay = new BarDisplay(Minecraft.getInstance(), this);
+  }
 
-		this.minecraft = Minecraft.getInstance();
-		barDisplay = new BarDisplay(Minecraft.getInstance(), this);
-	}
+  public void draw(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+    if (this.minecraft.options.renderDebug) {
+      return;
+    }
+    this.config = ToroHealth.CONFIG;
+    if (this.config == null) {
+      this.config = new Config();
+    }
+    float x = determineX();
+    float y = determineY();
+    draw(poseStack, x, y, config.hud.scale);
+  }
 
-	public void draw(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
-		if (this.minecraft.options.renderDebug) {
-			return;
-		}
+  private float determineX() {
+    float x = config.hud.x;
+    AnchorPoint anchor = config.hud.anchorPoint;
+    float wScreen = minecraft.getWindow().getGuiScaledHeight();
 
-		this.config = ToroHealth.CONFIG;
+    switch (anchor) {
+      case BOTTOM_CENTER:
+      case TOP_CENTER:
+        return (wScreen / 2) + x;
+      case BOTTOM_RIGHT:
+      case TOP_RIGHT:
+        return (wScreen) + x;
+      default:
+        return x;
+    }
+  }
 
-		if (this.config == null) {
-			this.config = new Config();
-		}
+  private float determineY() {
+    float y = config.hud.y;
+    AnchorPoint anchor = config.hud.anchorPoint;
+    float hScreen = minecraft.getWindow().getGuiScaledHeight();
 
-		float x = determineX();
-		float y = determineY();
+    switch (anchor) {
+      case BOTTOM_CENTER:
+      case BOTTOM_LEFT:
+      case BOTTOM_RIGHT:
+        return y + hScreen;
+      default:
+        return y;
+    }
+  }
 
-		draw(poseStack, x, y, config.hud.scale);
-	}
+  public void tick() {
+    age++;
+  }
 
-	private float determineX() {
-		float x = config.hud.x;
-		AnchorPoint anchor = config.hud.anchorPoint;
-		float wScreen = minecraft.getWindow().getGuiScaledHeight();
+  public void setEntity(LivingEntity entity) {
+    if (entity != null) {
+      age = 0;
+    }
 
-      return switch (anchor) {
-        case BOTTOM_CENTER, TOP_CENTER -> (wScreen / 2) + x;
-        case BOTTOM_RIGHT, TOP_RIGHT -> (wScreen) + x;
-        default -> x;
-      };
-	}
+    if (entity == null && age > config.hud.hideDelay) {
+      setEntityWork(null);
+    }
 
-	private float determineY() {
-		float y = config.hud.y;
-		AnchorPoint anchor = config.hud.anchorPoint;
-		float hScreen = minecraft.getWindow().getGuiScaledHeight();
+    if (entity != null && entity != this.entity) {
+      setEntityWork(entity);
+    }
+  }
 
-      return switch (anchor) {
-        case BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT -> y + hScreen;
-        default -> y;
-      };
-	}
+  private void setEntityWork(LivingEntity entity) {
+    this.entity = entity;
+    entityDisplay.setEntity(entity);
+  }
 
-	public void tick() {
-		age++;
-	}
+  public LivingEntity getEntity() {
+    return entity;
+  }
 
-	public void setEntity(LivingEntity entity) {
-		if (entity != null) {
-			age = 0;
-		}
+  private void draw(PoseStack matrix, float x, float y, float scale) {
+    if (entity == null) {
+      return;
+    }
+    
+    if (config.hud.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
+      return;
+    }
 
-		if (entity == null && age > config.hud.hideDelay) {
-			setEntityWork(null);
-		}
+    matrix.pushPose();
+    matrix.scale(scale, scale, scale);
+    matrix.translate(x - 10, y - 10, 0);
+    if (config.hud.showSkin) {
+      this.drawSkin(matrix);
+    }
+    matrix.translate(10, 10, 0);
+    if (config.hud.showEntity) {
+      entityDisplay.draw(matrix, scale);
+    }
+    matrix.translate(44, 0, 0);
+    if (config.hud.showBar) {
+      barDisplay.draw(matrix, entity);
+    }
+    matrix.popPose();
+  }
 
-		if (entity != null && entity != this.entity) {
-			setEntityWork(entity);
-		}
-	}
-
-	private void setEntityWork(LivingEntity entity) {
-		this.entity = entity;
-
-		entityDisplay.setEntity(entity);
-	}
-
-	public LivingEntity getEntity() {
-		return entity;
-	}
-
-	private void draw(PoseStack matrix, float x, float y, float scale) {
-		if (entity == null) {
-			return;
-		}
-
-		if (config.hud.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
-			return;
-		}
-
-		matrix.pushPose();
-		matrix.scale(scale, scale, scale);
-		matrix.translate(x - 10, y - 10, 0);
-
-		if (config.hud.showSkin) {
-			this.drawSkin(matrix);
-		}
-
-		matrix.translate(10, 10, 0);
-
-		if (config.hud.showEntity) {
-			entityDisplay.draw(matrix, scale);
-		}
-
-		matrix.translate(44, 0, 0);
-
-		if (config.hud.showBar) {
-			barDisplay.draw(matrix, entity);
-		}
-
-		matrix.popPose();
-	}
-
-	private void drawSkin(PoseStack matrix) {
-		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-		int w = 160, h = 60;
-
-		blit(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
-	}
+  private void drawSkin(PoseStack matrix) {
+    RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    int w = 160, h = 60;
+    blit(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
+  }
 }

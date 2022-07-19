@@ -18,7 +18,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.torocraft.torohealth.ToroHealth;
-import net.torocraft.torohealth.ToroHealthClient;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.InWorld;
 import net.torocraft.torohealth.config.Config.Mode;
@@ -60,7 +59,7 @@ public class HealthBarRenderer {
       return;
     }
 
-    if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealthClient.HUD.getEntity() != entity) {
+    if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealth.HUD.getEntity() != entity) {
       return;
     }
 
