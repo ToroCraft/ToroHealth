@@ -1,65 +1,66 @@
 package net.torocraft.torohealth.bars;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class BarStates {
+	private static final Map<Integer, BarState> STATES = new HashMap<>();
+	public static List<BarParticle> PARTICLES = new ArrayList<>();
+	private static int tickCount = 0;
 
-  private static final Map<Integer, BarState> STATES = new HashMap<>();
-  public static List<BarParticle> PARTICLES = new ArrayList<>();
-  private static int tickCount = 0;
+	public static BarState getState(LivingEntity entity) {
+		int id = entity.getId();
+		BarState state = STATES.get(id);
 
-  public static BarState getState(LivingEntity entity) {
-    int id = entity.getId();
-    BarState state = STATES.get(id);
-    if (state == null) {
-      state = new BarState(entity);
-      STATES.put(id, state);
-    }
-    return state;
-  }
+		if (state == null) {
+			state = new BarState(entity);
+			STATES.put(id, state);
+		}
 
-  public static void tick() {
-    for (BarState state : STATES.values()) {
-      state.tick();
-    }
+		return state;
+	}
 
-    if (tickCount % 200 == 0) {
-      cleanCache();
-    }
+	public static void tick() {
+		for (BarState state : STATES.values()) {
+			state.tick();
+		}
 
-    PARTICLES.forEach(p -> p.tick());
-    PARTICLES.removeIf(p -> p.age > 50);
+		if (tickCount % 200 == 0) {
+			cleanCache();
+		}
 
-    tickCount++;
-  }
+		PARTICLES.forEach(p -> p.tick());
+		PARTICLES.removeIf(p -> p.age > 50);
 
-  private static void cleanCache() {
-    STATES.entrySet().removeIf(BarStates::stateExpired);
-  }
+		tickCount++;
+	}
 
-  private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
-    if (entry.getValue() == null) {
-      return true;
-    }
+	private static void cleanCache() {
+		STATES.entrySet().removeIf(BarStates::stateExpired);
+	}
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Entity entity = minecraft.level.getEntity(entry.getKey());
+	private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
+		if (entry.getValue() == null) {
+			return true;
+		}
 
-    if (!(entity instanceof LivingEntity)) {
-      return true;
-    }
+		Minecraft minecraft = Minecraft.getInstance();
+		Entity entity = minecraft.level.getEntity(entry.getKey());
 
-    if (!minecraft.level.hasChunkAt(entity.blockPosition())) {
-      return true;
-    }
+		if (!(entity instanceof LivingEntity)) {
+			return true;
+		}
 
-    return !entity.isAlive();
-  }
+		if (!minecraft.level.hasChunkAt(entity.blockPosition())) {
+			return true;
+		}
 
+		return !entity.isAlive();
+	}
 }
