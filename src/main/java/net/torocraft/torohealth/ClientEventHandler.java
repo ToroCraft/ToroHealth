@@ -5,16 +5,19 @@ package net.torocraft.torohealth;
         import net.minecraft.client.Minecraft;
         import net.minecraft.client.model.EntityModel;
         import net.minecraft.world.entity.LivingEntity;
-        import net.minecraftforge.client.event.RenderGameOverlayEvent;
-        import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+        import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+        import net.minecraftforge.client.event.RenderLevelStageEvent;
         import net.minecraftforge.client.event.RenderLivingEvent;
-        import net.minecraftforge.client.event.RenderLevelLastEvent;
+        import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
         import net.minecraftforge.common.MinecraftForge;
         import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+        import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
         import net.torocraft.torohealth.bars.BarStates;
         import net.torocraft.torohealth.bars.HealthBarRenderer;
         import net.torocraft.torohealth.bars.ParticleRenderer;
         import net.torocraft.torohealth.util.HoldingWeaponUpdater;
+
+        import java.lang.annotation.ElementType;
 
 public class ClientEventHandler {
 
@@ -22,7 +25,11 @@ public class ClientEventHandler {
     MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::playerTick);
     MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::entityRender);
     MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::renderParticles);
-    MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::hudRender);
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandler::registerOverlays);
+  }
+
+  private static void registerOverlays(final RegisterGuiOverlaysEvent event) {
+    event.registerAbove(VanillaGuiOverlay.POTION_ICONS.id(), "torohealth_hud", ToroHealthClient.HUD::draw);
   }
 
   private static Minecraft minecraft = Minecraft.getInstance();
@@ -32,11 +39,13 @@ public class ClientEventHandler {
     HealthBarRenderer.prepareRenderInWorld(event.getEntity());
   }
 
-  private static void renderParticles(RenderLevelLastEvent event) {
-    Camera camera = minecraft.gameRenderer.getMainCamera();
-    ParticleRenderer.renderParticles(event.getPoseStack(), camera);
-    HealthBarRenderer.renderInWorld(event.getPartialTick(), event.getPoseStack(), camera);
-  }
+    private static void renderParticles(RenderLevelStageEvent event) {
+      if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        ParticleRenderer.renderParticles(event.getPoseStack(), camera);
+        HealthBarRenderer.renderInWorld(event.getPartialTick(), event.getPoseStack(), camera);
+      }
+    }
 
   private static void playerTick(PlayerTickEvent event) {
     if (!event.player.level.isClientSide) {
@@ -48,11 +57,4 @@ public class ClientEventHandler {
     HoldingWeaponUpdater.update();
     ToroHealthClient.HUD.tick();
   }
-
-  private static void hudRender(RenderGameOverlayEvent.Post event) {
-    if (event.getType().equals(ElementType.ALL)) {
-      ToroHealthClient.HUD.draw(event.getPoseStack(), ToroHealth.CONFIG);
-    }
-  }
-
 }

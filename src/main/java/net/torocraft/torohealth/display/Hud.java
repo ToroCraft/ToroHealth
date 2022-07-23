@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.AnchorPoint;
@@ -28,17 +29,17 @@ public class Hud extends Screen {
     barDisplay = new BarDisplay(Minecraft.getInstance(), this);
   }
 
-  public void draw(PoseStack matrix, Config config) {
+  public void draw(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
     if (this.minecraft.options.renderDebug) {
       return;
     }
-    this.config = config;
+    this.config = ToroHealth.CONFIG;
     if (this.config == null) {
       this.config = new Config();
     }
     float x = determineX();
     float y = determineY();
-    draw(matrix, x, y, config.hud.scale);
+    draw(poseStack, x, y, config.hud.scale);
   }
 
   private float determineX() {
