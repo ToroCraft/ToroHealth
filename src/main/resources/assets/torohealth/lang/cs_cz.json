@@ -1,0 +1,21 @@
+{
+  "config.title": "Konfigurace ToroHealth",
+  "config.category.hud": "Nastavení Panelu HUD",
+  "config.hud.hideDelay": "Skrýt Prodlevu",
+  "config.hud.x": "Pozice X",
+  "config.hud.y": "Pozice Y",
+  "config.hud.scale": "Měřítko",
+  "config.torohealth.category.bar": "Nastavení Panelu Zdraví",
+  "config.bar.damageNumberType": "Typ Čísla Poškození",
+  "config.torohealth.category.inWorld": "V Nastavení Světa",
+  "config.inWorld.mode": "Režim",
+  "config.inWorld.distance": "Vzdálenost",
+  "config.torohealth.friendColor.title": "Barva Proužku - Přítel",
+  "config.torohealth.friendColorSecondary.title":"Barva Proužku - Přítel (Druhořadá)",
+  "config.torohealth.foeColor.title": "Barva Proužku - Nepřítel",
+  "config.torohealth.foeColorSecondary.title":"Barva Proužku - Nepřítel (Druhořadá)",
+  "config.torohealth.red": "Červená",
+  "config.torohealth.green": "Zelená",
+  "config.torohealth.blue": "Modrá",
+  "config.torohealth.alpha": "Alfa"
+}
