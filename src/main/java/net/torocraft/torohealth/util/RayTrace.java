@@ -24,7 +24,7 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.RaycastContext.FluidHandling;
 
 public class RayTrace implements BlockView {
-  private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
+  private static Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.canHit();
   private static MinecraftClient minecraft = MinecraftClient.getInstance();
 
   @Override

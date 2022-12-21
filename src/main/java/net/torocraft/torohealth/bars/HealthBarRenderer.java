@@ -14,15 +14,15 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.torocraft.torohealth.ToroHealth;
 import net.torocraft.torohealth.config.Config;
 import net.torocraft.torohealth.config.Config.InWorld;
 import net.torocraft.torohealth.config.Config.Mode;
 import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
@@ -87,7 +87,7 @@ public class HealthBarRenderer {
       return;
     }
 
-    RenderSystem.setShader(GameRenderer::getPositionColorShader);
+    RenderSystem.setShader(GameRenderer::getPositionColorProgram);
     RenderSystem.enableDepthTest();
     RenderSystem.enableBlend();
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
@@ -110,8 +110,8 @@ public class HealthBarRenderer {
 
       matrix.push();
       matrix.translate(x - camX, (y + height) - camY, z - camZ);
-      matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-      matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+      matrix.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-camera.getYaw()));
+      matrix.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
       matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
       render(matrix, entity, 0, 0, FULL_SIZE, true);
@@ -183,7 +183,7 @@ public class HealthBarRenderer {
     float b = (color & 255) / 255.0F;
 
     RenderSystem.setShaderColor(r, g, b, 1);
-    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShader(GameRenderer::getPositionTexProgram);
     RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
     RenderSystem.enableBlend();
 

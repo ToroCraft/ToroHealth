@@ -29,7 +29,7 @@ public class BarDisplay {
     int xOffset = 0;
 
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShader(GameRenderer::getPositionTexProgram);
     RenderSystem.setShaderTexture(0, ICON_TEXTURES);
     RenderSystem.enableBlend();
 

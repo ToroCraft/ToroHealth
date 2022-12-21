@@ -6,8 +6,8 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.torocraft.torohealth.ToroHealth;
 import org.lwjgl.opengl.GL11;
 
@@ -41,11 +41,11 @@ public class ParticleRenderer {
 
     matrix.push();
     matrix.translate(x - camX, y - camY, z - camZ);
-    matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+    matrix.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-camera.getYaw()));
+    matrix.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-    RenderSystem.setShader(GameRenderer::getPositionColorShader);
+    RenderSystem.setShader(GameRenderer::getPositionColorProgram);
     RenderSystem.enableDepthTest();
     RenderSystem.enableBlend();
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,

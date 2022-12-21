@@ -11,8 +11,8 @@ import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
+import org.joml.Quaternionf;
 
 public class EntityDisplay {
 
@@ -82,10 +82,9 @@ public class EntityDisplay {
     matrixStack2.push();
     matrixStack2.translate(0.0D, 0.0D, 1000.0D);
     matrixStack2.scale((float) size, (float) size, (float) size);
-    Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-    Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
-    quaternion.hamiltonProduct(quaternion2);
-    matrixStack2.multiply(quaternion);
+    Quaternionf quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(180.0F);
+    Quaternionf quaternion2 = RotationAxis.POSITIVE_X.rotationDegrees(g * 20.0F);
+    matrixStack2.multiply(quaternion.mul(quaternion2));
     float h = entity.bodyYaw;
     float i = entity.getYaw();
     float j = entity.getPitch();
