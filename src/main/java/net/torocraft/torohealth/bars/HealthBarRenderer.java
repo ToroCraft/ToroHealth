@@ -144,6 +144,7 @@ public class HealthBarRenderer {
     drawBar(m4f, x, y, width, 1, DARK_GRAY, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent2, color2, zOffset++, inWorld);
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     if (!inWorld) {
       if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
