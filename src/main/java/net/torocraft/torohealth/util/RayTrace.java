@@ -103,8 +103,10 @@ public class RayTrace implements BlockView {
       VoxelShape blockShape = c.getBlockShape(block, this, pos);
       return this.raycastBlock(c.getStart(), c.getEnd(), pos, blockShape, block);
     }, (c) -> {
-      Vec3d v = c.getStart().subtract(c.getEnd());
-      return BlockHitResult.createMissed(c.getEnd(), Direction.getFacing(v.x, v.y, v.z), new BlockPos(c.getEnd()));
+      Vec3d end = c.getEnd();
+      Vec3d v = c.getStart().subtract(end);
+      BlockPos endBlockPos = new BlockPos((int) end.x, (int) end.y, (int) end.z);
+      return BlockHitResult.createMissed(end, Direction.getFacing(v.x, v.y, v.z), endBlockPos);
     });
   }
 

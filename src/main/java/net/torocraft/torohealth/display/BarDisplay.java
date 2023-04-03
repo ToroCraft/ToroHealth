@@ -40,7 +40,7 @@ public class BarDisplay {
     String healthText = healthCur + "/" + healthMax;
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-    DrawableHelper.drawStringWithShadow(matrix, mc.textRenderer, name, xOffset, (int) 2, 16777215);
+    DrawableHelper.drawTextWithShadow(matrix, mc.textRenderer, name, xOffset, 2, 16777215);
 
     mc.textRenderer.drawWithShadow(matrix, name, xOffset, 2, 16777215);
     xOffset += mc.textRenderer.getWidth(name) + 5;
