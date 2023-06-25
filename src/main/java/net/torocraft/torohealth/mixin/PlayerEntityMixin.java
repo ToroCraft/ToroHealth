@@ -21,7 +21,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
   @Inject(method = "tick()V", at = @At("HEAD"))
   private void tick(CallbackInfo info) {
-    if (!this.world.isClient) {
+    if (!this.getWorld().isClient) {
       return;
     }
     ToroHealth.HUD.setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));

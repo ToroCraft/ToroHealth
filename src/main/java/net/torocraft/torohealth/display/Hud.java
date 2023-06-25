@@ -2,6 +2,7 @@ package net.torocraft.torohealth.display;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -23,10 +24,10 @@ public class Hud extends Screen {
   public Hud() {
     super(Text.literal("ToroHealth HUD"));
     this.client = MinecraftClient.getInstance();
-    barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
+    barDisplay = new BarDisplay(MinecraftClient.getInstance());
   }
 
-  public void draw(MatrixStack matrix, Config config) {
+  public void draw(DrawContext drawContext, Config config) {
     if (this.client.options.debugEnabled) {
       return;
     }
@@ -36,7 +37,7 @@ public class Hud extends Screen {
     }
     float x = determineX();
     float y = determineY();
-    draw(matrix, x, y, config.hud.scale);
+    draw(drawContext, x, y, config.hud.scale);
   }
 
   private float determineX() {
@@ -98,20 +99,21 @@ public class Hud extends Screen {
     return entity;
   }
 
-  private void draw(MatrixStack matrix, float x, float y, float scale) {
+  private void draw(DrawContext drawContext, float x, float y, float scale) {
     if (entity == null) {
       return;
     }
-    
+
     if (config.hud.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
       return;
     }
 
+    MatrixStack matrix = drawContext.getMatrices();
     matrix.push();
     matrix.scale(scale, scale, scale);
     matrix.translate(x - 10, y - 10, 0);
     if (config.hud.showSkin) {
-      this.drawSkin(matrix);
+      this.drawSkin(drawContext);
     }
     matrix.translate(10, 10, 0);
     if (config.hud.showEntity) {
@@ -119,15 +121,14 @@ public class Hud extends Screen {
     }
     matrix.translate(44, 0, 0);
     if (config.hud.showBar) {
-      barDisplay.draw(matrix, entity);
+      barDisplay.draw(drawContext, entity);
     }
     matrix.pop();
   }
 
-  private void drawSkin(MatrixStack matrix) {
-    RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+  private void drawSkin(DrawContext drawContext) {
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     int w = 160, h = 60;
-    drawTexture(matrix, 0, 0, 0.0f, 0.0f, w, h, w, h);
+    drawContext.drawTexture(BACKGROUND_TEXTURE, 0, 0, 0.0f, 0.0f, w, h, w, h);
   }
 }
