@@ -4,10 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
@@ -70,7 +72,8 @@ public class HealthBarRenderer {
 
   }
 
-  public static void renderInWorld(MatrixStack matrix, Camera camera) {
+  public static void renderInWorld(MatrixStack matrix,
+                                   VertexConsumerProvider vertexConsumerProvider, Camera camera) {
 
     MinecraftClient client = MinecraftClient.getInstance();
 
@@ -114,7 +117,7 @@ public class HealthBarRenderer {
       matrix.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
       matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-      render(matrix, entity, 0, 0, FULL_SIZE, true);
+      render(matrix, vertexConsumerProvider, entity, 0, 0, FULL_SIZE, true);
 
       matrix.pop();
     }
@@ -124,8 +127,9 @@ public class HealthBarRenderer {
     renderedEntities.clear();
   }
 
-  public static void render(MatrixStack matrix, LivingEntity entity, double x, double y,
-      float width, boolean inWorld) {
+  public static void render(MatrixStack matrix, VertexConsumerProvider vertexConsumerProvider,
+                            LivingEntity entity, double x, double y,
+                            float width, boolean inWorld) {
 
     Relation relation = EntityUtil.determineRelation(entity);
 
@@ -148,15 +152,16 @@ public class HealthBarRenderer {
 
     if (!inWorld) {
       if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
-        drawDamageNumber(matrix, state.lastDmgCumulative, x, y, width);
+        drawDamageNumber(matrix, vertexConsumerProvider, state.lastDmgCumulative, x, y, width);
       } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
-        drawDamageNumber(matrix, state.lastDmg, x, y, width);
+        drawDamageNumber(matrix, vertexConsumerProvider, state.lastDmg, x, y, width);
       }
     }
   }
 
-  public static void drawDamageNumber(MatrixStack matrix, int dmg, double x, double y,
-      float width) {
+  public static void drawDamageNumber(MatrixStack matrix,
+                                      VertexConsumerProvider vertexConsumerProvider,
+                                      int dmg, double x, double y, float width) {
     int i = Math.abs(Math.round(dmg));
     if (i == 0) {
       return;
@@ -165,7 +170,10 @@ public class HealthBarRenderer {
     MinecraftClient minecraft = MinecraftClient.getInstance();
     int sw = minecraft.textRenderer.getWidth(s);
     int color = dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
-    minecraft.textRenderer.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
+    minecraft.textRenderer.draw(
+            s, (float) (x + (width / 2) - sw), (float) y + 5, color, false,
+            matrix.peek().getPositionMatrix(), vertexConsumerProvider,
+            TextRenderer.TextLayerType.NORMAL, 0, 0);
   }
 
   private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent,
