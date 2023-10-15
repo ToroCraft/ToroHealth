@@ -3,8 +3,7 @@ package net.torocraft.torohealth.display;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -13,6 +12,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.npc.Villager;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class EntityDisplay {
 
@@ -82,10 +83,9 @@ public class EntityDisplay {
     matrixStack2.pushPose();
     matrixStack2.translate(0.0D, 0.0D, 1000.0D);
     matrixStack2.scale((float) size, (float) size, (float) size);
-    Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-    Quaternion quaternion2 = Vector3f.XP.rotationDegrees(g * 20.0F);
-    quaternion.mul(quaternion2);
-    matrixStack2.mulPose(quaternion);
+    Quaternionf quaternion = Axis.ZP.rotationDegrees(180.0F);
+    Quaternionf quaternion2 = Axis.XP.rotationDegrees(g * 20.0F);
+    matrixStack2.mulPose(quaternion.mul(quaternion2));
     float h = entity.yBodyRot; // bodyYaw;
     float i = entity.getYRot(); // getYaw();
     float j = entity.getXRot(); // getPitch();
@@ -99,8 +99,7 @@ public class EntityDisplay {
     Lighting.setupForEntityInInventory();
     EntityRenderDispatcher entityrenderdispatcher =
         Minecraft.getInstance().getEntityRenderDispatcher();
-    quaternion2.conj();
-    entityrenderdispatcher.overrideCameraOrientation(quaternion2);
+    entityrenderdispatcher.overrideCameraOrientation(quaternion2.conjugate());
     entityrenderdispatcher.setRenderShadow(false);
     MultiBufferSource.BufferSource immediate =
         Minecraft.getInstance().renderBuffers().bufferSource();

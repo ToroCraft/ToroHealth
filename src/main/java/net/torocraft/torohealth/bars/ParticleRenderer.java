@@ -2,13 +2,15 @@ package net.torocraft.torohealth.bars;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.torocraft.torohealth.ToroHealth;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderer {
@@ -41,8 +43,8 @@ public class ParticleRenderer {
 
     matrix.pushPose();
     matrix.translate(x - camX, y - camY, z - camZ);
-    matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getYRot()));
-    matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getXRot()));
+    matrix.mulPose(Axis.YP.rotationDegrees(-camera.getYRot()));
+    matrix.mulPose(Axis.XP.rotationDegrees(camera.getXRot()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
     RenderSystem.setShader(GameRenderer::getPositionColorShader);

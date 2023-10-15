@@ -6,10 +6,10 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -23,6 +23,9 @@ import net.torocraft.torohealth.config.Config.InWorld;
 import net.torocraft.torohealth.config.Config.Mode;
 import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 public class HealthBarRenderer {
@@ -110,8 +113,8 @@ public class HealthBarRenderer {
 
       matrix.pushPose();
       matrix.translate(x - camX, (y + height) - camY, z - camZ);
-      matrix.mulPose(Vector3f.YP.rotationDegrees(-camera.getYRot()));
-      matrix.mulPose(Vector3f.XP.rotationDegrees(camera.getXRot()));
+      matrix.mulPose(Axis.YP.rotationDegrees(-camera.getYRot()));
+      matrix.mulPose(Axis.XP.rotationDegrees(camera.getXRot()));
       matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
       render(matrix, entity, 0, 0, FULL_SIZE, true);
@@ -164,11 +167,12 @@ public class HealthBarRenderer {
     Minecraft minecraft = Minecraft.getInstance();
     int sw = minecraft.font.width(s);
     int color = dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
-    minecraft.font.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
+//    minecraft.font.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
+    // FIXME
   }
 
   private static void drawBar(Matrix4f matrix4f, double x, double y, float width, float percent,
-      int color, int zOffset, boolean inWorld) {
+                              int color, int zOffset, boolean inWorld) {
     float c = 0.00390625F;
     int u = 0;
     int v = 6 * 5 * 2 + 5;

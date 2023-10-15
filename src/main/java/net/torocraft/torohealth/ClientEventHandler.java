@@ -48,7 +48,7 @@ public class ClientEventHandler {
     }
 
   private static void playerTick(PlayerTickEvent event) {
-    if (!event.player.level.isClientSide) {
+    if (!event.player.level().isClientSide) {
       return;
     }
     ToroHealthClient.HUD.setEntity(
