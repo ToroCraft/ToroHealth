@@ -4,22 +4,23 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.torocraft.torohealth.ToroHealth;
 import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderer {
 
-  public static void renderParticles(MatrixStack matrix, Camera camera) {
+  public static void renderParticles(MatrixStack matrix, VertexConsumerProvider vertexConsumerProvider, Camera camera) {
     for (BarParticle p : BarStates.PARTICLES) {
-      renderParticle(matrix, p, camera);
+      renderParticle(matrix, vertexConsumerProvider, p, camera);
     }
   }
 
-  private static void renderParticle(MatrixStack matrix, BarParticle particle, Camera camera) {
+  private static void renderParticle(MatrixStack matrix, VertexConsumerProvider vertexConsumerProvider, BarParticle particle, Camera camera) {
     double distanceSquared = camera.getPos().squaredDistanceTo(particle.x, particle.y, particle.z);
     if (distanceSquared > ToroHealth.CONFIG.particle.distanceSquared) {
       return;
@@ -41,17 +42,17 @@ public class ParticleRenderer {
 
     matrix.push();
     matrix.translate(x - camX, y - camY, z - camZ);
-    matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-    matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+    matrix.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-camera.getYaw()));
+    matrix.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
     matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-    RenderSystem.setShader(GameRenderer::getPositionColorShader);
+    RenderSystem.setShader(GameRenderer::getPositionColorProgram);
     RenderSystem.enableDepthTest();
     RenderSystem.enableBlend();
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
         GL11.GL_ZERO);
 
-    HealthBarRenderer.drawDamageNumber(matrix, particle.damage, 0, 0, 10);
+    HealthBarRenderer.drawDamageNumber(matrix, vertexConsumerProvider, particle.damage, 0, 0, 10);
 
     RenderSystem.disableBlend();
 
