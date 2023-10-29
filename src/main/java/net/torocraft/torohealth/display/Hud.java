@@ -28,7 +28,7 @@ public class Hud extends Screen {
   }
 
   public void draw(DrawContext drawContext, Config config) {
-    if (this.client.options.debugEnabled) {
+    if (this.client.getDebugHud().shouldShowDebugHud()) {
       return;
     }
     this.config = config;
