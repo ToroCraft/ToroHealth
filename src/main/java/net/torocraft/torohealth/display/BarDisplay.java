@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,7 +36,7 @@ public class BarDisplay {
     RenderSystem.setShaderTexture(0, ICON_TEXTURES);
     RenderSystem.enableBlend();
 
-    HealthBarRenderer.render(guiGraphics.pose(), entity, 63, 14, 130, false);
+    HealthBarRenderer.render(guiGraphics.pose(), entity, guiGraphics.bufferSource(), 63, 14, 130, false);
     String name = getEntityName(entity);
     int healthMax = Mth.ceil(entity.getMaxHealth());
     int healthCur = Math.min(Mth.ceil(entity.getHealth()), healthMax);

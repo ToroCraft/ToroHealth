@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,6 +31,7 @@ public class Hud extends Screen {
     barDisplay = new BarDisplay(Minecraft.getInstance(), this);
   }
 
+
   public void draw(ForgeGui gui, GuiGraphics poseStack, float partialTick, int width, int height) {
     if (this.minecraft.options.renderDebug) {
       return;
@@ -40,7 +42,7 @@ public class Hud extends Screen {
     }
     float x = determineX();
     float y = determineY();
-    // FIXME
+
     draw(poseStack, x, y, config.hud.scale);
   }
 

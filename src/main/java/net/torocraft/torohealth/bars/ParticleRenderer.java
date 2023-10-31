@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.torocraft.torohealth.ToroHealth;
@@ -15,13 +16,13 @@ import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderer {
 
-  public static void renderParticles(PoseStack matrix, Camera camera) {
+  public static void renderParticles(PoseStack matrix, Camera camera, MultiBufferSource bufferSource) {
     for (BarParticle p : BarStates.PARTICLES) {
-      renderParticle(matrix, p, camera);
+      renderParticle(matrix, p, camera, bufferSource);
     }
   }
 
-  private static void renderParticle(PoseStack matrix, BarParticle particle, Camera camera) {
+  private static void renderParticle(PoseStack matrix, BarParticle particle, Camera camera, MultiBufferSource bufferSource) {
     double distanceSquared = camera.getPosition().distanceToSqr(particle.x, particle.y, particle.z);
     if (distanceSquared > ToroHealth.CONFIG.particle.distanceSquared) {
       return;
@@ -53,7 +54,7 @@ public class ParticleRenderer {
     RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
         GL11.GL_ZERO);
 
-    HealthBarRenderer.drawDamageNumber(matrix, particle.damage, 0, 0, 10);
+    HealthBarRenderer.drawDamageNumber(matrix, bufferSource, particle.damage, 0, 0, 10);
 
     RenderSystem.disableBlend();
 

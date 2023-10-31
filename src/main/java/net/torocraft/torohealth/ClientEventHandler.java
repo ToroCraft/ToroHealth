@@ -4,6 +4,7 @@ package net.torocraft.torohealth;
         import net.minecraft.client.Camera;
         import net.minecraft.client.Minecraft;
         import net.minecraft.client.model.EntityModel;
+        import net.minecraft.client.renderer.MultiBufferSource;
         import net.minecraft.world.entity.LivingEntity;
         import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
         import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -42,8 +43,9 @@ public class ClientEventHandler {
     private static void renderParticles(RenderLevelStageEvent event) {
       if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        ParticleRenderer.renderParticles(event.getPoseStack(), camera);
-        HealthBarRenderer.renderInWorld(event.getPartialTick(), event.getPoseStack(), camera);
+        MultiBufferSource bufferSource = event.getLevelRenderer().renderBuffers.bufferSource();
+        ParticleRenderer.renderParticles(event.getPoseStack(), camera, bufferSource);
+        HealthBarRenderer.renderInWorld(event.getPartialTick(), event.getPoseStack(), bufferSource, camera);
       }
     }
 
