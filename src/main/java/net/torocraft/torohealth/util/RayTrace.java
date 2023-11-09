@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -108,8 +109,9 @@ public class RayTrace implements BlockGetter {
       return this.clipWithInteractionOverride(c.getFrom(), c.getTo(), pos, voxelshape, block);
     }, (c) -> {
       Vec3 vec3 = c.getFrom().subtract(c.getTo());
+      Vec3 cto = c.getTo();
       return BlockHitResult.miss(c.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z),
-          new BlockPos(c.getTo()));
+          new BlockPos(new Vec3i((int) cto.x, (int) cto.y, (int) cto.z)));
     });
   }
 
