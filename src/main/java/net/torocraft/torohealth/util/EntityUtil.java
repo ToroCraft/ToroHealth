@@ -44,13 +44,13 @@ public class EntityUtil {
   }
 
   public static boolean showHealthBar(Entity entity, MinecraftClient client) {
-    return entity instanceof LivingEntity
+    return entity instanceof LivingEntity living
             && !(entity instanceof ArmorStandEntity)
             && (!entity.isInvisibleTo(client.player)
                 || entity.isGlowing()
                 || entity.isOnFire()
-                || entity instanceof CreeperEntity && ((CreeperEntity) entity).shouldRenderOverlay() // charged creeper
-                || StreamSupport.stream(entity.getItemsEquipped().spliterator(), false).anyMatch(is -> !is.isEmpty()))
+                || entity instanceof CreeperEntity && ((CreeperEntity) entity).isCharged() // charged creeper
+                || StreamSupport.stream(living.getEquippedItems().spliterator(), false).anyMatch(is -> !is.isEmpty()))
             && entity != client.player
             && !entity.isSpectator();
   }
