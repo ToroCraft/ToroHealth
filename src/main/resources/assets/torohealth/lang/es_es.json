@@ -17,5 +17,65 @@
   "config.torohealth.red": "Rojo",
   "config.torohealth.green": "Verde",
   "config.torohealth.blue": "Azul",
-  "config.torohealth.alpha": "Transparencia"
+  "config.torohealth.alpha": "Transparencia",
+
+  "text.autoconfig.torohealth.title": "Configuración de ToroHealth",
+
+  "text.autoconfig.torohealth.option.hudOptions": "Ajustes del HUD",
+  "text.autoconfig.torohealth.option.hudOptions.showEntity": "Mostrar entidad",
+  "text.autoconfig.torohealth.option.hudOptions.showBar": "Mostrar barra",
+  "text.autoconfig.torohealth.option.hudOptions.showSkin": "Mostrar marco",
+  "text.autoconfig.torohealth.option.hudOptions.onlyWhenHurt": "Solo al recibir daño",
+  "text.autoconfig.torohealth.option.hudOptions.anchorPoint": "Punto de anclaje del HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudHideDelay": "Demora en ocultar el HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudDistance": "Distancia máxima del HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudXPosition": "Posición X del HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudYPosition": "Posición Y del HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudScale": "Escala del HUD",
+
+  "text.autoconfig.torohealth.option.particleOptions": "Ajustes de partículas",
+  "text.autoconfig.torohealth.option.particleOptions.show": "Mostrar partículas",
+  "text.autoconfig.torohealth.option.particleOptions.particleDistance": "Distancia máxima de partículas",
+  "text.autoconfig.torohealth.option.particleOptions.damageColor": "Color de daño",
+  "text.autoconfig.torohealth.option.particleOptions.healColor": "Color de curación",
+
+  "text.autoconfig.torohealth.option.inWorldBarOptions": "Opciones de barra sobre entidades",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarVisibilityMode": "Modo de visibilidad de barra sobre entidades",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenLookingAt": "Solo al mirar directamente",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenHurt": "Solo al recibir daño",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarDistance": "Distancia máxima de barra sobre entidades",
+
+  "text.autoconfig.torohealth.option.barOptions": "Ajustes de la barra",
+  "text.autoconfig.torohealth.option.barOptions.healthChangeType": "Tipo de cambio de salud",
+  "text.autoconfig.torohealth.option.barOptions.friendColor": "Color para aliados",
+  "text.autoconfig.torohealth.option.barOptions.friendColorSecondary": "Color secundario (aliados)",
+  "text.autoconfig.torohealth.option.barOptions.foeColor": "Color para enemigos",
+  "text.autoconfig.torohealth.option.barOptions.foeColorSecondary": "Color secundario (enemigos)",
+
+  "text.autoconfig.torohealth.option.hudOptions.showEntity.@Tooltip": "Si está activado, dibuja el modelo de la entidad objetivo en el HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.showBar.@Tooltip": "Si está activado, muestra la barra de salud de la entidad objetivo en el HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.showSkin.@Tooltip": "Si está activado, dibuja el marco decorativo alrededor del modelo de entidad en el HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.onlyWhenHurt.@Tooltip": "Si está activado, el HUD solo aparece cuando la entidad objetivo ha recibido daño.",
+  "text.autoconfig.torohealth.option.hudOptions.anchorPoint.@Tooltip": "Determina la esquina o borde de la pantalla que se usa como punto de anclaje del HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.hudHideDelay.@Tooltip": "Tiempo (en ticks) antes de que el HUD se desvanezca después de dejar de mirar la entidad.",
+  "text.autoconfig.torohealth.option.hudOptions.hudDistance.@Tooltip": "Distancia máxima a la que aparece el HUD para entidades objetivo.",
+  "text.autoconfig.torohealth.option.hudOptions.hudXPosition.@Tooltip": "Desplazamiento horizontal (en píxeles) aplicado desde el punto de anclaje.",
+  "text.autoconfig.torohealth.option.hudOptions.hudYPosition.@Tooltip": "Desplazamiento vertical (en píxeles) aplicado desde el punto de anclaje.",
+  "text.autoconfig.torohealth.option.hudOptions.hudScale.@Tooltip": "Escala el tamaño del HUD. 1.0 = tamaño predeterminado.",
+
+  "text.autoconfig.torohealth.option.particleOptions.show.@Tooltip": "Si está activado, muestra números flotantes de daño y curación cuando cambia la salud de una entidad.",
+  "text.autoconfig.torohealth.option.particleOptions.particleDistance.@Tooltip": "Distancia máxima (en bloques) a la que se renderizan las partículas de daño/curación.",
+  "text.autoconfig.torohealth.option.particleOptions.damageColor.@Tooltip": "Color utilizado para las partículas de daño.",
+  "text.autoconfig.torohealth.option.particleOptions.healColor.@Tooltip": "Color utilizado para las partículas de curación.",
+
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarVisibilityMode.@Tooltip": "Determina cuándo se muestran las barras de salud en el mundo encima de las entidades.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenLookingAt.@Tooltip": "Si es verdadero, la barra de salud en el mundo solo se muestra al mirar directamente a la entidad.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenHurt.@Tooltip": "Si es verdadero, la barra de salud en el mundo aparece solo cuando la entidad ha recibido daño.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarDistance.@Tooltip": "Distancia máxima (en bloques) a la que las barras de salud en el mundo son visibles.",
+
+  "text.autoconfig.torohealth.option.barOptions.healthChangeType.@Tooltip": "Determina qué número de cambio de salud se muestra en el HUD.",
+  "text.autoconfig.torohealth.option.barOptions.friendColor.@Tooltip": "Color primario utilizado para la barra de salud de entidades amistosas.",
+  "text.autoconfig.torohealth.option.barOptions.friendColorSecondary.@Tooltip": "Color secundario que indica la pérdida de salud en entidades amistosas.",
+  "text.autoconfig.torohealth.option.barOptions.foeColor.@Tooltip": "Color primario utilizado para la barra de salud de entidades hostiles.",
+  "text.autoconfig.torohealth.option.barOptions.foeColorSecondary.@Tooltip": "Color secundario que indica la pérdida de salud en entidades hostiles."
 }

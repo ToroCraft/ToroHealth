@@ -18,9 +18,8 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.torocraft.torohealth.ToroHealth;
-import net.torocraft.torohealth.config.Config;
-import net.torocraft.torohealth.config.Config.InWorld;
-import net.torocraft.torohealth.config.Config.Mode;
+import net.torocraft.torohealth.ModConfig.HealthChangeType;
+import net.torocraft.torohealth.ModConfig.InWorldBarVisibilityMode;
 import net.torocraft.torohealth.util.EntityUtil;
 import net.torocraft.torohealth.util.EntityUtil.Relation;
 import org.lwjgl.opengl.GL11;
@@ -31,10 +30,6 @@ public class HealthBarRenderer {
   private static final int DARK_GRAY = 0x808080;
   private static final float FULL_SIZE = 40;
 
-  private static InWorld getConfig() {
-    return ToroHealth.CONFIG.inWorld;
-  }
-
   private static final List<LivingEntity> renderedEntities = new ArrayList<>();
 
   public static void prepareRenderInWorld(LivingEntity entity) {
@@ -44,25 +39,25 @@ public class HealthBarRenderer {
       return;
     }
 
-    if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorld.distance) {
+    if (entity.distanceTo(client.getCameraEntity()) > ToroHealth.CONFIG.inWorldBarOptions.inWorldBarDistance) {
       return;
     }
 
     BarStates.getState(entity);
 
-    if (Mode.WHEN_HOLDING_WEAPON.equals(getConfig().mode) && !ToroHealth.IS_HOLDING_WEAPON) {
+    if (InWorldBarVisibilityMode.WHEN_HOLDING_WEAPON.equals(ToroHealth.CONFIG.inWorldBarOptions.inWorldBarVisibilityMode) && !ToroHealth.IS_HOLDING_WEAPON) {
       return;
     }
 
-    if (Mode.NONE.equals(getConfig().mode)) {
+    if (InWorldBarVisibilityMode.NONE.equals(ToroHealth.CONFIG.inWorldBarOptions.inWorldBarVisibilityMode)) {
       return;
     }
 
-    if (ToroHealth.CONFIG.inWorld.onlyWhenLookingAt && ToroHealth.HUD.getEntity() != entity) {
+    if (ToroHealth.CONFIG.inWorldBarOptions.onlyWhenLookingAt && ToroHealth.HUD.getEntity() != entity) {
       return;
     }
 
-    if (ToroHealth.CONFIG.inWorld.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
+    if (ToroHealth.CONFIG.inWorldBarOptions.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
       return;
     }
 
@@ -129,10 +124,10 @@ public class HealthBarRenderer {
 
     Relation relation = EntityUtil.determineRelation(entity);
 
-    int color = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColor
-        : ToroHealth.CONFIG.bar.foeColor;
-    int color2 = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.bar.friendColorSecondary
-        : ToroHealth.CONFIG.bar.foeColorSecondary;
+    int color = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.barOptions.friendColor
+        : ToroHealth.CONFIG.barOptions.foeColor;
+    int color2 = relation.equals(Relation.FRIEND) ? ToroHealth.CONFIG.barOptions.friendColorSecondary
+        : ToroHealth.CONFIG.barOptions.foeColorSecondary;
 
     BarState state = BarStates.getState(entity);
 
@@ -146,9 +141,9 @@ public class HealthBarRenderer {
     drawBar(m4f, x, y, width, percent, color, zOffset, inWorld);
 
     if (!inWorld) {
-      if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.CUMULATIVE)) {
+      if (ToroHealth.CONFIG.barOptions.healthChangeType.equals(HealthChangeType.CUMULATIVE)) {
         drawDamageNumber(matrix, state.lastDmgCumulative, x, y, width);
-      } else if (ToroHealth.CONFIG.bar.damageNumberType.equals(Config.NumberType.LAST)) {
+      } else if (ToroHealth.CONFIG.barOptions.healthChangeType.equals(HealthChangeType.LAST)) {
         drawDamageNumber(matrix, state.lastDmg, x, y, width);
       }
     }
@@ -163,7 +158,7 @@ public class HealthBarRenderer {
     String s = Integer.toString(i);
     MinecraftClient minecraft = MinecraftClient.getInstance();
     int sw = minecraft.textRenderer.getWidth(s);
-    int color = dmg < 0 ? ToroHealth.CONFIG.particle.healColor : ToroHealth.CONFIG.particle.damageColor;
+    int color = dmg < 0 ? ToroHealth.CONFIG.particleOptions.healColor : ToroHealth.CONFIG.particleOptions.damageColor;
     minecraft.textRenderer.draw(matrix, s, (int) (x + (width / 2) - sw), (int) y + 5, color);
   }
 

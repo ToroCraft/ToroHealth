@@ -8,8 +8,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 import net.torocraft.torohealth.ToroHealth;
-import net.torocraft.torohealth.config.Config;
-import net.torocraft.torohealth.config.Config.AnchorPoint;
+import net.torocraft.torohealth.ModConfig;
+import net.torocraft.torohealth.ModConfig.AnchorPoint;
 
 public class Hud extends Screen {
   private static final Identifier BACKGROUND_TEXTURE =
@@ -17,7 +17,7 @@ public class Hud extends Screen {
   private EntityDisplay entityDisplay = new EntityDisplay();
   private LivingEntity entity;
   private BarDisplay barDisplay;
-  private Config config = new Config();
+  private ModConfig config;
   private int age;
 
   public Hud() {
@@ -26,22 +26,23 @@ public class Hud extends Screen {
     barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
   }
 
-  public void draw(MatrixStack matrix, Config config) {
+  public void draw(MatrixStack matrix, ModConfig config) {
     if (this.client.options.debugEnabled) {
       return;
     }
     this.config = config;
     if (this.config == null) {
-      this.config = new Config();
+        ModConfig.init();
+        this.config = ModConfig.INSTANCE;
     }
     float x = determineX();
     float y = determineY();
-    draw(matrix, x, y, config.hud.scale);
+    draw(matrix, x, y, config.hudOptions.hudScale);
   }
 
   private float determineX() {
-    float x = config.hud.x;
-    AnchorPoint anchor = config.hud.anchorPoint;
+    float x = config.hudOptions.hudXPosition;
+    AnchorPoint anchor = config.hudOptions.anchorPoint;
     float wScreen = client.getWindow().getScaledWidth();
 
     switch (anchor) {
@@ -57,8 +58,8 @@ public class Hud extends Screen {
   }
 
   private float determineY() {
-    float y = config.hud.y;
-    AnchorPoint anchor = config.hud.anchorPoint;
+    float y = config.hudOptions.hudYPosition;
+    AnchorPoint anchor = config.hudOptions.anchorPoint;
     float hScreen = client.getWindow().getScaledHeight();
 
     switch (anchor) {
@@ -71,6 +72,7 @@ public class Hud extends Screen {
     }
   }
 
+
   public void tick() {
     age++;
   }
@@ -80,7 +82,7 @@ public class Hud extends Screen {
       age = 0;
     }
 
-    if (entity == null && age > config.hud.hideDelay) {
+    if (entity == null && age > config.hudOptions.hudHideDelay) {
       setEntityWork(null);
     }
 
@@ -103,22 +105,23 @@ public class Hud extends Screen {
       return;
     }
     
-    if (config.hud.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
+    if (config.hudOptions.onlyWhenHurt && entity.getHealth() >= entity.getMaxHealth()) {
       return;
     }
 
     matrix.push();
     matrix.scale(scale, scale, scale);
     matrix.translate(x - 10, y - 10, 0);
-    if (config.hud.showSkin) {
+    if (config.hudOptions.showSkin) {
       this.drawSkin(matrix);
     }
     matrix.translate(10, 10, 0);
-    if (config.hud.showEntity) {
+    if (config.hudOptions.showEntity) {
+
       entityDisplay.draw(matrix, scale);
     }
     matrix.translate(44, 0, 0);
-    if (config.hud.showBar) {
+    if (config.hudOptions.showBar) {
       barDisplay.draw(matrix, entity);
     }
     matrix.pop();

@@ -17,5 +17,65 @@
   "config.torohealth.red": "Red",
   "config.torohealth.green": "Green",
   "config.torohealth.blue": "Blue",
-  "config.torohealth.alpha": "Alpha"
+  "config.torohealth.alpha": "Alpha",
+
+  "text.autoconfig.torohealth.title": "ToroHealth Config",
+
+  "text.autoconfig.torohealth.option.hudOptions": "HUD Options",
+  "text.autoconfig.torohealth.option.hudOptions.showEntity": "Show Entity",
+  "text.autoconfig.torohealth.option.hudOptions.showBar": "Show Bar",
+  "text.autoconfig.torohealth.option.hudOptions.showSkin": "Show Skin",
+  "text.autoconfig.torohealth.option.hudOptions.onlyWhenHurt": "Only When Hurt",
+  "text.autoconfig.torohealth.option.hudOptions.anchorPoint": "HUD Anchor Point",
+  "text.autoconfig.torohealth.option.hudOptions.hudHideDelay": "HUD Hide Delay",
+  "text.autoconfig.torohealth.option.hudOptions.hudDistance": "HUD Max Distance",
+  "text.autoconfig.torohealth.option.hudOptions.hudXPosition": "HUD X Position",
+  "text.autoconfig.torohealth.option.hudOptions.hudYPosition": "HUD Y Position",
+  "text.autoconfig.torohealth.option.hudOptions.hudScale": "HUD Scale",
+
+  "text.autoconfig.torohealth.option.particleOptions": "Particle Options",
+  "text.autoconfig.torohealth.option.particleOptions.show": "Display Particles",
+  "text.autoconfig.torohealth.option.particleOptions.particleDistance": "Particle Max Distance",
+  "text.autoconfig.torohealth.option.particleOptions.damageColor": "Damage Color",
+  "text.autoconfig.torohealth.option.particleOptions.healColor": "Heal Color",
+
+  "text.autoconfig.torohealth.option.inWorldBarOptions": "In-World Bar Options",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarVisibilityMode": "In-World Bar Visibility Mode",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenLookingAt": "Only When Looking At",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenHurt": "Only When Hurt",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarDistance": "In-World Bar Max Distance",
+
+  "text.autoconfig.torohealth.option.barOptions": "Bar Options",
+  "text.autoconfig.torohealth.option.barOptions.healthChangeType": "Health Change Type",
+  "text.autoconfig.torohealth.option.barOptions.friendColor": "Friend Color",
+  "text.autoconfig.torohealth.option.barOptions.friendColorSecondary": "Friend Color (Secondary)",
+  "text.autoconfig.torohealth.option.barOptions.foeColor": "Foe Color",
+  "text.autoconfig.torohealth.option.barOptions.foeColorSecondary": "Foe Color (Secondary)",
+
+  "text.autoconfig.torohealth.option.hudOptions.showEntity.@Tooltip": "If true, draw the target entity model in the HUD overlay.",
+  "text.autoconfig.torohealth.option.hudOptions.showBar.@Tooltip": "If true, displays the health bar of the target entity in the HUD overlay.",
+  "text.autoconfig.torohealth.option.hudOptions.showSkin.@Tooltip": "If true, draw the frame texture in the HUD overlay.",
+  "text.autoconfig.torohealth.option.hudOptions.onlyWhenHurt.@Tooltip": "If true, the HUD only appears when the targeted entity has taken damage.",
+  "text.autoconfig.torohealth.option.hudOptions.anchorPoint.@Tooltip": "Determines the screen corner or edge used as the anchor for positioning the HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.hudHideDelay.@Tooltip": "Time (in ticks) before the HUD fades out after the entity is no longer targeted.",
+  "text.autoconfig.torohealth.option.hudOptions.hudDistance.@Tooltip": "Maximum distance at which the HUD will appear for targeted entities.",
+  "text.autoconfig.torohealth.option.hudOptions.hudXPosition.@Tooltip": "Horizontal offset (in pixels) applied from the selected anchor point.",
+  "text.autoconfig.torohealth.option.hudOptions.hudYPosition.@Tooltip": "Vertical offset (in pixels) applied from the selected anchor point.",
+  "text.autoconfig.torohealth.option.hudOptions.hudScale.@Tooltip": "Scales the size of the HUD overlay. 1.0 = default size.",
+
+  "text.autoconfig.torohealth.option.particleOptions.show.@Tooltip": "If true, displays floating damage/heal particle numbers whenever an entity's health changes.",
+  "text.autoconfig.torohealth.option.particleOptions.particleDistance.@Tooltip": "Maximum distance (in blocks) at which damage/heal particles are rendered.",
+  "text.autoconfig.torohealth.option.particleOptions.damageColor.@Tooltip": "Color used for damage number particles.",
+  "text.autoconfig.torohealth.option.particleOptions.healColor.@Tooltip": "Color used for healing number particles.",
+
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarVisibilityMode.@Tooltip": "Determines when in-world health bars are displayed above entities.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenLookingAt.@Tooltip": "If true, the in-world health bar is shown only when directly looking at the entity.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenHurt.@Tooltip": "If true, the in-world health bar appears only when the entity has taken damage.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarDistance.@Tooltip": "Maximum distance (in blocks) at which in-world health bars are visible.",
+
+  "text.autoconfig.torohealth.option.barOptions.healthChangeType.@Tooltip": "Sets which health-change number is shown in the HUD.",
+  "text.autoconfig.torohealth.option.barOptions.friendColor.@Tooltip": "Primary color used for the health bar of friendly entities.",
+  "text.autoconfig.torohealth.option.barOptions.friendColorSecondary.@Tooltip": "Secondary color used to display health loss on friendly entities.",
+  "text.autoconfig.torohealth.option.barOptions.foeColor.@Tooltip": "Primary color used for the health bar of hostile entities.",
+  "text.autoconfig.torohealth.option.barOptions.foeColorSecondary.@Tooltip": "Secondary color used to display health loss on hostile entities."
 }

@@ -1,6 +1,6 @@
 {
   "config.title": "Конфиг ToroHealth",
-  "config.category.hud": "Параметры HUD",
+  "config.category.hud": "Настройки HUD",
   "config.hud.hideDelay": "Задержка до исчезновения",
   "config.hud.x": "Позиция X",
   "config.hud.y": "Позиция Y",
@@ -17,5 +17,65 @@
   "config.torohealth.red": "Красный",
   "config.torohealth.green": "Зелёный",
   "config.torohealth.blue": "Синий",
-  "config.torohealth.alpha": "Альфа"
+  "config.torohealth.alpha": "Альфа",
+
+  "text.autoconfig.torohealth.title": "Конфиг ToroHealth",
+
+  "text.autoconfig.torohealth.option.hudOptions": "Параметры HUD",
+  "text.autoconfig.torohealth.option.hudOptions.showEntity": "Показывать сущность",
+  "text.autoconfig.torohealth.option.hudOptions.showBar": "Показывать полоску",
+  "text.autoconfig.torohealth.option.hudOptions.showSkin": "Показывать рамку",
+  "text.autoconfig.torohealth.option.hudOptions.onlyWhenHurt": "Только при получении урона",
+  "text.autoconfig.torohealth.option.hudOptions.anchorPoint": "Точка закрепления HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudHideDelay": "Задержка скрытия HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudDistance": "Максимальная дистанция HUD",
+  "text.autoconfig.torohealth.option.hudOptions.hudXPosition": "Позиция HUD по X",
+  "text.autoconfig.torohealth.option.hudOptions.hudYPosition": "Позиция HUD по Y",
+  "text.autoconfig.torohealth.option.hudOptions.hudScale": "Масштаб HUD",
+
+  "text.autoconfig.torohealth.option.particleOptions": "Параметры частиц",
+  "text.autoconfig.torohealth.option.particleOptions.show": "Показывать частицы",
+  "text.autoconfig.torohealth.option.particleOptions.particleDistance": "Максимальная дистанция частиц",
+  "text.autoconfig.torohealth.option.particleOptions.damageColor": "Цвет урона",
+  "text.autoconfig.torohealth.option.particleOptions.healColor": "Цвет лечения",
+
+  "text.autoconfig.torohealth.option.inWorldBarOptions": "Полоски здоровья над сущностями",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarVisibilityMode": "Режим отображения полосок над сущностями",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenLookingAt": "Только при наведении",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenHurt": "Только при получении урона",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarDistance": "Максимальная дистанция полосок над сущностями",
+
+  "text.autoconfig.torohealth.option.barOptions": "Параметры полоски",
+  "text.autoconfig.torohealth.option.barOptions.healthChangeType": "Тип отображения изменения здоровья",
+  "text.autoconfig.torohealth.option.barOptions.friendColor": "Цвет для союзников",
+  "text.autoconfig.torohealth.option.barOptions.friendColorSecondary": "Цвет союзников (вторичный)",
+  "text.autoconfig.torohealth.option.barOptions.foeColor": "Цвет для врагов",
+  "text.autoconfig.torohealth.option.barOptions.foeColorSecondary": "Цвет врагов (вторичный)",
+
+  "text.autoconfig.torohealth.option.hudOptions.showEntity.@Tooltip": "Если включено, отображает модель цели в интерфейсе HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.showBar.@Tooltip": "Если включено, показывает полосу здоровья цели в HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.showSkin.@Tooltip": "Если включено, отображает декоративную рамку вокруг модели сущности в HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.onlyWhenHurt.@Tooltip": "Если включено, HUD появляется только когда цель получила урон.",
+  "text.autoconfig.torohealth.option.hudOptions.anchorPoint.@Tooltip": "Определяет угол или сторону экрана, используемые как точка привязки HUD.",
+  "text.autoconfig.torohealth.option.hudOptions.hudHideDelay.@Tooltip": "Задержка (в тиках) перед исчезновением HUD после того, как цель перестала быть выделена.",
+  "text.autoconfig.torohealth.option.hudOptions.hudDistance.@Tooltip": "Максимальная дистанция, на которой HUD появляется для выделенных сущностей.",
+  "text.autoconfig.torohealth.option.hudOptions.hudXPosition.@Tooltip": "Горизонтальное смещение (в пикселях) от точки привязки.",
+  "text.autoconfig.torohealth.option.hudOptions.hudYPosition.@Tooltip": "Вертикальное смещение (в пикселях) от точки привязки.",
+  "text.autoconfig.torohealth.option.hudOptions.hudScale.@Tooltip": "Масштаб HUD. 1.0 = стандартный размер.",
+
+  "text.autoconfig.torohealth.option.particleOptions.show.@Tooltip": "Если включено, показывает плавающие цифры урона и лечения при изменении здоровья сущности.",
+  "text.autoconfig.torohealth.option.particleOptions.particleDistance.@Tooltip": "Максимальная дистанция (в блоках), на которой отображаются частицы урона/исцеления.",
+  "text.autoconfig.torohealth.option.particleOptions.damageColor.@Tooltip": "Цвет, используемый для частиц урона.",
+  "text.autoconfig.torohealth.option.particleOptions.healColor.@Tooltip": "Цвет, используемый для частиц исцеления.",
+
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarVisibilityMode.@Tooltip": "Определяет, когда отображаются полоски здоровья в мире над сущностями.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenLookingAt.@Tooltip": "Если включено, полоска здоровья в мире показывается только при прямом взгляде на сущность.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.onlyWhenHurt.@Tooltip": "Если включено, полоска здоровья в мире появляется только после того, как сущность получила урон.",
+  "text.autoconfig.torohealth.option.inWorldBarOptions.inWorldBarDistance.@Tooltip": "Максимальная дистанция (в блоках), на которой отображаются полоски здоровья в мире.",
+
+  "text.autoconfig.torohealth.option.barOptions.healthChangeType.@Tooltip": "Определяет, какое изменение здоровья отображается в HUD.",
+  "text.autoconfig.torohealth.option.barOptions.friendColor.@Tooltip": "Основной цвет полоски здоровья дружелюбных сущностей.",
+  "text.autoconfig.torohealth.option.barOptions.friendColorSecondary.@Tooltip": "Вторичный цвет, используемый для отображения потери здоровья у дружелюбных сущностей.",
+  "text.autoconfig.torohealth.option.barOptions.foeColor.@Tooltip": "Основной цвет полоски здоровья враждебных сущностей.",
+  "text.autoconfig.torohealth.option.barOptions.foeColorSecondary.@Tooltip": "Вторичный цвет, используемый для отображения потери здоровья у враждебных сущностей."
 }

@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SwordItem;
 import net.torocraft.torohealth.ToroHealth;
-import net.torocraft.torohealth.config.Config.Mode;
+import net.torocraft.torohealth.ModConfig.InWorldBarVisibilityMode;
 
 public class HoldingWeaponUpdater {
   public static void update() {
-    if (Mode.NONE.equals(ToroHealth.CONFIG.inWorld.mode))
+    if (InWorldBarVisibilityMode.NONE.equals(ToroHealth.CONFIG.inWorldBarOptions.inWorldBarVisibilityMode))
       return;
     MinecraftClient minecraft = MinecraftClient.getInstance();
     PlayerEntity player = minecraft.player;
