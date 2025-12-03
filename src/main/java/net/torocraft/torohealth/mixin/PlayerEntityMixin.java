@@ -24,7 +24,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     if (!this.world.isClient) {
       return;
     }
-    ToroHealth.HUD.setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hud.distance));
+    ToroHealth.HUD.setEntity(ToroHealth.RAYTRACE.getEntityInCrosshair(0, ToroHealth.CONFIG.hudOptions.hudDistance));
     BarStates.tick();
     HoldingWeaponUpdater.update();
     ToroHealth.HUD.tick();
