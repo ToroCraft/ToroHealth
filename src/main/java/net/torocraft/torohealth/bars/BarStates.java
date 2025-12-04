@@ -18,7 +18,7 @@ public class BarStates {
     int id = entity.getId();
     BarState state = STATES.get(id);
     if (state == null) {
-      state = new BarState(entity);
+      state = new BarState(id);
       STATES.put(id, state);
     }
     return state;
