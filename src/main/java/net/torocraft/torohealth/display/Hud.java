@@ -109,11 +109,11 @@ public class Hud extends Screen {
 
     matrix.push();
     matrix.scale(scale, scale, scale);
-    matrix.translate(x - 10, y - 10, 0);
+    matrix.translate(x - 9, y - 9, 0);
     if (config.hud.showSkin) {
       this.drawSkin(matrix);
     }
-    matrix.translate(10, 10, 0);
+    matrix.translate(9, 9, 0);
     if (config.hud.showEntity) {
       entityDisplay.draw(matrix, scale);
     }
