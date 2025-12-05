@@ -121,15 +121,15 @@ public class ModConfig implements ConfigData {
     }
 
 
-    public static enum AnchorPoint {
+    public enum AnchorPoint {
         TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
     }
 
-    public static enum InWorldBarVisibilityMode {
+    public enum InWorldBarVisibilityMode {
         NONE, WHEN_HOLDING_WEAPON, ALWAYS
     }
 
-    public static enum HealthChangeType {
+    public enum HealthChangeType {
         NONE, LAST, CUMULATIVE
     }
 
