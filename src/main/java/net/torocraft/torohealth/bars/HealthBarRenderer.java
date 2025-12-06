@@ -171,8 +171,8 @@ public class HealthBarRenderer {
       int color, int zOffset, boolean inWorld) {
     float c = 0.00390625F;
     int u = 0;
-    int v = 6 * 5 * 2 + 5;
-    int uw = MathHelper.ceil(92 * percent);
+    int v = 6 * 5 * 2 + 5 + (inWorld ? 70 : 0);
+    int uw = MathHelper.ceil((inWorld ? 41 : 131) * percent);
     int vh = 5;
 
     double size = percent * width;
@@ -186,6 +186,7 @@ public class HealthBarRenderer {
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
     RenderSystem.enableBlend();
+
 
     float half = width / 2;
 
