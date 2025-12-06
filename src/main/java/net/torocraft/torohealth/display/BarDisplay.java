@@ -67,6 +67,7 @@ public class BarDisplay {
 
   private void renderHeartIcon(MatrixStack matrix, int x, int y) {
     RenderSystem.setShaderTexture(0, ICON_TEXTURES);
+    gui.drawTexture(matrix, x, y, 16, 0, 9, 9);
     gui.drawTexture(matrix, x, y, 16 + 36, 0, 9, 9);
   }
 }
