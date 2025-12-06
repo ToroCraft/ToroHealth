@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class InGameHudMixin {
 
   @Inject(method = "render", at = @At("RETURN"))
-  private void render(MatrixStack matrixStack, float partial, CallbackInfo info) {
-    ToroHealth.HUD.draw(matrixStack, ToroHealth.CONFIG);
+  private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
+    ToroHealth.HUD.draw(matrixStack, tickDelta, ToroHealth.CONFIG);
   }
 
 }

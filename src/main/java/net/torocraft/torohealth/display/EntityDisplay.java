@@ -33,7 +33,7 @@ public class EntityDisplay {
     updateScale();
   }
 
-  public void draw(MatrixStack matrix) {
+  public void draw(MatrixStack matrix, float tickDelta) {
     if (entity != null) {
       MatrixStack matrixStack = RenderSystem.getModelViewStack();
       matrixStack.push();
@@ -41,7 +41,7 @@ public class EntityDisplay {
       Matrix4f positionMatrix2 = matrix.peek().getPositionMatrix();
       positionMatrix.multiply(positionMatrix2);
       RenderSystem.applyModelViewMatrix();
-      drawEntity((int) xOffset, (int) yOffset, entityScale, -80, -20, entity);
+      drawEntity((int) xOffset, (int) yOffset, entityScale, -80, -20, entity, tickDelta);
       matrixStack.pop();
       RenderSystem.applyModelViewMatrix();
     }
@@ -76,7 +76,7 @@ public class EntityDisplay {
    * copied from InventoryScreen.drawEntity() to expose the matrixStack
    */
   public static void drawEntity(int x, int y, int size, float mouseX,
-      float mouseY, LivingEntity entity) {
+      float mouseY, LivingEntity entity, float tickDelta) {
     float f = (float) Math.atan(mouseX / 40.0F);
     float g = (float) Math.atan(mouseY / 40.0F);
     MatrixStack matrixStack = RenderSystem.getModelViewStack();
@@ -92,16 +92,14 @@ public class EntityDisplay {
     Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
     quaternion.hamiltonProduct(quaternion2);
     matrixStack2.multiply(quaternion);
-    float h = entity.bodyYaw;
-    float i = entity.prevBodyYaw;
-    float j = entity.getYaw();
-    float k = entity.prevHeadYaw;
-    float l = entity.headYaw;
+    float i = entity.bodyYaw;
+    float j = entity.prevBodyYaw;
+    float k = entity.headYaw;
+    float l = entity.prevHeadYaw;
     entity.bodyYaw = 180.0f + f * 20.0f;
-    entity.prevBodyYaw = 180.0f + f * 20.0f + i - h;
-    entity.setYaw(180.0f + f * 20.0f + j - h);
-    entity.headYaw = 180.0f + f * 20.0f + k - h;
-    entity.prevHeadYaw = 180.0f + f * 20.0f + l - h;
+    entity.prevBodyYaw = 180.0f + f * 20.0f;
+    entity.headYaw = 180.0f + f * 20.0f + k - i;
+    entity.prevHeadYaw = 180.0f + f * 20.0f + l - j;
     DiffuseLighting.method_34742();
     EntityRenderDispatcher entityRenderDispatcher =
         MinecraftClient.getInstance().getEntityRenderDispatcher();
@@ -110,17 +108,15 @@ public class EntityDisplay {
     entityRenderDispatcher.setRenderShadows(false);
     VertexConsumerProvider.Immediate immediate =
         MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-    RenderSystem.runAsFancy(() -> entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0f, 1.0f, matrixStack2, immediate, 0xF000F0));
+    RenderSystem.runAsFancy(() -> entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0f, tickDelta, matrixStack2, immediate, 0xF000F0));
     immediate.draw();
     entityRenderDispatcher.setRenderShadows(true);
-    entity.bodyYaw = h;
-    entity.prevBodyYaw = i;
-    entity.setYaw(j);
-    entity.prevHeadYaw = k;
-    entity.headYaw = l;
+    entity.bodyYaw = i;
+    entity.prevBodyYaw = j;
+    entity.headYaw = k;
+    entity.prevHeadYaw = l;
     matrixStack.pop();
     RenderSystem.applyModelViewMatrix();
     DiffuseLighting.enableGuiDepthLighting();
   }
-
 }
