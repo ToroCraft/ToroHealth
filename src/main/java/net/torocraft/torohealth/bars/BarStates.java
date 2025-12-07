@@ -19,7 +19,9 @@ public class BarStates {
     BarState state = STATES.get(id);
     if (state == null) {
       state = BarState.create(id);
-      STATES.put(id, state);
+      if (state != null) {
+          STATES.put(id, state);
+      }
     }
     return state;
   }
