@@ -22,26 +22,32 @@ public class BarState {
     private static final float HEALTH_INDICATOR_DELAY = 10;
 
 
-
-    public BarState(Integer id) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        Entity entity = client.world != null ? client.world.getEntityById(id) : null;
-        if (entity instanceof LivingEntity living) {
-            this.entityID = id;
-            health = Math.min(living.getHealth(), living.getMaxHealth());
-            previousHealthDisplay = health;
-            lastDmg = 0;
-            lastDmgCumulative = 0;
-            lastHealth = health;
-            lastDmgDelay = 0;
-            animationSpeed = 0;
-        } else {
-            this.entityID = null; // will be ignored
-        }
+    private BarState(Integer id, float health){
+        this.entityID = id;
+        this.health = health;
+        this.previousHealthDisplay = health;
+        this.lastDmg = 0;
+        this.lastDmgCumulative = 0;
+        this.lastHealth = health;
+        this.lastDmgDelay = 0;
+        this.animationSpeed = 0;
     }
+
+    public static BarState create(Integer id){
+        MinecraftClient client = MinecraftClient.getInstance();
+        assert client.world != null;
+        Entity entity = client.world.getEntityById(id);
+        if (entity instanceof LivingEntity living) {
+            float currentHealth = Math.min(living.getHealth(), living.getMaxHealth());
+            return new BarState(id, currentHealth);
+        }
+        return  null;
+    }
+
 
     public void tick() {
         MinecraftClient client = MinecraftClient.getInstance();
+        assert client.world != null;
         LivingEntity entity = (LivingEntity) client.world.getEntityById(entityID);
 
         if (entity != null){
@@ -85,8 +91,11 @@ public class BarState {
         lastHealth = health;
         if (ToroHealth.CONFIG.particle.show) {
             MinecraftClient client = MinecraftClient.getInstance();
+            assert client.world != null;
             LivingEntity entity = (LivingEntity) client.world.getEntityById(entityID);
-            BarStates.PARTICLES.add(new BarParticle(entity, lastDmg));
+            if (entity != null) {
+                BarStates.PARTICLES.add(new BarParticle(entity, lastDmg));
+            }
         }
     }
 
