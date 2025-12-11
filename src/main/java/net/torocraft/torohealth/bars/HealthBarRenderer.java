@@ -135,6 +135,9 @@ public class HealthBarRenderer {
         : ToroHealth.CONFIG.bar.foeColorSecondary;
 
     BarState state = BarStates.getState(entity);
+    if (state == null) {
+        return;
+    }
 
     float percent = Math.min(1, Math.min(state.health, entity.getMaxHealth()) / entity.getMaxHealth());
     float percent2 = Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();

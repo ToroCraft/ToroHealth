@@ -18,8 +18,10 @@ public class BarStates {
     int id = entity.getId();
     BarState state = STATES.get(id);
     if (state == null) {
-      state = new BarState(entity);
-      STATES.put(id, state);
+      state = BarState.create(id);
+      if (state != null) {
+          STATES.put(id, state);
+      }
     }
     return state;
   }
@@ -49,6 +51,7 @@ public class BarStates {
     }
 
     MinecraftClient minecraft = MinecraftClient.getInstance();
+    assert minecraft.world != null;
     Entity entity = minecraft.world.getEntityById(entry.getKey());
 
     if (!(entity instanceof LivingEntity)) {
