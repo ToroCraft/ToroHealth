@@ -10,7 +10,7 @@ public class BarState {
 
   public float health;
   public float previousHealth;
-  public float previousHealthDisplay;
+  public float previousHealthDisplay = 0;
   public float previousHealthDelay;
   public int lastDmg;
   public int lastDmgCumulative;
@@ -61,25 +61,24 @@ public class BarState {
     lastDmgCumulative += lastDmg;
 
     lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;
+    previousHealthDisplay = Math.max(lastHealth, previousHealthDisplay);
+    if (previousHealthDisplay <= lastHealth) {
+      previousHealthDelay = HEALTH_INDICATOR_DELAY;
+    }
     lastHealth = health;
     if (ToroHealth.CONFIG.particle.show) {
       BarStates.PARTICLES.add(new BarParticle(entity, lastDmg));
     }
+    updateAnimationSpeed();
+  }
+
+  private void updateAnimationSpeed() {
+      animationSpeed = (previousHealthDisplay - health) / 10f;
   }
 
   private void updateAnimations() {
-    if (previousHealthDelay > 0) {
-      float diff = previousHealthDisplay - health;
-      if (diff > 0) {
-        animationSpeed = diff / 10f;
+      if (previousHealthDelay <= 0) {
+          previousHealthDisplay = Math.max(previousHealthDisplay - animationSpeed, health);
       }
-    } else if (previousHealthDelay < 1 && previousHealthDisplay > health) {
-      previousHealthDisplay -= animationSpeed;
-    } else {
-      previousHealthDisplay = health;
-      previousHealth = health;
-      previousHealthDelay = HEALTH_INDICATOR_DELAY;
-    }
   }
-
 }
