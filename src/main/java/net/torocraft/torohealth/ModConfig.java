@@ -134,8 +134,7 @@ public class ModConfig implements ConfigData {
     }
 
 
-    @Override
-    public void validatePostLoad() {
+    public void postLoad() {
         // Recalculate dependent field
         particleOptions.particleDistanceSquared = particleOptions.particleDistance * particleOptions.particleDistance;
     }
