@@ -17,6 +17,7 @@ public class ModConfig implements ConfigData {
     {
         AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
         INSTANCE = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+        INSTANCE.postLoad();
     }
 
     @ConfigEntry.Gui.CollapsibleObject
