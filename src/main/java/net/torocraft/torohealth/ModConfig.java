@@ -56,7 +56,6 @@ public class ModConfig implements ConfigData {
     }
 
 
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject
     public ParticleOptions particleOptions = new ParticleOptions();
     public static class ParticleOptions {
@@ -78,7 +77,6 @@ public class ModConfig implements ConfigData {
     }
 
 
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject
     public InWorldBarOptions inWorldBarOptions = new InWorldBarOptions();
     public static class InWorldBarOptions {
@@ -96,7 +94,6 @@ public class ModConfig implements ConfigData {
         public float inWorldBarDistance = 60f;
     }
 
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject
     public BarOptions barOptions = new BarOptions();
     public static class BarOptions {
