@@ -62,7 +62,7 @@ public class BarState {
 
     lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;
     lastHealth = health;
-    if (ToroHealth.CONFIG.particle.show) {
+    if (ToroHealth.CONFIG.particleOptions.show) {
       BarStates.PARTICLES.add(new BarParticle(entity, lastDmg));
     }
   }

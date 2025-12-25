@@ -21,7 +21,7 @@ public class ParticleRenderer {
 
   private static void renderParticle(MatrixStack matrix, BarParticle particle, Camera camera) {
     double distanceSquared = camera.getPos().squaredDistanceTo(particle.x, particle.y, particle.z);
-    if (distanceSquared > ToroHealth.CONFIG.particle.distanceSquared) {
+    if (distanceSquared > ToroHealth.CONFIG.particleOptions.particleDistanceSquared) {
       return;
     }
 

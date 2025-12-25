@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "net.torocraft.torohealth.ToroHealth"
+    ],
+    "modmenu": [
+      "net.torocraft.torohealth.integration.ModMenuIntegration"
     ]
   },
   "mixins": [
